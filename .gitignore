@@ -1,0 +1,39 @@
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Machine-local agent context: private notes, session transcripts, agent skills and rules
+.local/
+docs/sensitive/
+.claude/
+.cursor/
+CLAUDE.local.md
+
+# Demo video workspace: vendored recording engine, renders, audio (skill produce-video)
+demos/
+
+# Datasets, vectors, model weights and run outputs (fetched or rebuilt by scripts)
+data/
+models/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+*.egg-info/
+
+# Node
+node_modules/
+dist/
+.vite/
+
+# Editors and OS
+.idea/
+.vscode/*
+!.vscode/extensions.json
+.DS_Store
+Thumbs.db
