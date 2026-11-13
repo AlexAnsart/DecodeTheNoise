@@ -66,7 +66,7 @@ This is a proposal. The direction is Alexandre's call.
 | --- | --- | --- | --- |
 | 1 | Primary direction(s) | Swarm plus technique; traffic first; another pairing | Friday night (preliminary submission) |
 | 2 | Who the user is | Trust-and-safety analyst; journalist or researcher; site owner on a hosting platform | Before the UI |
-| 3 | Stack | Default in `AGENTS.md` §7, or another | Before the scaffold |
+| 3 | Stack | Default (Python and FastAPI, React and Vite, SQLite), or another | Before the scaffold |
 | 4 | Embedding model | AI Router embeddings (endpoint to verify, spends credits, no RAM cost) or a small local model on CPU such as `multilingual-e5-small` (free, uses server RAM, speed on 2 vCPU to measure, wheels to check on ARM64) | Before embedding the corpus. One model for batch and live |
 | 5 | Datasets | Starting picks per direction in `research/datasets-and-methods.md` §1 | Saturday morning |
 | 6 | Which probes | Two to four classes the demo needs | After the corpus is chosen |
