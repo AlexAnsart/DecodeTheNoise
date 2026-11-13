@@ -12,14 +12,11 @@ Build a deployed, working system that detects one or more of: coordinated inauth
 
 | Path | Content |
 | --- | --- |
-| [`AGENTS.md`](AGENTS.md) | Instructions for coding agents (Cursor, Claude Code) and the project's engineering rules |
 | [`docs/strategy.md`](docs/strategy.md) | Ideas, directions, open decisions, timeline |
 | [`docs/hackathon.md`](docs/hackathon.md) | Deadlines, rules, submission checklist, judging |
 | [`docs/research/`](docs/research/) | Datasets, methods and published results for each direction |
 | [`docs/hostinger.md`](docs/hostinger.md) | VPS, AI Router, MCP server |
 | [`docs/tech-challenges/`](docs/tech-challenges/) | Partner tech challenges that can be combined with the main one |
-
-Agent skills and editor rules (`.claude/`, `.cursor/`) are kept on the team's machines and are not part of this repository.
 
 ## Setup
 

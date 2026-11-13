@@ -3,11 +3,13 @@
 .env.*
 !.env.example
 
-# Machine-local agent context: private notes, session transcripts, agent skills and rules
+# Machine-local agent context: private notes, session transcripts, agent instructions, skills and rules
 .local/
 docs/sensitive/
 .claude/
 .cursor/
+AGENTS.md
+CLAUDE.md
 CLAUDE.local.md
 
 # Demo video workspace: vendored recording engine, renders, audio (skill produce-video)
