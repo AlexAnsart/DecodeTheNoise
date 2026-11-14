@@ -5,6 +5,7 @@ import type { Bounds, TimeRange } from '../map/geometry'
 import { RELIEF_TOP, TIME_STRETCH, timePlace } from '../map/geometry'
 import type { AxisLine, Vec3 } from '../map/layers'
 import { formatDay, formatMonth } from '../text/format'
+import type { ReliefTick } from './relief'
 
 export interface AxisWord {
   position: Vec3
@@ -66,7 +67,7 @@ export function timeMarks(range: TimeRange, span: number, bounds: Bounds): AxisM
 }
 
 /** The height axis of a relief: the floor of the points outlined, a scale up a back corner. */
-export function reliefMarks(label: string, span: number, bounds: Bounds): AxisMarks {
+export function reliefMarks(label: string, ticks: ReliefTick[], span: number, bounds: Bounds): AxisMarks {
   const top = span * RELIEF_TOP
   const pad = span * 0.04
   const west = bounds.centre[0] - bounds.half[0] - pad
@@ -81,9 +82,8 @@ export function reliefMarks(label: string, span: number, bounds: Bounds): AxisMa
     { path: [[corner[0], corner[1], 0], [corner[0], corner[1], top]], major: true },
   ]
   const words: AxisWord[] = [{ position: [corner[0], corner[1], top + span * 0.09], text: label, title: true }]
-  const steps: Array<[number, string]> = [[0, 'like the rest'], [0.5, ''], [1, 'stands out']]
-  for (const [share, text] of steps) {
-    const z = share * top
+  for (const { at, text } of ticks) {
+    const z = at * top
     lines.push({ path: [[corner[0], corner[1], z], [corner[0] - tick, corner[1], z]], major: false })
     if (text) words.push({ position: [corner[0] - tick * 2.4, corner[1], z], text, title: false })
   }

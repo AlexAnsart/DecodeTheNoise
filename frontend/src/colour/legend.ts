@@ -14,10 +14,14 @@ export interface PaintGroup {
   mask: Uint8Array
 }
 
-export type Colouring =
+/** A colouring read from the map itself. */
+export type PlainColouring =
   | { kind: 'column'; key: string }
   | { kind: 'date' }
   | { kind: 'groups'; groups: PaintGroup[] }
+
+/** A probe colouring also needs the scores of the probe: see probes/probeLegend.ts. */
+export type Colouring = PlainColouring | { kind: 'probe'; key: string }
 
 export interface LegendEntry {
   id: number
@@ -39,6 +43,8 @@ export interface Legend {
   /** RGBA per point at full strength. */
   base: Uint8Array
   dateBar: DateBar | null
+  /** A sentence under the title: what the colours were measured to be worth, or what is missing. */
+  note: string | null
 }
 
 /** Columns whose every value keeps its own colour instead of falling into "Others". */
@@ -51,7 +57,7 @@ function fill(base: Uint8Array, i: number, colour: Rgb, alpha: number): void {
   base[i * 4 + 3] = alpha
 }
 
-function paintEntries(n: number, entries: LegendEntry[], entryOf: Uint16Array): Uint8Array {
+export function paintEntries(n: number, entries: LegendEntry[], entryOf: Uint16Array): Uint8Array {
   const base = new Uint8Array(n * 4)
   for (let i = 0; i < n; i += 1) {
     const entry = entries[entryOf[i]]
@@ -103,7 +109,7 @@ function columnLegend(data: MapData, column: MapColumn, palette: Palette): Legen
     const code = column.codes[i]
     entryOf[i] = code === NO_VALUE ? noneId : entryOfCode[code] >= 0 ? entryOfCode[code] : othersId
   }
-  return { title: column.label, entries, entryOf, base: paintEntries(data.n, entries, entryOf), dateBar: null }
+  return { title: column.label, entries, entryOf, base: paintEntries(data.n, entries, entryOf), dateBar: null, note: null }
 }
 
 function groupsLegend(data: MapData, groups: PaintGroup[], palette: Palette): Legend {
@@ -123,7 +129,7 @@ function groupsLegend(data: MapData, groups: PaintGroup[], palette: Palette): Le
     entryOf[i] = k >= 0 ? k : restId
     entries[entryOf[i]].total += 1
   }
-  return { title: 'Composed colours', entries, entryOf, base: paintEntries(data.n, entries, entryOf), dateBar: null }
+  return { title: 'Composed colours', entries, entryOf, base: paintEntries(data.n, entries, entryOf), dateBar: null, note: null }
 }
 
 function dateLegend(data: MapData, palette: Palette): Legend {
@@ -136,18 +142,19 @@ function dateLegend(data: MapData, palette: Palette): Legend {
     entries.push({ id: 1, label: 'No date', colour: palette.others, alpha: ALPHA_NO_VALUE, total: undated })
     for (let i = 0; i < data.n; i += 1) if (!(data.ts[i] > 0)) entryOf[i] = 1
   }
-  return { title: 'Date', entries, entryOf, base, dateBar: bar }
+  return { title: 'Date', entries, entryOf, base, dateBar: bar, note: null }
 }
 
-export function buildLegend(data: MapData, colouring: Colouring, palette: Palette): Legend {
+export function buildLegend(data: MapData, colouring: PlainColouring, palette: Palette): Legend {
   if (colouring.kind === 'date') return dateLegend(data, palette)
   if (colouring.kind === 'groups') return groupsLegend(data, colouring.groups, palette)
   const column = data.columns.find((c) => c.key === colouring.key) ?? data.columns[0]
-  return columnLegend(data, column, palette)
+  // A map can have no column at all (a workspace before its first items are described).
+  return column ? columnLegend(data, column, palette) : dateLegend(data, palette)
 }
 
 /** The colouring a map opens with: zones when it has some, else its first column, else dates. */
-export function defaultColouring(data: MapData): Colouring {
+export function defaultColouring(data: MapData): PlainColouring {
   if (data.columns.some((column) => column.key === 'zone')) return { kind: 'column', key: 'zone' }
   if (data.columns.length > 0) return { kind: 'column', key: data.columns[0].key }
   return { kind: 'date' }

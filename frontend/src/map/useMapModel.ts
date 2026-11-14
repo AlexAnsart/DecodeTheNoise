@@ -2,14 +2,17 @@
 
 import { useMemo, useState } from 'react'
 import type { Relief } from '../axes/relief'
+import { fitRelief } from '../axes/relief'
 import { litPoints, maskOfEntry, maskOfIndices, maskOfPeriod, paintPoints } from '../colour/emphasis'
 import type { Palette } from '../colour/palette'
 import type { ColouringState } from '../colour/useColouring'
 import { useColouring } from '../colour/useColouring'
 import type { Filters, Kept } from '../filters/mask'
 import { NO_FILTERS, filterMask, keptPoints } from '../filters/mask'
+import { useSearchRefresh } from '../filters/useSearchRefresh'
 import type { Scrubber } from '../scrubber/useScrubber'
 import { useScrubber } from '../scrubber/useScrubber'
+import { carryFilters } from './carryOver'
 import type { Shape, TimeRange } from './geometry'
 import { busyRange, neighbourGap, positionsFor } from './geometry'
 import type { MapData } from './mapData'
@@ -49,13 +52,23 @@ function storedShape(): Shape {
 
 export function useMapModel(data: MapData, palette: Palette): MapModel {
   const [shape, setShapeState] = useState<Shape>(storedShape)
-  const [relief, setReliefState] = useState<Relief | null>(null)
+  const [reliefState, setReliefState] = useState<Relief | null>(null)
   const [filters, setFilters] = useState<Filters>(NO_FILTERS)
   const [chosen, setSelected] = useState<number | null>(null)
   const [picked, setPicked] = useState<Uint32Array | null>(null)
+  const [seen, setSeen] = useState(data)
+  if (seen !== data) {
+    // A live map was read again: the filters are translated to its new codes and sizes before
+    // anything is drawn from them.
+    setSeen(data)
+    setFilters((current) => carryFilters(current, seen, data))
+  }
+  useSearchRefresh(data, filters, setFilters)
   const colouring = useColouring(data, palette)
   const range = useMemo(() => busyRange(data.ts), [data])
   const scrubber = useScrubber(range)
+  // Points added since the heights were read wait on the floor until they are read again.
+  const relief = useMemo(() => (reliefState ? fitRelief(reliefState, data.n) : null), [reliefState, data.n])
 
   const setShape = (next: Shape): void => {
     setShapeState(next)
@@ -101,7 +114,7 @@ export function useMapModel(data: MapData, palette: Palette): MapModel {
   )
 
   // A point the filter hides is not selected any more: its card would point at nothing.
-  const selected = chosen !== null && kept.values[chosen] >= 0.5 ? chosen : null
+  const selected = chosen !== null && chosen < data.n && kept.values[chosen] >= 0.5 ? chosen : null
 
   return {
     shape,

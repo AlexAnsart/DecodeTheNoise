@@ -1,42 +1,41 @@
-import { Moon, Sun } from 'lucide-react'
+import { useState } from 'react'
 import type { ReactElement } from 'react'
-import { MapScreen } from '../map/MapScreen'
-import { useTheme } from '../theme/theme'
+import { MethodPage } from '../method/MethodPage'
+import { PATHS, navigate, useInternalLinks, useRoute } from '../route/useRoute'
+import { useTour } from '../tour/useTour'
+import type { WorkspacePanel } from '../workspace/panel'
+import { useStoredWorkspace } from '../workspace/storedKey'
+import { WorkspacePage } from '../workspace/WorkspacePage'
+import { DemoPage } from './DemoPage'
+import { Header } from './Header'
 import './app.css'
 
-const SOURCE_URL = 'https://github.com/AlexAnsart/DecodeTheNoise'
-
+/** The shell: one header, then the demo map, the visitor's own workspace, or the method page. */
 export function App(): ReactElement {
-  const [theme, toggleTheme] = useTheme()
+  const page = useRoute()
+  useInternalLinks()
+  const tour = useTour()
+  const stored = useStoredWorkspace()
+  const [panel, setPanel] = useState<WorkspacePanel | null>(null)
+  // A panel belongs to the page it was opened on: leaving the page closes it.
+  const [panelPage, setPanelPage] = useState(page)
+  if (panelPage !== page) {
+    setPanelPage(page)
+    setPanel(null)
+  }
+
+  const startTour = (): void => {
+    navigate(PATHS.demo)
+    tour.start()
+  }
+
   return (
     <div className="nm-app">
-      <header className="nm-header">
-        <div className="nm-brand">
-          <span className="nm-brand__mark" aria-hidden>
-            <i />
-            <i />
-            <i />
-          </span>
-          <strong>NoiseMap</strong>
-          <span className="nm-brand__line">Every post becomes a point on a meaning map.</span>
-        </div>
-        <nav className="nm-header__nav">
-          <a href={SOURCE_URL} target="_blank" rel="noopener noreferrer">
-            Source
-          </a>
-          <button
-            type="button"
-            className="nm-tool nm-tool--icon"
-            onClick={toggleTheme}
-            title={theme === 'dark' ? 'Switch to the light theme' : 'Switch to the dark theme'}
-            aria-label={theme === 'dark' ? 'Switch to the light theme' : 'Switch to the dark theme'}
-          >
-            {theme === 'dark' ? <Sun size={15} aria-hidden /> : <Moon size={15} aria-hidden />}
-          </button>
-        </nav>
-      </header>
+      <Header page={page} workspaceOpen={stored !== null} onPanel={setPanel} onTour={startTour} />
       <main className="nm-main">
-        <MapScreen />
+        {page === 'demo' ? <DemoPage tour={tour} /> : null}
+        {page === 'workspace' ? <WorkspacePage panel={panel} onPanel={setPanel} /> : null}
+        {page === 'method' ? <MethodPage /> : null}
       </main>
     </div>
   )

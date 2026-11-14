@@ -51,6 +51,9 @@ export function useCamera(input: CameraInput): Camera {
   const { deck, size, shape, positions, gap } = input
   const view = useRef<ViewState | null>(null)
   const previous = useRef<Previous | null>(null)
+  // True while the view on screen is the whole map, as framed here and not by a gesture: a
+  // live map that grows is then framed again, so it stays whole in view.
+  const following = useRef(true)
   const latest = useRef(input)
 
   useEffect(() => {
@@ -68,6 +71,7 @@ export function useCamera(input: CameraInput): Camera {
   const fit = useCallback(() => {
     const now = latest.current
     if (!now.size) return
+    following.current = true
     push(fitView(now.shape, frameBounds(now.positions, now.kept), now.size, now.frame))
   }, [push])
 
@@ -80,16 +84,19 @@ export function useCamera(input: CameraInput): Camera {
     deck.current.setProps({ views: viewFor(shape) })
     const whole = fitView(shape, frameBounds(positions, now.kept), now.size, now.frame)
     if (!before || !view.current || before.shape === shape) {
-      if (!view.current) push(whole)
+      // The first view, or the same shape with new places while the whole map was in view.
+      if (!view.current || (following.current && before !== null && before.positions !== positions)) push(whole)
       return
     }
     const wholeBefore = fitView(before.shape, frameBounds(before.positions, now.kept), now.size)
     const anchor = now.selected ?? nearestPoint(before.positions, view.current.target, now.kept)
     const nearWhole = now.selected === null && Math.abs(view.current.zoom - wholeBefore.zoom) < NEAR_FIT
     if (anchor === null || nearWhole) {
+      following.current = true
       push(whole)
       return
     }
+    following.current = false
     const kept = keepPlace(shape, view.current, pointAt(positions, anchor), before.gap, gap)
     // Coming from the flat map there is no angle to keep: the shape opens at its own.
     push(isFlat(before.shape) ? { ...kept, rotationX: whole.rotationX, rotationOrbit: whole.rotationOrbit } : kept)
@@ -99,6 +106,7 @@ export function useCamera(input: CameraInput): Camera {
     (position: Vec3, coveredRight: number, reach?: number) => {
       const now = latest.current
       if (!view.current || !now.size) return
+      following.current = false
       const centred: ViewState = { ...view.current, target: position }
       if (reach && reach > 0) {
         // One unit is 2^zoom pixels at the target: the neighbourhood takes a share of the stage.
@@ -128,7 +136,14 @@ export function useCamera(input: CameraInput): Camera {
     [centreAt],
   )
 
-  const onView = useCallback((next: ViewState) => push(next), [push])
+  const onView = useCallback(
+    (next: ViewState) => {
+      // A gesture of the user: the view is theirs from now on.
+      following.current = false
+      push(next)
+    },
+    [push],
+  )
 
   return { view, onView, fit, centreOn, centreAt }
 }

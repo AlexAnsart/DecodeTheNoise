@@ -131,6 +131,7 @@ export function boundsOf(positions: Float32Array, kept?: Float32Array): Bounds {
 const FRAME_SAMPLE = 20000
 const FRAME_TRIM = 0.005
 const FRAME_PAD = 1.08
+const FRAME_LEAST_SHARE = 0.02
 
 /** The box the camera frames: the bulk of the shown points. A handful of strays at the far
  *  ends would otherwise shrink the whole map to a corner of the stage. */
@@ -151,6 +152,10 @@ export function frameBounds(positions: Float32Array, kept?: Float32Array): Bound
     centre[axis] = (low + high) / 2
     half[axis] = ((high - low) / 2) * FRAME_PAD
   }
+  // A single point, or points in a line, have no box to frame: the frame keeps a least size.
+  const widest = Math.max(half[0], half[1], half[2])
+  const least = widest > 0 ? widest * FRAME_LEAST_SHARE : 1
+  for (let axis = 0; axis < 3; axis += 1) half[axis] = Math.max(half[axis], least)
   return { centre, half, radius: Math.hypot(half[0], half[1], half[2]) || 1 }
 }
 

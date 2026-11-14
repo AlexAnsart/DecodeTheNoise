@@ -2,9 +2,10 @@
    that built the map, and lands among its nearest items. */
 
 import { useCallback, useRef, useState } from 'react'
-import { ApiError, analyze } from '../api/client'
+import { ApiError } from '../api/client'
 import type { Analysis } from '../api/schema'
 import { logger } from '../log/logger'
+import { useMapApi } from '../source/mapServices'
 
 const log = logger('paste')
 
@@ -33,23 +34,28 @@ function explain(error: unknown): string {
 }
 
 export function usePaste(): Paste {
+  const api = useMapApi()
   const [state, setState] = useState<PasteState>({ status: 'idle' })
   const running = useRef<AbortController | null>(null)
 
-  const submit = useCallback((input: string) => {
-    const link = asLink(input)
-    running.current?.abort()
-    const abort = new AbortController()
-    running.current = abort
-    setState({ status: 'reading', what: link ? 'link' : 'text' })
-    analyze(link ? { url: link } : { text: input.trim() }, abort.signal)
-      .then((analysis) => setState({ status: 'done', analysis }))
-      .catch((error: unknown) => {
-        if (abort.signal.aborted) return
-        log.error('the paste could not be analysed', error)
-        setState({ status: 'error', message: explain(error) })
-      })
-  }, [])
+  const submit = useCallback(
+    (input: string) => {
+      const link = asLink(input)
+      running.current?.abort()
+      const abort = new AbortController()
+      running.current = abort
+      setState({ status: 'reading', what: link ? 'link' : 'text' })
+      api
+        .analyze(link ? { url: link } : { text: input.trim() }, abort.signal)
+        .then((analysis) => setState({ status: 'done', analysis }))
+        .catch((error: unknown) => {
+          if (abort.signal.aborted) return
+          log.error('the paste could not be analysed', error)
+          setState({ status: 'error', message: explain(error) })
+        })
+    },
+    [api],
+  )
 
   const clear = useCallback(() => {
     running.current?.abort()

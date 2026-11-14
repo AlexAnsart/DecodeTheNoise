@@ -115,3 +115,15 @@ html[data-theme='light'] {
   --nm-axis-text-strong: #3c3a34;
   --nm-point-highlight: #3c3a34;
 }
+
+/* The two levels of a probe, as an intensity and not as an alarm: a probe can read a subject
+   as well as a technique. */
+html[data-theme='dark'] {
+  --nm-level-possible: #f5d547;
+  --nm-level-probable: #f07c3e;
+}
+
+html[data-theme='light'] {
+  --nm-level-possible: #b8860b;
+  --nm-level-probable: #b5461f;
+}

@@ -17,12 +17,21 @@
   flex: none;
 }
 
+.nm-header__left {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  min-width: 0;
+}
+
 .nm-brand {
   display: flex;
   align-items: center;
   gap: 0.55rem;
-  min-width: 0;
+  flex: none;
+  color: inherit;
   font-size: 0.86rem;
+  text-decoration: none;
 }
 
 .nm-brand strong {
@@ -75,20 +84,53 @@
   background: var(--nm-cat-2);
 }
 
+/* The switch between the two maps: the one control of the header that is never hidden. */
+.nm-mode {
+  flex: none;
+}
+
+.nm-mode > button {
+  font-weight: 500;
+}
+
+.nm-mode > button.is-active {
+  background: color-mix(in srgb, var(--nm-accent) 22%, transparent);
+  color: var(--nm-text);
+  font-weight: 600;
+}
+
+/* Says, beside the switch, that what is on screen is not the visitor's own data. */
+.nm-badge {
+  flex: none;
+  padding: 0.1rem 0.5rem;
+  border: 1px solid color-mix(in srgb, var(--nm-warning) 50%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--nm-warning) 12%, transparent);
+  color: var(--nm-warning);
+  font-size: 0.66rem;
+  font-weight: 600;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+
 .nm-header__nav {
   display: flex;
   align-items: center;
-  gap: 0.7rem;
+  gap: 0.4rem;
   flex: none;
 }
 
 .nm-header__nav a {
-  color: var(--nm-text-muted);
-  font-size: 0.74rem;
   text-decoration: none;
 }
 
-.nm-header__nav a:hover {
+.nm-header__source {
+  padding: 0 0.3rem;
+  color: var(--nm-text-muted);
+  font-size: 0.74rem;
+}
+
+.nm-header__source:hover {
   color: var(--nm-text);
 }
 
@@ -97,4 +139,30 @@
   flex: 1;
   flex-direction: column;
   min-height: 0;
+}
+
+/* The demo: the map, and over it the card that leads to one's own workspace. */
+.nm-demo {
+  position: relative;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+}
+
+@media (max-width: 1180px) {
+  .nm-brand__line {
+    display: none;
+  }
+}
+
+@media (max-width: 760px) {
+  .nm-header__source,
+  .nm-badge {
+    display: none;
+  }
+
+  .nm-header {
+    gap: 0.5rem;
+  }
 }

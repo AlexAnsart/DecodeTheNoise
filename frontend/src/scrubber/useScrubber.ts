@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { TimeRange } from '../map/geometry'
-import { openingWindow, stepWindow } from './scrubWindow'
+import { clampWindow, openingWindow, stepWindow } from './scrubWindow'
 
 const PLAY_STEP_MS = 1200
 
@@ -16,25 +16,38 @@ export interface Scrubber {
 /** A time window that lights the points inside it. Playing moves it one width at a time. */
 export function useScrubber(range: TimeRange | null): Scrubber {
   const [on, setOnState] = useState(false)
-  const [window, setWindow] = useState<TimeRange | null>(() => (range ? openingWindow(range) : null))
+  const [chosen, setChosen] = useState<TimeRange | null>(null)
   const [playing, setPlaying] = useState(false)
+  // The range moves when a live map gains dated points: the window stays inside it, and opens
+  // on the first month until the user places it.
+  const window = useMemo(() => (range ? clampWindow(chosen ?? openingWindow(range), range) : null), [chosen, range])
+
+  const latestRange = useRef(range)
+  useEffect(() => {
+    latestRange.current = range
+  })
+  const dated = range !== null
 
   useEffect(() => {
-    if (!playing || !range) return undefined
+    if (!playing || !dated) return undefined
+    // The range is read when the step falls due: a map that grows must not restart the clock.
     const timer = setInterval(() => {
-      setWindow((current) => {
-        const next = current ? stepWindow(current, range) : null
+      const now = latestRange.current
+      if (!now) return
+      setChosen((current) => {
+        const from = clampWindow(current ?? openingWindow(now), now)
+        const next = stepWindow(from, now)
         if (!next) setPlaying(false)
-        return next ?? current
+        return next ?? from
       })
     }, PLAY_STEP_MS)
     return () => clearInterval(timer)
-  }, [playing, range])
+  }, [playing, dated])
 
   const setOn = useCallback((next: boolean) => {
     setOnState(next)
     if (!next) setPlaying(false)
   }, [])
 
-  return { on: on && range !== null, window, playing, setOn, setWindow, setPlaying }
+  return { on: on && range !== null, window, playing, setOn, setWindow: setChosen, setPlaying }
 }

@@ -48,10 +48,8 @@ function Result({ analysis, unplaced, onLocate }: { analysis: Analysis; unplaced
           Show it on the map
         </button>
       ) : null}
-      {analysis.outcome === 'placed' ? (
-        <p className="nm-paste__note">
-          No detector is shown yet: a layer appears here only once its precision and false-positive rate are measured.
-        </p>
+      {analysis.outcome === 'placed' && analysis.verdicts.length === 0 ? (
+        <p className="nm-paste__note">No verdict comes with it: a pasted text is placed among the items it resembles, not judged.</p>
       ) : null}
     </div>
   )

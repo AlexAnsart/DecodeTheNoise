@@ -2,6 +2,7 @@ import { ExternalLink } from 'lucide-react'
 import type { ReactElement } from 'react'
 import type { Item } from '../api/schema'
 import { formatMoment } from '../text/format'
+import { partsAround } from './quotes'
 import './items.css'
 
 interface ItemSummaryProps {
@@ -10,6 +11,8 @@ interface ItemSummaryProps {
   actor: string | null
   /** Lines of text shown before the rest is cut; null shows all of it. */
   clamp: number | null
+  /** Spans of the text to mark: the words a review leaned on. */
+  quotes?: string[]
 }
 
 function label(key: string): string {
@@ -26,7 +29,7 @@ function host(url: string): string {
 }
 
 /** What an item says and where it comes from: used by the card, the tooltip lists and the drawers. */
-export function ItemSummary({ item, actor, clamp }: ItemSummaryProps): ReactElement {
+export function ItemSummary({ item, actor, clamp, quotes = [] }: ItemSummaryProps): ReactElement {
   const facts = Object.entries(item.attrs).filter(([, value]) => value !== null && value !== '')
   return (
     <div className="nm-item">
@@ -35,7 +38,13 @@ export function ItemSummary({ item, actor, clamp }: ItemSummaryProps): ReactElem
         <span className="nm-item__when nm-num">{item.created_at ? formatMoment(item.created_at) : 'No date'}</span>
       </div>
       <p className="nm-item__text" style={clamp ? { WebkitLineClamp: clamp } : undefined} data-clamped={clamp !== null}>
-        {item.text}
+        {quotes.length === 0
+          ? item.text
+          : partsAround(item.text, quotes).map((part, position) =>
+              // The parts are positional: the text is cut again whole when the quotes change.
+              // eslint-disable-next-line react/no-array-index-key
+              part.quoted ? <mark key={position}>{part.text}</mark> : part.text,
+            )}
       </p>
       {facts.length > 0 || item.lang ? (
         <dl className="nm-item__facts">

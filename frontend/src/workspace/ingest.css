@@ -1,0 +1,50 @@
+/* The embedding of a batch: its progress, and the warning when the model does not answer. */
+
+.nm-ingest {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  width: 100%;
+  min-width: 0;
+}
+
+.nm-ingest > .nm-ingest__line {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.2rem 0.75rem;
+  margin: 0;
+  color: var(--nm-text);
+  font-size: 0.78rem;
+  line-height: 1.35;
+}
+
+.nm-ingest__line strong {
+  font-weight: 600;
+}
+
+.nm-ingest__line span {
+  color: var(--nm-text-muted);
+  font-size: 0.72rem;
+}
+
+.nm-ingest-warning {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0.45rem 0.7rem;
+  border: 1px solid color-mix(in srgb, var(--nm-warning) 50%, transparent);
+  border-radius: var(--nm-radius-sm);
+  background: color-mix(in srgb, var(--nm-warning) 12%, transparent);
+  color: var(--nm-text);
+  font-size: 0.74rem;
+  line-height: 1.45;
+}
+
+.nm-ingest-warning svg {
+  flex: none;
+  margin-top: 0.15rem;
+  color: var(--nm-warning);
+}

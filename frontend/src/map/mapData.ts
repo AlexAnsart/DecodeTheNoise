@@ -1,6 +1,6 @@
 /* The map in memory: a struct of typed arrays, one index per point. */
 
-import type { BufferSpec, Manifest } from '../api/schema'
+import type { BufferSpec, Manifest, ProbeInfo } from '../api/schema'
 
 export const NO_VALUE = 0xffff
 export const NO_NEIGHBOUR = 0xffffffff
@@ -33,6 +33,11 @@ export interface MapData {
   columns: MapColumn[]
   zones: MapZone[]
   embeddingKey: string
+  /** A workspace map grows: `version` changes with every point, layout, name or review. */
+  live: boolean
+  version: number
+  /** Probes that can be read on this map, shown or only feeding the review. */
+  probes: ProbeInfo[]
 }
 
 type TypedArray = Float32Array | Float64Array | Uint8Array | Uint16Array | Uint32Array
@@ -68,10 +73,35 @@ function buffer<T extends TypedArray>(
   return array
 }
 
+function described(manifest: Manifest): Pick<MapData, 'build' | 'zones' | 'embeddingKey' | 'live' | 'version' | 'probes'> {
+  return {
+    build: manifest.build,
+    zones: manifest.zones,
+    embeddingKey: manifest.embedding_key,
+    live: manifest.live,
+    version: manifest.version,
+    probes: manifest.probes,
+  }
+}
+
+/** A map without a point: an empty workspace has no buffers to read. */
+export function emptyMap(manifest: Manifest): MapData {
+  return {
+    ...described(manifest),
+    n: 0,
+    k: 0,
+    pos3: new Float32Array(0),
+    pos2: new Float32Array(0),
+    ts: new Float64Array(0),
+    neighbours: new Uint32Array(0),
+    columns: [],
+  }
+}
+
 export function decodeMap(manifest: Manifest, bytes: ArrayBuffer): MapData {
   const { n, k } = manifest
   return {
-    build: manifest.build,
+    ...described(manifest),
     n,
     k,
     pos3: buffer(manifest, bytes, 'pos3', Float32Array, n * 3),
@@ -84,8 +114,6 @@ export function decodeMap(manifest: Manifest, bytes: ArrayBuffer): MapData {
       names: column.names,
       codes: buffer(manifest, bytes, column.buffer, Uint16Array, n),
     })),
-    zones: manifest.zones,
-    embeddingKey: manifest.embedding_key,
   }
 }
 

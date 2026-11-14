@@ -3,6 +3,8 @@ import { useRef, useState } from 'react'
 import type { ReactElement } from 'react'
 import type { MapData } from '../map/mapData'
 import { Popover } from '../popover/Popover'
+import { shownProbes } from '../probes/levels'
+import { ProbeList } from '../probes/ProbeList'
 import type { Colouring } from './legend'
 
 interface ColourMenuProps {
@@ -21,7 +23,7 @@ interface Option {
   disabled: string | null
 }
 
-/** The attribute that colours every point of the map. */
+/** The attribute that colours every point of the map: a column, the date, or the level a probe reads. */
 export function ColourMenu({ data, choice, composed, hasDates, onChoose }: ColourMenuProps): ReactElement {
   const trigger = useRef<HTMLButtonElement>(null)
   const [open, setOpen] = useState(false)
@@ -35,6 +37,8 @@ export function ColourMenu({ data, choice, composed, hasDates, onChoose }: Colou
     { id: 'date', label: 'Date', colouring: { kind: 'date' } as const, disabled: hasDates ? null : 'No item of this map is dated.' },
   ]
   const current = composed ? null : choice.kind === 'date' ? 'date' : choice.kind === 'column' ? choice.key : null
+  const probe = !composed && choice.kind === 'probe' ? choice.key : null
+  const hasProbes = shownProbes(data.probes).length > 0
 
   return (
     <>
@@ -46,11 +50,12 @@ export function ColourMenu({ data, choice, composed, hasDates, onChoose }: Colou
         aria-label="Colour by"
         aria-haspopup="dialog"
         aria-expanded={open}
+        data-tour="colour"
         onClick={() => setOpen((value) => !value)}
       >
         <Palette size={17} aria-hidden />
       </button>
-      <Popover anchor={trigger} open={open} onClose={() => setOpen(false)} variant="menu" width={220} label="Colour by">
+      <Popover anchor={trigger} open={open} onClose={() => setOpen(false)} variant="menu" width={hasProbes ? 300 : 220} label="Colour by">
         <p className="nm-menu-title">Colour by</p>
         {options.map((option) => (
           <button
@@ -68,6 +73,20 @@ export function ColourMenu({ data, choice, composed, hasDates, onChoose }: Colou
             {current === option.id ? <Check size={13} aria-hidden /> : null}
           </button>
         ))}
+        <div className="nm-menu-sep" />
+        <p className="nm-menu-title" title="Each item takes the colour of the level a probe reads for it: not flagged, possible or probable.">
+          Probe level
+        </p>
+        <div className="nm-menu-probes">
+          <ProbeList
+            probes={data.probes}
+            current={probe}
+            onPick={(picked) => {
+              onChoose({ kind: 'probe', key: picked.key })
+              setOpen(false)
+            }}
+          />
+        </div>
       </Popover>
     </>
   )

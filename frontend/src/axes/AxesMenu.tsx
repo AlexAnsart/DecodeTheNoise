@@ -1,56 +1,36 @@
 import { Axis3d, X } from 'lucide-react'
 import { useRef, useState } from 'react'
 import type { ReactElement } from 'react'
+import type { ProbeInfo } from '../api/schema'
 import type { Shape } from '../map/geometry'
 import { Popover } from '../popover/Popover'
+import { shownProbes } from '../probes/levels'
+import { ProbeList } from '../probes/ProbeList'
+import { ConceptForm } from './ConceptForm'
 import type { Relief } from './relief'
 import './axes.css'
-
-const RECENT_KEY = 'noisemap.concepts'
-const MAX_RECENT = 5
 
 interface AxesMenuProps {
   shape: Shape
   relief: Relief | null
+  /** The probes of the map: each can be read as a height. */
+  probes: ProbeInfo[]
   hasDates: boolean
   /** A score is being computed. */
   busy: boolean
   error: string | null
   onShape(shape: '3d' | 'time'): void
+  onProbe(probe: ProbeInfo): void
   onConcept(text: string): void
   onClearRelief(): void
 }
 
-function recentConcepts(): string[] {
-  try {
-    const stored: unknown = JSON.parse(localStorage.getItem(RECENT_KEY) ?? '[]')
-    return Array.isArray(stored) ? stored.filter((value): value is string => typeof value === 'string') : []
-  } catch {
-    return []
-  }
-}
-
-/** One more axis on the map: the date, or a height read from a concept you type. */
+/** One more axis on the map: the date, or a height read from a probe or from a concept you type. */
 export function AxesMenu(props: AxesMenuProps): ReactElement {
-  const { shape, relief, hasDates, busy, error, onShape, onConcept, onClearRelief } = props
+  const { shape, relief, probes, hasDates, busy, error, onShape, onProbe, onConcept, onClearRelief } = props
   const trigger = useRef<HTMLButtonElement>(null)
   const [open, setOpen] = useState(false)
-  const [text, setText] = useState('')
-  const [recent, setRecent] = useState(recentConcepts)
-
-  const apply = (concept: string): void => {
-    const clean = concept.trim()
-    if (!clean) return
-    const next = [clean, ...recent.filter((value) => value !== clean)].slice(0, MAX_RECENT)
-    setRecent(next)
-    try {
-      localStorage.setItem(RECENT_KEY, JSON.stringify(next))
-    } catch {
-      // Not remembered.
-    }
-    setText('')
-    onConcept(clean)
-  }
+  const raisedBy = relief?.source.kind === 'probe' ? relief.source.key : null
 
   return (
     <>
@@ -62,6 +42,7 @@ export function AxesMenu(props: AxesMenuProps): ReactElement {
         aria-label="Axes"
         aria-haspopup="dialog"
         aria-expanded={open}
+        data-tour="axes"
         onClick={() => setOpen((value) => !value)}
       >
         <Axis3d size={17} aria-hidden />
@@ -84,29 +65,16 @@ export function AxesMenu(props: AxesMenuProps): ReactElement {
           </button>
         </div>
         <section className="nm-axes__section">
+          <h4>Raise by a probe</h4>
+          {shownProbes(probes).length > 0 ? (
+            <p>Each item rises by its score for the probe. Every probe has its two levels at the same height: possible from 0.5, probable from 0.8.</p>
+          ) : null}
+          <ProbeList probes={probes} current={raisedBy} disabled={busy} onPick={onProbe} />
+        </section>
+        <section className="nm-axes__section">
           <h4>Raise by a concept</h4>
           <p>Type a few words. Each item rises by how much its meaning resembles them, whatever words it uses.</p>
-          <form
-            className="nm-axes__form"
-            onSubmit={(event) => {
-              event.preventDefault()
-              apply(text)
-            }}
-          >
-            <input className="nm-field" value={text} onChange={(event) => setText(event.target.value)} placeholder="a call to violence, a giveaway…" aria-label="Concept" maxLength={300} />
-            <button type="submit" className="nm-btn-primary nm-btn-small" disabled={!text.trim() || busy}>
-              Raise
-            </button>
-          </form>
-          {recent.length > 0 ? (
-            <div className="nm-axes__recent">
-              {recent.map((concept) => (
-                <button key={concept} type="button" className="nm-axes__chip" disabled={busy} onClick={() => apply(concept)}>
-                  {concept}
-                </button>
-              ))}
-            </div>
-          ) : null}
+          <ConceptForm busy={busy} onConcept={onConcept} />
         </section>
         {busy ? <p className="nm-axes__note">Computing the scores…</p> : null}
         {error ? <p className="nm-axes__note nm-axes__note--error">{error}</p> : null}

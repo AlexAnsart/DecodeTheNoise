@@ -153,3 +153,10 @@
   color: var(--nm-text-muted);
   font-size: 0.64rem;
 }
+
+/* A note that heads the rows: what the colours were measured to be worth, or what is missing. */
+.nm-legend__note--lead {
+  margin: 0;
+  padding: 0.35rem 0.35rem 0.2rem;
+  line-height: 1.3;
+}

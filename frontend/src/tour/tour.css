@@ -1,0 +1,111 @@
+/* The guided tour: a small card and a ring around what it explains. Above everything else. */
+
+.nm-tour {
+  position: fixed;
+  z-index: 20100;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  width: min(320px, calc(100vw - 20px));
+  padding: 0.75rem 0.8rem 0.7rem;
+  border: 1px solid color-mix(in srgb, var(--nm-accent) 45%, transparent);
+  border-radius: var(--nm-radius-md);
+  background: var(--nm-menu-bg);
+  box-shadow: var(--nm-shadow-card);
+  color: var(--nm-text);
+  animation: nm-tour-in 160ms ease-out;
+}
+
+.nm-tour__head {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.nm-tour__head h2 {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  font-size: 0.86rem;
+  font-weight: 650;
+  line-height: 1.3;
+}
+
+.nm-tour > p {
+  margin: 0;
+  color: var(--nm-text-muted);
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+.nm-tour__foot {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.25rem;
+}
+
+.nm-tour__dots {
+  display: inline-flex;
+  gap: 5px;
+  margin-right: auto;
+}
+
+.nm-tour__dots i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--nm-text-muted) 40%, transparent);
+  transition: background 0.15s ease;
+}
+
+.nm-tour__dots i.is-current {
+  background: var(--nm-accent);
+}
+
+.nm-tour__skip {
+  padding: 0.3rem 0.4rem;
+  border: none;
+  border-radius: var(--nm-radius-sm);
+  background: transparent;
+  color: var(--nm-text-muted);
+  font-size: 0.72rem;
+}
+
+.nm-tour__skip:hover {
+  color: var(--nm-text);
+  text-decoration: underline;
+}
+
+/* Drawn over the target without taking the pointer: the control under it still works. */
+.nm-tour__ring {
+  position: fixed;
+  z-index: 20099;
+  border: 2px solid var(--nm-accent);
+  border-radius: 9px;
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--nm-accent) 22%, transparent);
+  pointer-events: none;
+  /* Three beats, then still: an animation that never ends keeps the browser composing frames
+     over the map's canvas. */
+  animation: nm-tour-ring 1.2s ease-in-out 3;
+}
+
+@keyframes nm-tour-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}
+
+@keyframes nm-tour-ring {
+  50% {
+    box-shadow: 0 0 0 7px color-mix(in srgb, var(--nm-accent) 10%, transparent);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nm-tour,
+  .nm-tour__ring {
+    animation: none;
+  }
+}

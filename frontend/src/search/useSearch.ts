@@ -2,11 +2,10 @@
    words, asked of the server once the typing settles. Typing lists results; it does not filter. */
 
 import { useEffect, useMemo, useState } from 'react'
-import { searchText } from '../api/client'
-import { loadItems } from '../items/itemStore'
 import { logger } from '../log/logger'
 import type { MapData } from '../map/mapData'
 import { columnOf } from '../map/mapData'
+import { useItemStore, useMapApi } from '../source/mapServices'
 import { formatDay, plural } from '../text/format'
 
 const log = logger('search')
@@ -51,6 +50,8 @@ function zoneHits(data: MapData, needle: string): SearchHit[] {
 }
 
 export function useSearch(data: MapData, text: string): SearchState {
+  const api = useMapApi()
+  const store = useItemStore()
   const [settled, setSettled] = useState('')
   const [answer, setAnswer] = useState<{ query: string; mask: Uint8Array; items: SearchHit[]; total: number } | null>(null)
   const [error, setError] = useState<string | null>(null)
@@ -64,7 +65,8 @@ export function useSearch(data: MapData, text: string): SearchState {
     if (settled.length < MIN_CHARS) return undefined
     const abort = new AbortController()
     setError(null)
-    searchText(settled, abort.signal)
+    api
+      .searchText(settled, abort.signal)
       .then(async (mask) => {
         const found: number[] = []
         let total = 0
@@ -73,7 +75,7 @@ export function useSearch(data: MapData, text: string): SearchState {
           total += 1
           if (found.length < MAX_ITEMS) found.push(i)
         }
-        const items = await loadItems(found, abort.signal)
+        const items = await store.load(found, abort.signal)
         const rows = items.map((item) => ({
           id: `item:${item.index}`,
           kind: 'item' as const,
@@ -89,7 +91,7 @@ export function useSearch(data: MapData, text: string): SearchState {
         setError('The search did not answer.')
       })
     return () => abort.abort()
-  }, [settled])
+  }, [settled, api, store])
 
   const zones = useMemo(() => (settled.length >= MIN_CHARS ? zoneHits(data, settled.toLowerCase()) : []), [data, settled])
   const current = answer && answer.query === settled ? answer : null

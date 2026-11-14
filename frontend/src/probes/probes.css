@@ -1,0 +1,226 @@
+/* The list of probes, in a menu. */
+.nm-probes {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.nm-probes__rows {
+  max-height: 232px;
+  overflow-y: auto;
+}
+
+.nm-popover p.nm-probes__family,
+.nm-probes__family {
+  margin: 0.35rem 0 0.1rem;
+  padding: 0 0.45rem;
+  color: var(--nm-text-muted);
+  font-size: 0.64rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.nm-popover p.nm-probes__none,
+.nm-probes__none {
+  margin: 0;
+  padding: 0.15rem 0;
+  color: var(--nm-text-muted);
+  font-size: 0.72rem;
+}
+
+.nm-menu-probes {
+  padding: 0 0.1rem 0.2rem;
+}
+
+.nm-menu-probes .nm-probes__none {
+  padding: 0.15rem 0.35rem 0.3rem;
+}
+
+.nm-probe-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0 0.4rem;
+  width: 100%;
+  min-height: 36px;
+  padding: 0.2rem 0.45rem;
+  border: none;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--nm-text);
+  font-size: 0.74rem;
+  line-height: 1.25;
+  text-align: left;
+}
+
+.nm-probe-row:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--nm-accent) 8%, transparent);
+}
+
+.nm-probe-row.is-chosen {
+  background: color-mix(in srgb, var(--nm-accent) 14%, transparent);
+}
+
+.nm-probe-row:disabled {
+  opacity: 0.45;
+}
+
+.nm-probe-row__label,
+.nm-probe-row__measure {
+  grid-column: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nm-probe-row__measure {
+  color: var(--nm-text-muted);
+  font-size: 0.66rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.nm-probe-row__check {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  color: var(--nm-accent);
+}
+
+/* What the probes and the review say of one item, in its card. */
+.nm-verdicts {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-top: 0.55rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--nm-border);
+  font-size: 0.72rem;
+  line-height: 1.35;
+}
+
+.nm-verdicts__title {
+  margin: 0;
+  color: var(--nm-text-muted);
+  font-size: 0.64rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.nm-verdicts__note {
+  margin: 0;
+  color: var(--nm-text-muted);
+}
+
+.nm-verdicts__note--error {
+  color: var(--nm-danger);
+}
+
+.nm-verdict {
+  padding: 0.3rem 0.45rem;
+  border-left: 3px solid var(--level);
+  border-radius: 0 6px 6px 0;
+  background: color-mix(in srgb, var(--level) 9%, transparent);
+}
+
+.nm-verdict--possible {
+  --level: var(--nm-level-possible);
+}
+
+.nm-verdict--probable {
+  --level: var(--nm-level-probable);
+}
+
+.nm-verdict__head {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+}
+
+.nm-verdict__level {
+  flex: none;
+  color: var(--level);
+  font-weight: 700;
+}
+
+.nm-verdict__label {
+  flex: 1;
+  min-width: 0;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.nm-verdict__score {
+  flex: none;
+  color: var(--nm-text-muted);
+}
+
+.nm-verdict__measure {
+  margin: 0.1rem 0 0;
+  color: var(--nm-text-muted);
+  font-size: 0.66rem;
+}
+
+.nm-verdict__measure a {
+  color: var(--nm-accent);
+  text-decoration: none;
+}
+
+.nm-verdict__measure a:hover {
+  text-decoration: underline;
+}
+
+.nm-review {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 0.35rem 0.45rem;
+  border: 1px solid var(--nm-border);
+  border-radius: 6px;
+}
+
+.nm-review__head {
+  margin: 0;
+  font-weight: 600;
+}
+
+.nm-review__finding {
+  margin: 0;
+}
+
+.nm-review__reading {
+  font-weight: 600;
+}
+
+.nm-review__reading--supported {
+  color: var(--nm-level-probable);
+}
+
+.nm-review__reading--unclear,
+.nm-review__reading--not-supported {
+  color: var(--nm-text-muted);
+}
+
+.nm-review__quote {
+  margin: 0.2rem 0 0;
+  padding-left: 0.5rem;
+  border-left: 2px solid var(--nm-border-strong);
+  color: var(--nm-text);
+  font-style: italic;
+  overflow-wrap: anywhere;
+}
+
+.nm-review__limit {
+  margin: 0;
+  color: var(--nm-text-muted);
+  font-size: 0.66rem;
+}
+
+/* A quote of the review, found in the text of the item. */
+.nm-item__text mark {
+  padding: 0 0.1em;
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--nm-level-possible) 32%, transparent);
+  color: inherit;
+}

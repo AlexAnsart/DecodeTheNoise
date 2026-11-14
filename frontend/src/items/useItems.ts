@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import type { Item } from '../api/schema'
 import { logger } from '../log/logger'
-import { cachedItem, loadItems } from './itemStore'
+import { useItemStore } from '../source/mapServices'
 
 const log = logger('items')
 
@@ -13,6 +13,7 @@ export interface ItemsState {
 
 /** The content of the given points, in order. `key` names the list, so a new list resets it. */
 export function useItems(indices: number[], key: string): ItemsState {
+  const store = useItemStore()
   const [state, setState] = useState<ItemsState>({ items: [], loading: false, error: null })
 
   useEffect(() => {
@@ -21,7 +22,7 @@ export function useItems(indices: number[], key: string): ItemsState {
       return undefined
     }
     const known = indices.flatMap((index) => {
-      const item = cachedItem(index)
+      const item = store.cached(index)
       return item ? [item] : []
     })
     if (known.length === indices.length) {
@@ -30,7 +31,8 @@ export function useItems(indices: number[], key: string): ItemsState {
     }
     const abort = new AbortController()
     setState((previous) => ({ items: previous.items, loading: true, error: null }))
-    loadItems(indices, abort.signal)
+    store
+      .load(indices, abort.signal)
       .then((items) => setState({ items, loading: false, error: null }))
       .catch((error: unknown) => {
         if (abort.signal.aborted) return
@@ -40,7 +42,7 @@ export function useItems(indices: number[], key: string): ItemsState {
     return () => abort.abort()
     // The list is identified by its key: the array itself is rebuilt on every render.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [key])
+  }, [key, store])
 
   return state
 }

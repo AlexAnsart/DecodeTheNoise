@@ -3,8 +3,10 @@ import type { CSSProperties, ReactElement, RefObject } from 'react'
 import type { LegendEntry } from '../colour/legend'
 import { cssColour } from '../colour/palette'
 import { useItem } from '../items/useItems'
+import type { ProbeInfo } from '../api/schema'
 import type { MapData } from '../map/mapData'
 import { NO_VALUE, columnOf } from '../map/mapData'
+import { formatScore, levelOf } from '../probes/levels'
 import { formatDay } from '../text/format'
 import './picking.css'
 
@@ -16,11 +18,26 @@ interface HoverTipProps {
   tip: RefObject<HTMLDivElement | null>
   /** Legend entry of the point under the current colouring, with the colouring's name. */
   entry: { title: string; entry: LegendEntry } | null
-  /** Height read on the relief axis, when one is on. */
-  score: { label: string; value: number } | null
+  /** What the relief axis reads for the point, when one is on. */
+  score: HeightRead | null
   /** Set when the pointer is on a line to a neighbour of the selected point. */
   neighbourOfSelected: boolean
   onSettle(): void
+}
+
+export interface HeightRead {
+  label: string
+  /** A share of the height, or the score of the probe (NaN when it does not read the point). */
+  value: number
+  /** The probe the height reads, when it reads one. */
+  probe: ProbeInfo | null
+}
+
+function heightWords(score: HeightRead): string {
+  if (!score.probe) return `${score.label}: ${Math.round(score.value * 100)}% of the height`
+  if (Number.isNaN(score.value)) return `${score.label}: not read by this probe`
+  const level = levelOf(score.value, score.probe)
+  return `${score.label}: score ${formatScore(score.value)}${level ? `, ${level}` : ', not flagged'}`
 }
 
 function value(data: MapData, key: string, index: number): string | null {
@@ -66,11 +83,7 @@ export function HoverTip(props: HoverTipProps): ReactElement {
               {entry.title}: {entry.entry.label}
             </p>
           ) : null}
-          {score ? (
-            <p className="nm-tip__line">
-              {score.label}: {Math.round(score.value * 100)}% of the height
-            </p>
-          ) : null}
+          {score ? <p className="nm-tip__line">{heightWords(score)}</p> : null}
           {neighbourOfSelected ? <p className="nm-tip__note">A neighbour by meaning of the selected item</p> : null}
         </>
       ) : null}

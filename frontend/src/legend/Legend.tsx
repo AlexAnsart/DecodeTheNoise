@@ -50,7 +50,7 @@ export function Legend(props: LegendProps): ReactElement {
   }
 
   return (
-    <section className={`nm-legend${raised ? ' is-raised' : ''}`} aria-label="Legend">
+    <section className={`nm-legend${raised ? ' is-raised' : ''}`} aria-label="Legend" data-tour="legend">
       <header className="nm-legend__head">
         <button type="button" className="nm-legend__title" onClick={fold} aria-expanded={!folded} title={folded ? 'Unfold the legend' : 'Fold the legend'}>
           <span>{legend.title}</span>
@@ -84,6 +84,7 @@ export function Legend(props: LegendProps): ReactElement {
               <p className="nm-legend__note">Each stretch of colour holds as many items.</p>
             </div>
           ) : null}
+          {legend.note ? <p className="nm-legend__note nm-legend__note--lead">{legend.note}</p> : null}
           {rows.map((entry) => (
             <LegendRow
               key={entry.id}

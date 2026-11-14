@@ -1,15 +1,19 @@
-/* What colours the map: a column or the date, or groups composed by the user on top of it. */
+/* What colours the map: a column, the date or a probe, or groups composed by the user. */
 
 import { useCallback, useMemo, useState } from 'react'
+import { fitMask } from '../map/carryOver'
 import type { MapData } from '../map/mapData'
+import { probeLegend } from '../probes/probeLegend'
+import { useProbeScores } from '../probes/useProbeScores'
 import type { Colouring, Legend, PaintGroup } from './legend'
 import { buildLegend, defaultColouring } from './legend'
 import type { Palette } from './palette'
 
 const STORAGE_KEY = 'noisemap.colouring'
+const PROBE_PREFIX = 'probe:'
 
 export interface ColouringState {
-  /** The attribute chosen in the colour menu. */
+  /** The attribute that colours the map: the one chosen in the menu when this map has it. */
   choice: Colouring
   composed: PaintGroup[] | null
   legend: Legend
@@ -24,45 +28,71 @@ export interface ColouringState {
   setPeek(entry: number | null): void
 }
 
-function storedChoice(data: MapData): Colouring {
+function storedChoice(): Colouring | null {
   try {
     const value = localStorage.getItem(STORAGE_KEY)
     if (value === 'date') return { kind: 'date' }
-    if (value && data.columns.some((column) => column.key === value)) return { kind: 'column', key: value }
+    if (value?.startsWith(PROBE_PREFIX)) return { kind: 'probe', key: value.slice(PROBE_PREFIX.length) }
+    if (value) return { kind: 'column', key: value }
   } catch {
     // No storage: the default colouring applies.
   }
-  return defaultColouring(data)
+  return null
 }
 
 function remember(colouring: Colouring): void {
   try {
     if (colouring.kind === 'date') localStorage.setItem(STORAGE_KEY, 'date')
     else if (colouring.kind === 'column') localStorage.setItem(STORAGE_KEY, colouring.key)
+    else if (colouring.kind === 'probe') localStorage.setItem(STORAGE_KEY, `${PROBE_PREFIX}${colouring.key}`)
   } catch {
     // Not remembered.
   }
 }
 
-export function useColouring(data: MapData, palette: Palette): ColouringState {
-  const [choice, setChoice] = useState<Colouring>(() => storedChoice(data))
-  const [composed, setComposed] = useState<PaintGroup[] | null>(null)
-  const [hidden, setHidden] = useState<ReadonlySet<number>>(new Set())
-  const [peek, setPeek] = useState<number | null>(null)
+/** Whether this map has what the colouring reads. A growing map gains columns and probes. */
+function applies(colouring: Colouring, data: MapData): boolean {
+  if (colouring.kind === 'column') return data.columns.some((column) => column.key === colouring.key)
+  if (colouring.kind === 'probe') return data.probes.some((probe) => probe.key === colouring.key && probe.state === 'shown')
+  return true
+}
 
-  const legend = useMemo(
-    () => buildLegend(data, composed ? { kind: 'groups', groups: composed } : choice, palette),
-    [data, choice, composed, palette],
-  )
+export function useColouring(data: MapData, palette: Palette): ColouringState {
+  const [chosen, setChosen] = useState<Colouring | null>(storedChoice)
+  const [composed, setComposed] = useState<PaintGroup[] | null>(null)
+  // Hidden entries are kept by label: a map that grows ranks its entries again.
+  const [hiddenLabels, setHiddenLabels] = useState<ReadonlySet<string>>(new Set())
+  const [peek, setPeek] = useState<number | null>(null)
+  const [seen, setSeen] = useState(data)
+  if (seen !== data) {
+    // The map was read again: the composed groups keep their points, on the new size.
+    setSeen(data)
+    if (composed) setComposed(composed.map((group) => ({ label: group.label, mask: fitMask(group.mask, data.n) })))
+  }
+
+  const choice = useMemo(() => (chosen && applies(chosen, data) ? chosen : defaultColouring(data)), [chosen, data])
+  const probe = useProbeScores(data, !composed && choice.kind === 'probe' ? choice.key : null)
+
+  const legend = useMemo(() => {
+    if (composed) return buildLegend(data, { kind: 'groups', groups: composed }, palette)
+    if (choice.kind === 'probe') return probeLegend(data, choice.key, probe, palette)
+    return buildLegend(data, choice, palette)
+  }, [data, choice, composed, palette, probe])
+
+  const hidden = useMemo(() => {
+    const ids = new Set<number>()
+    for (const entry of legend.entries) if (hiddenLabels.has(entry.label)) ids.add(entry.id)
+    return ids
+  }, [legend, hiddenLabels])
 
   const reset = useCallback(() => {
-    setHidden(new Set())
+    setHiddenLabels(new Set())
     setPeek(null)
   }, [])
 
   const choose = useCallback(
     (colouring: Colouring) => {
-      setChoice(colouring)
+      setChosen(colouring)
       setComposed(null)
       remember(colouring)
       reset()
@@ -78,20 +108,27 @@ export function useColouring(data: MapData, palette: Palette): ColouringState {
     [reset],
   )
 
-  const toggle = useCallback((entry: number) => {
-    setHidden((previous) => {
-      const next = new Set(previous)
-      if (next.has(entry)) next.delete(entry)
-      else next.add(entry)
-      return next
-    })
-  }, [])
+  const toggle = useCallback(
+    (entry: number) => {
+      const label = legend.entries.find((candidate) => candidate.id === entry)?.label
+      if (label === undefined) return
+      setHiddenLabels((previous) => {
+        const next = new Set(previous)
+        if (next.has(label)) next.delete(label)
+        else next.add(label)
+        return next
+      })
+    },
+    [legend],
+  )
 
   const solo = useCallback(
     (entry: number) => {
-      setHidden((previous) => {
-        const others = legend.entries.filter((e) => e.id !== entry).map((e) => e.id)
-        const alreadyAlone = !previous.has(entry) && others.every((id) => previous.has(id))
+      const label = legend.entries.find((candidate) => candidate.id === entry)?.label
+      if (label === undefined) return
+      setHiddenLabels((previous) => {
+        const others = legend.entries.filter((candidate) => candidate.id !== entry).map((candidate) => candidate.label)
+        const alreadyAlone = !previous.has(label) && others.every((other) => previous.has(other))
         return new Set(alreadyAlone ? [] : others)
       })
     },
@@ -99,7 +136,7 @@ export function useColouring(data: MapData, palette: Palette): ColouringState {
   )
 
   const hideAll = useCallback(
-    (hide: boolean) => setHidden(new Set(hide ? legend.entries.map((e) => e.id) : [])),
+    (hide: boolean) => setHiddenLabels(new Set(hide ? legend.entries.map((entry) => entry.label) : [])),
     [legend],
   )
 

@@ -57,6 +57,7 @@ export function Toolbar(props: ToolbarProps): ReactElement {
         className={`nm-tool nm-tool--icon${lasso ? ' is-active' : ''}`}
         title="Lasso: draw around points to select them (L)"
         aria-label="Lasso"
+        data-tour="lasso"
         aria-pressed={lasso}
         onClick={() => props.onLasso(!lasso)}
       >

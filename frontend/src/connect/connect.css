@@ -1,0 +1,116 @@
+/* The key, the ways to send posts, and the blocks of text to copy. */
+
+.nm-key {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
+.nm-key__value {
+  flex: 1;
+  min-width: 0;
+  height: 28px;
+  padding: 0 0.5rem;
+  overflow: hidden;
+  border: 1px solid var(--nm-border);
+  border-radius: var(--nm-radius-sm);
+  background: var(--nm-input-bg);
+  color: var(--nm-text);
+  font-family: var(--nm-font-mono);
+  font-size: 0.72rem;
+  line-height: 26px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  user-select: all;
+}
+
+.nm-copy {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.25rem;
+  flex: none;
+}
+
+.nm-copy__failed {
+  max-width: 16rem;
+  color: var(--nm-danger);
+  font-size: 0.68rem;
+  line-height: 1.35;
+}
+
+.nm-send {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  min-width: 0;
+}
+
+.nm-send__panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.nm-send__panel p,
+.nm-sample p {
+  margin: 0;
+  color: var(--nm-text-muted);
+  font-size: 0.74rem;
+  line-height: 1.45;
+}
+
+.nm-code {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.45rem;
+  min-width: 0;
+}
+
+.nm-code__text {
+  width: 100%;
+  max-height: 11.5rem;
+  margin: 0;
+  padding: 0.55rem 0.65rem;
+  overflow: auto;
+  border: 1px solid var(--nm-border);
+  border-radius: var(--nm-radius-sm);
+  background: var(--nm-inset-bg);
+  color: var(--nm-text);
+  font-family: var(--nm-font-mono);
+  font-size: 0.68rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.nm-code__text:focus-visible {
+  outline-offset: 0;
+}
+
+.nm-sample {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.55rem;
+}
+
+.nm-sample__progress {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  width: 100%;
+}
+
+.nm-sample .nm-sample__progress > p {
+  color: var(--nm-text);
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.nm-sample .nm-sample__note--error {
+  color: var(--nm-danger);
+}

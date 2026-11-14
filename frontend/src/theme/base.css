@@ -282,3 +282,78 @@ input:focus-visible {
 .nm-num {
   font-variant-numeric: tabular-nums;
 }
+
+/* A bare icon button: closing a card or a panel. */
+.nm-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--nm-control-h);
+  height: var(--nm-control-h);
+  padding: 0;
+  flex: none;
+  border: none;
+  border-radius: var(--nm-radius-sm);
+  background: transparent;
+  color: var(--nm-text-muted);
+  transition:
+    background 0.12s ease,
+    color 0.12s ease;
+}
+
+.nm-icon-btn:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--nm-accent) 8%, transparent);
+  color: var(--nm-text);
+}
+
+.nm-icon-btn:disabled {
+  opacity: 0.4;
+}
+
+/* A link written inside a sentence. */
+.nm-link {
+  color: var(--nm-accent);
+  text-decoration: none;
+}
+
+.nm-link:hover {
+  text-decoration: underline;
+}
+
+/* A small label above a title: what kind of thing follows. */
+.nm-eyebrow {
+  margin: 0;
+  color: var(--nm-accent);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* A short line under a control: what it does, or why it failed. */
+.nm-note {
+  margin: 0;
+  color: var(--nm-text-muted);
+  font-size: 0.72rem;
+  line-height: 1.4;
+}
+
+.nm-note--error {
+  color: var(--nm-danger);
+}
+
+/* A thin bar: how much of something is used or done. */
+.nm-meter {
+  height: 6px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--nm-inset-bg);
+}
+
+.nm-meter > i {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--nm-accent), var(--nm-accent-alt));
+  transition: width 0.2s ease;
+}

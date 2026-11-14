@@ -1,0 +1,224 @@
+/* The method page: one column that scrolls, sections, and plain tables. */
+
+.nm-method {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+}
+
+.nm-method__page {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: min(980px, 100%);
+  margin: 0 auto;
+  padding: 2rem 1.25rem 4rem;
+}
+
+.nm-method__head {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.nm-method__head h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 650;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+
+.nm-method__toc {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.2rem;
+}
+
+.nm-method__toc a {
+  padding: 0.2rem 0.65rem;
+  border: 1px solid var(--nm-border);
+  border-radius: 999px;
+  color: var(--nm-text-muted);
+  font-size: 0.74rem;
+  line-height: 1.5;
+  text-decoration: none;
+  transition:
+    border-color 0.12s ease,
+    color 0.12s ease;
+}
+
+.nm-method__toc a:hover {
+  border-color: var(--nm-border-strong);
+  color: var(--nm-text);
+}
+
+.nm-method__section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  /* A section opened from a link clears the top of the page. */
+  scroll-margin-top: 1rem;
+  font-size: 0.82rem;
+  line-height: 1.55;
+}
+
+.nm-method__section h2 {
+  margin: 0;
+  padding-bottom: 0.45rem;
+  border-bottom: 1px solid var(--nm-border);
+  font-size: 1.05rem;
+  font-weight: 650;
+}
+
+.nm-method__section h3 {
+  margin: 0.6rem 0 0;
+  font-size: 0.84rem;
+  font-weight: 600;
+}
+
+.nm-method__section > p {
+  margin: 0;
+}
+
+.nm-method__section code {
+  padding: 0.05rem 0.3rem;
+  border-radius: 4px;
+  background: var(--nm-inset-bg);
+  font-family: var(--nm-font-mono);
+  font-size: 0.74rem;
+}
+
+.nm-method__section > .nm-method__empty {
+  padding: 0.8rem 0.9rem;
+  border: 1px dashed var(--nm-border-strong);
+  border-radius: var(--nm-radius-sm);
+  color: var(--nm-text-muted);
+}
+
+.nm-method__shape,
+.nm-method__raw pre {
+  margin: 0;
+  padding: 0.7rem 0.8rem;
+  overflow: auto;
+  border: 1px solid var(--nm-border);
+  border-radius: var(--nm-radius-sm);
+  background: var(--nm-inset-bg);
+  font-family: var(--nm-font-mono);
+  font-size: 0.7rem;
+  line-height: 1.55;
+}
+
+.nm-method__raw pre {
+  max-height: 22rem;
+  margin-top: 0.5rem;
+}
+
+.nm-method__raw summary {
+  color: var(--nm-text-muted);
+  font-size: 0.76rem;
+  cursor: pointer;
+}
+
+.nm-method__raw summary:hover {
+  color: var(--nm-text);
+}
+
+.nm-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--nm-border);
+  border-radius: var(--nm-radius-sm);
+}
+
+.nm-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.76rem;
+  line-height: 1.45;
+}
+
+.nm-table th,
+.nm-table td {
+  padding: 0.5rem 0.7rem;
+  border-bottom: 1px solid var(--nm-border);
+  text-align: left;
+  vertical-align: top;
+}
+
+.nm-table thead th {
+  background: var(--nm-surface-2);
+  color: var(--nm-text-muted);
+  font-size: 0.68rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.nm-table tbody th {
+  font-weight: 500;
+}
+
+.nm-table tbody:last-child tr:last-child > * {
+  border-bottom: none;
+}
+
+.nm-table td > span {
+  display: block;
+  color: var(--nm-text-muted);
+  font-size: 0.68rem;
+}
+
+.nm-table__probe {
+  min-width: 15rem;
+  max-width: 22rem;
+}
+
+.nm-table__probe > strong,
+.nm-table__probe > span {
+  display: block;
+}
+
+.nm-table__probe > span {
+  color: var(--nm-text-muted);
+  font-weight: 400;
+}
+
+.nm-table__tags {
+  display: flex !important;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin-top: 0.3rem;
+}
+
+.nm-table__tags i,
+.nm-table__required {
+  padding: 0 0.4rem;
+  border: 1px solid var(--nm-border);
+  border-radius: 999px;
+  color: var(--nm-text-muted);
+  font-size: 0.64rem;
+  font-style: normal;
+  line-height: 1.6;
+}
+
+.nm-table__required {
+  margin-left: 0.4rem;
+  border-color: color-mix(in srgb, var(--nm-accent) 45%, transparent);
+  color: var(--nm-accent);
+}
+
+.nm-table__route,
+.nm-table__field {
+  width: 1%;
+  white-space: nowrap;
+}
+
+.nm-table td.nm-num {
+  white-space: nowrap;
+}
+
+.nm-table__route b {
+  color: var(--nm-accent);
+  font-weight: 600;
+}

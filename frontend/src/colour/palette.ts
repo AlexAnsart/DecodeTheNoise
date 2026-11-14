@@ -21,6 +21,9 @@ export interface Palette {
   muted: Rgb
   highlight: Rgb
   danger: Rgb
+  /** The two levels of a probe, as an intensity. */
+  possible: Rgb
+  probable: Rgb
 }
 
 export function readPalette(): Palette {
@@ -33,6 +36,8 @@ export function readPalette(): Palette {
     muted: tokenRgb('--nm-text-muted'),
     highlight: tokenRgb('--nm-point-highlight'),
     danger: tokenRgb('--nm-danger'),
+    possible: tokenRgb('--nm-level-possible'),
+    probable: tokenRgb('--nm-level-probable'),
   }
 }
 

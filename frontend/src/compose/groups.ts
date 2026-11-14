@@ -3,11 +3,13 @@
 import { maskOfIndices, maskOfPeriod } from '../colour/emphasis'
 import type { PaintGroup } from '../colour/legend'
 import { columnOptions } from '../filters/columnOptions'
+import { carryCodes } from '../map/carryOver'
 import type { MapData } from '../map/mapData'
 import { formatDay } from '../text/format'
 
 export const MIN_GROUPS = 2
 export const MAX_GROUPS = 6
+const COLUMN_KIND = 'column:'
 
 /** `column:<key>` for one value of an attribute, or one of the three other kinds. */
 export type GroupKind = `column:${string}` | 'period' | 'selection' | 'filters'
@@ -59,6 +61,14 @@ export function openingDrafts(data: MapData): Draft[] {
     { ...emptyDraft(kind), value: first?.id ?? null },
     { ...emptyDraft(kind), value: second?.id ?? null },
   ]
+}
+
+/** The same draft on a map that was read again: the value of a column is kept by its name,
+ *  since its code changes when the column is ranked again. */
+export function carryDraft(draft: Draft, previous: MapData, next: MapData): Draft {
+  if (!draft.kind.startsWith(COLUMN_KIND) || draft.value === null) return draft
+  const [value] = carryCodes(previous, next, draft.kind.slice(COLUMN_KIND.length), [draft.value])
+  return { ...draft, value: value ?? null }
 }
 
 /** The group a draft describes, or null while it is incomplete. */

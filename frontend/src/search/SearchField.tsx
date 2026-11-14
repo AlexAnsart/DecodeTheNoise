@@ -38,7 +38,7 @@ export function SearchField({ data, filteredOn, onPick, onFilter, onLift, onClea
   }
 
   return (
-    <div ref={wrap} className="nm-search">
+    <div ref={wrap} className="nm-search" data-tour="search">
       {search.loading ? <LoaderCircle size={13} className="nm-search__icon nm-spin" aria-hidden /> : <Search size={13} className="nm-search__icon" aria-hidden />}
       <input
         type="search"
