@@ -1,0 +1,7 @@
+{"at": "2026-11-14T13:06:00+00:00", "step": "ingest", "build": "ira-3k", "machine": "laptop Snapdragon X, CPU", "items": 3000, "seconds": 38.8}
+{"at": "2026-11-14T13:14:39+00:00", "step": "embed", "build": "ira-3k", "machine": "laptop Snapdragon X, CPU", "items": 2998, "seconds": 143.3}
+{"at": "2026-11-14T13:15:17+00:00", "step": "ingest", "build": "ira-18k", "machine": "laptop Snapdragon X, CPU", "items": 18000, "seconds": 29.5}
+{"at": "2026-11-14T13:18:48+00:00", "step": "layout", "build": "ira-3k", "machine": "laptop Snapdragon X, CPU", "items": 3000, "seconds": 65.5}
+{"at": "2026-11-14T13:18:50+00:00", "step": "neighbours", "build": "ira-3k", "machine": "laptop Snapdragon X, CPU", "items": 3000, "seconds": 0.4}
+{"at": "2026-11-14T13:18:51+00:00", "step": "zones", "build": "ira-3k", "machine": "laptop Snapdragon X, CPU", "items": 3000, "seconds": 0.2}
+{"at": "2026-11-14T13:18:53+00:00", "step": "pack", "build": "ira-3k", "machine": "laptop Snapdragon X, CPU", "items": 3000, "seconds": 0.8}
