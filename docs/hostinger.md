@@ -75,5 +75,31 @@ Set up on 14 Nov 2026. No secrets.
 | Health route | `/api/health` returns the commit and the map build being served |
 | Map build served | The folder `data/build/current` points to. On the server today: `ira-120k` (UMAP layout, the one served) and `ira-120k-pca` (PCA layout, served for an hour on 14 Nov as a test), same posts, vectors, neighbours and zones. To switch: `ln -sfn <build> data/build/current` in `/docker/noisemap`, then `docker compose --project-directory . -f deploy/docker-compose.yml restart api`. A deploy does not change it |
 | Deploy | Push to `main`: the CI builds the images on CRACI and loads them on the server (`.github/workflows/ci.yml`, `deploy/up.sh`) |
+| Workspaces | `/docker/noisemap/data/workspaces` on the server, mounted in the API container and written by it: one folder per workspace, `accounts.sqlite` (hashed keys, settings, daily usage), `embeddings.sqlite` (vectors already computed, by text), `.numba` (compiled layout code). Not in git and not in an image: a redeploy keeps it |
+| Server `.env` | `LLM_MODEL=gemini-3.8-flash` added on 15 Nov 2026: without it the server names no zone and reviews nothing |
 | Also on the server | Hermes Agent (`/docker/hermes-agent-yciq`), left as installed |
 | Firewall | Hostinger firewall group `noisemap` (id 401111), active on the VPS: TCP 22, 80 and 443 from anywhere, everything else dropped. Hermes Agent is still reachable through Traefik, no longer on its direct port |
+
+## Measured on the server
+
+Night of 14 to 15 Nov 2026, commit `5c7bb8b`, from outside over HTTPS, with a script that plays the whole API (not in the repository). The server was otherwise idle. A fresh text is one it never embedded.
+
+| What | Measured |
+| --- | --- |
+| One post sent (`POST /api/v1/items`), fresh text | 0.17 to 0.38 s |
+| The same text sent again | 0.06 s: the vector comes from the cache |
+| A batch of 200 fresh posts, from received to placed on the map | 25.6 s, 7.8 posts a second |
+| While that batch is embedded: a search by meaning on the demo map, one post sent | 0.72 s, 0.55 s |
+| Layout, zones and words of a workspace of 20, 101 and 205 points | 0.5 s, 0.7 s, 0.4 s |
+| Memory of the API container (with its computing process), of Ollama | 679 MiB, 493 to 729 MiB |
+| Model alone, chunks of 8 against 16 texts a call (64 fresh texts, twice each) | 7.3 and 8.8 against 8.5 and 9.0 posts a second |
+
+What these measures decided:
+
+- **1,000 posts per workspace and per batch.** At 8 posts a second, a thousand posts take about two minutes; ten thousand would take twenty.
+- **Chunks of 8 texts.** The model takes one call at a time, so a search or a single post waits for the chunk in flight. Halving the chunk costs little speed and halves that wait.
+- **Ollama weighs eight times the other containers (`cpu_shares`).** While UMAP compiled in the API container, posts were embedded at 1 a second and a search took 7 s: Docker shares the processor between containers by weight, whatever the priority of a process inside one. With the weight, the embedding kept 6 to 7 posts a second during a compilation.
+- **Layouts run in a process of their own, one at a time.** A refresh that started during the start-up compilation got corrupted neighbour indices from the compiled code under UMAP, and compiling inside the API process slowed every request.
+- **The first start compiles for about 80 s; later ones do not.** The compiled code is kept in `.numba` on the volume: after the second deploy, the first refresh took 0.5 s.
+
+Before a push that changes an image, build it on the server from the committed tree, with the ignore file: `git archive HEAD .dockerignore pyproject.toml uv.lock backend pipelines probes reports deploy | ssh root@<server> 'tar -x -C /tmp/x && docker build -f /tmp/x/deploy/api.Dockerfile /tmp/x'`. A first deploy failed in the CI on a folder the ignore file left out, which a build without that file had not shown.
