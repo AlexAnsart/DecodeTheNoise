@@ -71,7 +71,7 @@ What was measured:
 | Neighbours, exact, 10 per point | 75 s |
 | Zones | 5 s |
 
-A second layout of the same vectors, on their three axes of largest variance (PCA), was made on the laptop in 5 s and is the one served since 14 Nov evening, as a test: those three axes keep 16.7% of the variance (`reports/pipeline-runs.jsonl`). The UMAP build stays on the server; switching is one link and a restart ([`hostinger.md`](hostinger.md)).
+A second layout of the same vectors, on their three axes of largest variance (PCA), was made on the laptop in 5 s and served for an hour on 14 Nov as a test: those three axes keep 16.7% of the variance (`reports/pipeline-runs.jsonl`) and the zones overlap in one dense cloud, so the UMAP build is the one served again. Both builds stay on the server; switching is one link and a restart ([`hostinger.md`](hostinger.md)).
 
 The limit on throughput was the CPU side of the Ollama server, not the GPU (45 to 47% busy): six servers on the one GPU gave 131 texts per second where one gave 94 to 98. The vector check against the laptop passed (table in section 2).
 
