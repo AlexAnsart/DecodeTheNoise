@@ -11,9 +11,13 @@ export interface Relief {
   note: string | null
 }
 
-const FLOOR_Z = 2.5
-const MIN_TOP_Z = 6
-const CLEAR_Z = 3.5
+// Set on the similarities this embedding model gives (four concepts on 3,000 posts: the 99th
+// percentile sits 2.1 to 4.1 robust deviations above the median, the 99.9th 3.1 to 6.2).
+// A point leaves the floor from 1.5 deviations and reaches the top at 4, or at the 99.9th
+// percentile when that is higher.
+const FLOOR_Z = 1.5
+const MIN_TOP_Z = 4
+const CLEAR_Z = 2.5
 const MIN_CLEAR_POINTS = 5
 
 function quantile(sorted: Float32Array, share: number): number {

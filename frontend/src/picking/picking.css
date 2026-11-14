@@ -2,7 +2,7 @@
   position: absolute;
   top: 0;
   left: 0;
-  z-index: 30;
+  z-index: 31;
   max-width: 300px;
   padding: 0.45rem 0.55rem;
   border: 1px solid color-mix(in srgb, var(--nm-accent) 20%, transparent);

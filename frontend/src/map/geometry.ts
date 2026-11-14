@@ -128,6 +128,32 @@ export function boundsOf(positions: Float32Array, kept?: Float32Array): Bounds {
   return { centre, half, radius: Math.sqrt(reach) || 1 }
 }
 
+const FRAME_SAMPLE = 20000
+const FRAME_TRIM = 0.005
+const FRAME_PAD = 1.08
+
+/** The box the camera frames: the bulk of the shown points. A handful of strays at the far
+ *  ends would otherwise shrink the whole map to a corner of the stage. */
+export function frameBounds(positions: Float32Array, kept?: Float32Array): Bounds {
+  const n = positions.length / 3
+  const shown: number[] = []
+  for (let i = 0; i < n; i += 1) if (!kept || kept[i] >= 0.5) shown.push(i)
+  if (shown.length === 0) return boundsOf(positions, kept)
+  const step = Math.max(1, Math.floor(shown.length / FRAME_SAMPLE))
+  const centre: [number, number, number] = [0, 0, 0]
+  const half: [number, number, number] = [1, 1, 1]
+  for (let axis = 0; axis < 3; axis += 1) {
+    const values: number[] = []
+    for (let j = 0; j < shown.length; j += step) values.push(positions[shown[j] * 3 + axis])
+    values.sort((a, b) => a - b)
+    const low = values[Math.floor(FRAME_TRIM * (values.length - 1))]
+    const high = values[Math.ceil((1 - FRAME_TRIM) * (values.length - 1))]
+    centre[axis] = (low + high) / 2
+    half[axis] = ((high - low) / 2) * FRAME_PAD
+  }
+  return { centre, half, radius: Math.hypot(half[0], half[1], half[2]) || 1 }
+}
+
 export function pointAt(positions: Float32Array, index: number): [number, number, number] {
   return [positions[index * 3], positions[index * 3 + 1], positions[index * 3 + 2]]
 }

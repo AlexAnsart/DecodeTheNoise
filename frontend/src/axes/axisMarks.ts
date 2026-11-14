@@ -1,7 +1,7 @@
 /* The lines and words that say what an added axis reads: dates along the front edge of the
    time shape, the height scale up a back corner of a relief. */
 
-import type { TimeRange } from '../map/geometry'
+import type { Bounds, TimeRange } from '../map/geometry'
 import { RELIEF_TOP, TIME_STRETCH, timePlace } from '../map/geometry'
 import type { AxisLine, Vec3 } from '../map/layers'
 import { formatDay, formatMonth } from '../text/format'
@@ -49,11 +49,11 @@ function calendarTicks(range: TimeRange): { at: number; text: string }[] {
   return []
 }
 
-/** The date axis: a line along the front bottom edge, a tick per calendar step. */
-export function timeMarks(range: TimeRange, span: number): AxisMarks {
+/** The date axis: a line along the front bottom edge of the points, a tick per calendar step. */
+export function timeMarks(range: TimeRange, span: number, bounds: Bounds): AxisMarks {
   const reach = span * TIME_STRETCH
-  const y = -span * 1.06
-  const z = -span
+  const y = bounds.centre[1] - bounds.half[1] - span * 0.06
+  const z = bounds.centre[2] - bounds.half[2]
   const tick = span * 0.035
   const lines: AxisLine[] = [{ path: [[-reach, y, z], [reach, y, z]], major: true }]
   const words: AxisWord[] = [{ position: [reach + span * 0.08, y, z], text: 'Date', title: true }]
@@ -65,12 +65,17 @@ export function timeMarks(range: TimeRange, span: number): AxisMarks {
   return { lines, words }
 }
 
-/** The height axis of a relief: the floor outlined, a scale up a back corner. */
-export function reliefMarks(label: string, span: number): AxisMarks {
+/** The height axis of a relief: the floor of the points outlined, a scale up a back corner. */
+export function reliefMarks(label: string, span: number, bounds: Bounds): AxisMarks {
   const top = span * RELIEF_TOP
-  const corner: [number, number] = [-span, span]
+  const pad = span * 0.04
+  const west = bounds.centre[0] - bounds.half[0] - pad
+  const east = bounds.centre[0] + bounds.half[0] + pad
+  const south = bounds.centre[1] - bounds.half[1] - pad
+  const north = bounds.centre[1] + bounds.half[1] + pad
+  const corner: [number, number] = [west, north]
   const tick = span * 0.035
-  const floor: Vec3[] = [[-span, -span, 0], [span, -span, 0], [span, span, 0], [-span, span, 0], [-span, -span, 0]]
+  const floor: Vec3[] = [[west, south, 0], [east, south, 0], [east, north, 0], [west, north, 0], [west, south, 0]]
   const lines: AxisLine[] = [
     { path: floor, major: false },
     { path: [[corner[0], corner[1], 0], [corner[0], corner[1], top]], major: true },

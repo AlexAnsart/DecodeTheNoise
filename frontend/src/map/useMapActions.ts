@@ -29,7 +29,7 @@ export function useMapActions(model: MapModel, stage: Stage, coveredRight: () =>
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const { setRelief, setSelected, setPicked, picked, positions, kept } = model
-  const { camera, size, project } = stage
+  const { camera, size, pixelMatrix } = stage
 
   const lift = useCallback(
     (label: string, scores: Promise<Float32Array>, skip: ArrayLike<number>) => {
@@ -68,9 +68,10 @@ export function useMapActions(model: MapModel, stage: Stage, coveredRight: () =>
 
   const lasso = useCallback(
     (stroke: Stroke, mode: LassoMode): boolean => {
-      if (!size) return picked !== null
+      const matrix = pixelMatrix()
+      if (!size || !matrix) return picked !== null
       const found = pointsInside(
-        (position) => project(position) ?? [-1, -1, -1],
+        matrix,
         positions,
         kept.values,
         stroke,
@@ -81,7 +82,7 @@ export function useMapActions(model: MapModel, stage: Stage, coveredRight: () =>
       setPicked(next)
       return next !== null
     },
-    [size, project, positions, kept, picked, setPicked],
+    [size, pixelMatrix, positions, kept, picked, setPicked],
   )
 
   return { busy, error, liftConcept, liftSelection, goTo, lasso }

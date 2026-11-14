@@ -3,7 +3,8 @@
 import { useCallback, useEffect, useRef } from 'react'
 import type { RefObject } from 'react'
 import type { Shape } from './geometry'
-import { boundsOf, nearestPoint, pointAt } from './geometry'
+import { frameBounds, nearestPoint, pointAt } from './geometry'
+import type { Vec3 } from './layers'
 import type { MapDeck } from './useDeck'
 import type { Size, ViewState } from './views'
 import { fitView, isFlat, keepPlace, viewFor } from './views'
@@ -19,6 +20,8 @@ export interface CameraInput {
   gap: number
   kept: Float32Array
   selected: number | null
+  /** Places that must stay in view besides the points: the ends of the axes. */
+  frame: Vec3[]
 }
 
 export interface Camera {
@@ -56,7 +59,7 @@ export function useCamera(input: CameraInput): Camera {
   const fit = useCallback(() => {
     const now = latest.current
     if (!now.size) return
-    push(fitView(now.shape, boundsOf(now.positions, now.kept), now.size))
+    push(fitView(now.shape, frameBounds(now.positions, now.kept), now.size, now.frame))
   }, [push])
 
   const ready = size !== null
@@ -66,12 +69,12 @@ export function useCamera(input: CameraInput): Camera {
     const before = previous.current
     previous.current = { shape, positions, gap }
     deck.current.setProps({ views: viewFor(shape) })
-    const whole = fitView(shape, boundsOf(positions, now.kept), now.size)
+    const whole = fitView(shape, frameBounds(positions, now.kept), now.size, now.frame)
     if (!before || !view.current || before.shape === shape) {
       if (!view.current) push(whole)
       return
     }
-    const wholeBefore = fitView(before.shape, boundsOf(before.positions, now.kept), now.size)
+    const wholeBefore = fitView(before.shape, frameBounds(before.positions, now.kept), now.size)
     const anchor = now.selected ?? nearestPoint(before.positions, view.current.target, now.kept)
     const nearWhole = now.selected === null && Math.abs(view.current.zoom - wholeBefore.zoom) < NEAR_FIT
     if (anchor === null || nearWhole) {

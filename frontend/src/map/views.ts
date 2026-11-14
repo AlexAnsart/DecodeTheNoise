@@ -2,6 +2,7 @@
 
 import { OrbitView, OrthographicView } from '@deck.gl/core'
 import type { Bounds, Shape } from './geometry'
+import type { Vec3 } from './layers'
 
 export interface ViewState {
   target: [number, number, number]
@@ -38,6 +39,10 @@ export interface Size {
 const ZOOM_BOUNDS = { minZoom: -6, maxZoom: 16 }
 const FLAT_MARGIN = 40
 const ANGLED_MARGIN = 70
+/** The fit in depth searches the zoom this far around a first guess, in this many passes. */
+const FIT_SEARCH_OUT = 3
+const FIT_SEARCH_IN = 2
+const FIT_PASSES = 16
 
 const OPENING_ANGLES: Record<Exclude<Shape, '2d'>, { rotationX: number; rotationOrbit: number }> = {
   '3d': { rotationX: 30, rotationOrbit: 20 },
@@ -56,8 +61,40 @@ export function viewFor(shape: Shape): OrthographicView | OrbitView {
     : new OrbitView({ id: 'deep', orbitAxis: 'Z', fovy: 50 })
 }
 
-/** The whole map in view, at the opening angle of the shape. */
-export function fitView(shape: Shape, bounds: Bounds, size: Size): ViewState {
+function corners(bounds: Bounds): Vec3[] {
+  const out: Vec3[] = []
+  for (const sx of [-1, 1]) {
+    for (const sy of [-1, 1]) {
+      for (const sz of [-1, 1]) {
+        out.push([
+          bounds.centre[0] + sx * bounds.half[0],
+          bounds.centre[1] + sy * bounds.half[1],
+          bounds.centre[2] + sz * bounds.half[2],
+        ])
+      }
+    }
+  }
+  return out
+}
+
+/** How far the places that must stay in view spill out of the stage, the camera aimed at the
+ *  centre: 1 touches the margin, more than 1 is cut. */
+function spill(shape: Shape, state: ViewState, points: Vec3[], size: Size, margin: number): number {
+  const viewport = viewFor(shape).makeViewport({ ...size, viewState: state })
+  if (!viewport) return Infinity
+  const roomX = Math.max(1, (size.width - margin) / 2)
+  const roomY = Math.max(1, (size.height - margin) / 2)
+  let worst = 0
+  for (const point of points) {
+    const [x, y] = viewport.project(point)
+    worst = Math.max(worst, Math.abs(x - size.width / 2) / roomX, Math.abs(y - size.height / 2) / roomY)
+  }
+  return worst
+}
+
+/** The whole map in view, at the opening angle of the shape. `frame` lists places that must
+ *  stay in view besides the points: the ends of the axes and their words. */
+export function fitView(shape: Shape, bounds: Bounds, size: Size, frame: Vec3[] = []): ViewState {
   if (shape === '2d') {
     const zoom = -Math.log2(
       Math.max(
@@ -69,14 +106,23 @@ export function fitView(shape: Shape, bounds: Bounds, size: Size): ViewState {
   }
   const margin = shape === '3d' ? FLAT_MARGIN : ANGLED_MARGIN
   const room = Math.max(1, Math.min(size.width, size.height) - margin)
-  // An angled, stretched shape needs a little more room than its sphere suggests.
-  const tighten = shape === '3d' ? 0 : 0.25
-  return {
+  const state: ViewState = {
     target: bounds.centre,
-    zoom: -Math.log2((2 * bounds.radius) / room) + tighten,
+    zoom: -Math.log2((2 * bounds.radius) / room),
     ...OPENING_ANGLES[shape],
     ...ZOOM_BOUNDS,
   }
+  // With perspective the size on screen is not linear in the zoom: search the closest zoom at
+  // which nothing is cut. The size grows with the zoom, so a bisection finds it.
+  const points = [...corners(bounds), ...frame]
+  let low = state.zoom - FIT_SEARCH_OUT
+  let high = state.zoom + FIT_SEARCH_IN
+  for (let pass = 0; pass < FIT_PASSES; pass += 1) {
+    const middle = (low + high) / 2
+    if (spill(shape, { ...state, zoom: middle }, points, size, margin) > 1) high = middle
+    else low = middle
+  }
+  return { ...state, zoom: low }
 }
 
 /** Same place after a change of shape: the anchor stays in the middle, and the zoom shifts so

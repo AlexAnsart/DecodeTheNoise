@@ -23,9 +23,10 @@ function inside(x: number, y: number, stroke: Stroke): boolean {
   return within
 }
 
-/** Indices of the shown points whose screen position falls inside the stroke. */
+/** Indices of the shown points whose screen position falls inside the stroke. `matrix` is the
+ *  4x4 world-to-pixel matrix of the view, column-major, origin at the top left. */
 export function pointsInside(
-  project: (position: number[]) => number[],
+  matrix: ArrayLike<number>,
   positions: Float32Array,
   kept: Float32Array,
   stroke: Stroke,
@@ -46,9 +47,14 @@ export function pointsInside(
   const n = positions.length / 3
   for (let i = 0; i < n; i += 1) {
     if (kept[i] < 0.5) continue
-    const [x, y, depth] = project([positions[i * 3], positions[i * 3 + 1], positions[i * 3 + 2]])
+    const px = positions[i * 3]
+    const py = positions[i * 3 + 1]
+    const pz = positions[i * 3 + 2]
+    const w = matrix[3] * px + matrix[7] * py + matrix[11] * pz + matrix[15]
     // Behind the camera, off the canvas, or outside the box of the stroke: no polygon test.
-    if (depth !== undefined && (depth < 0 || depth > 1)) continue
+    if (w <= 0) continue
+    const x = (matrix[0] * px + matrix[4] * py + matrix[8] * pz + matrix[12]) / w
+    const y = (matrix[1] * px + matrix[5] * py + matrix[9] * pz + matrix[13]) / w
     if (x < 0 || y < 0 || x > width || y > height) continue
     if (x < left || x > right || y < top || y > bottom) continue
     if (inside(x, y, stroke)) found.push(i)

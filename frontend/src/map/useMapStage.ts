@@ -25,6 +25,8 @@ import { isFlat } from './views'
 const CONTROLLER = { doubleClickZoom: false, inertia: 300 }
 const SELECTED_RING_PX = 7
 const LISTED_RING_PX = 9
+/** A line picked this close to the selected point stands for the point itself. */
+const NEAR_SELECTED_PX = 9
 
 export interface StageRefs {
   stage: RefObject<HTMLDivElement | null>
@@ -59,7 +61,8 @@ export interface Stage {
   neighbours: number[]
   /** Width of the stage no drawer covers. */
   freeWidth(): number
-  project(position: number[]): number[] | null
+  /** World-to-pixel matrix of the current frame, for tests done on the CPU. */
+  pixelMatrix(): number[] | null
   place(): void
 }
 
@@ -93,7 +96,12 @@ export function useMapStage(input: StageInput): Stage {
   const { deck, size, failed } = useDeck(refs.host, shape, {
     onView: (view) => camera.onView(view),
     onHover: (info) => {
-      const hit = pick(info)
+      let hit = pick(info)
+      const chosen = latest.current.model.selected
+      if (hit?.viaEdge && chosen !== null) {
+        const at = currentViewport(deck.current)?.project(pointAt(latest.current.model.positions, chosen))
+        if (at && Math.hypot(at[0] - info.x, at[1] - info.y) < NEAR_SELECTED_PX) hit = null
+      }
       setOnEdge(hit?.viaEdge ?? false)
       // The selected point already has its card: no tooltip on top of it.
       pointer.onHover(hit && hit.index !== latest.current.model.selected ? hit.index : null, info.x, info.y)
@@ -103,10 +111,14 @@ export function useMapStage(input: StageInput): Stage {
     cursor: ({ isDragging, isHovering }) => (isDragging ? 'grabbing' : isHovering ? 'pointer' : 'grab'),
   })
 
-  const camera = useCamera({ deck, size, shape, positions, gap, kept: kept.values, selected })
+  const frame = useMemo(
+    () => [...marks.lines.flatMap((line) => line.path), ...marks.words.map((word) => word.position)],
+    [marks],
+  )
+  const camera = useCamera({ deck, size, shape, positions, gap, kept: kept.values, selected, frame })
 
-  const project = useCallback(
-    (position: number[]): number[] | null => currentViewport(deck.current)?.project(position) ?? null,
+  const pixelMatrix = useCallback(
+    (): number[] | null => currentViewport(deck.current)?.pixelProjectionMatrix ?? null,
     [deck],
   )
 
@@ -176,5 +188,5 @@ export function useMapStage(input: StageInput): Stage {
   // The card and the words mount after a render that draws no new frame: place them now.
   useLayoutEffect(() => place(), [place, selected, marks, shape])
 
-  return { failed, size, camera, pointer, onEdge, neighbours, freeWidth, project, place }
+  return { failed, size, camera, pointer, onEdge, neighbours, freeWidth, pixelMatrix, place }
 }

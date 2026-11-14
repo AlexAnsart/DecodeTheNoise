@@ -24,7 +24,7 @@ import { plural } from '../text/format'
 import { useTheme } from '../theme/theme'
 import { DisplayMenu } from '../toolbar/DisplayMenu'
 import { Toolbar } from '../toolbar/Toolbar'
-import { flatSpan } from './geometry'
+import { boundsOf, flatSpan } from './geometry'
 import type { MapData } from './mapData'
 import { useMapActions } from './useMapActions'
 import { useMapModel } from './useMapModel'
@@ -57,10 +57,10 @@ export function MapView({ data }: { data: MapData }): ReactElement {
   const [neighboursClosedFor, setNeighboursClosedFor] = useState<number | null>(null)
 
   const marks = useMemo(() => {
-    if (shape === 'time' && range) return timeMarks(range, flatSpan(data))
-    if (shape === 'relief' && relief) return reliefMarks(relief.label, flatSpan(data))
+    if (shape === 'time' && range) return timeMarks(range, flatSpan(data), boundsOf(model.positions))
+    if (shape === 'relief' && relief) return reliefMarks(relief.label, flatSpan(data), boundsOf(model.positions))
     return NO_MARKS
-  }, [shape, range, relief, data])
+  }, [shape, range, relief, data, model.positions])
 
   const stage = useMapStage({ data, model, palette, refs, lasso, edges, ringed, marks })
   const coveredRight = useCallback(() => refs.drawers.current?.offsetWidth ?? 0, [refs.drawers])
