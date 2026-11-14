@@ -20,6 +20,10 @@ class MapBuild:
     vectors: np.ndarray  # (n, dims) float32, unit rows
     items: sqlite3.Connection
     items_lock: threading.Lock
+    # A workspace map lives in memory: its buffers and its layouts are here, not in files.
+    blob: bytes | None = None
+    pos3: np.ndarray | None = None
+    pos2: np.ndarray | None = None
 
     @property
     def buffers_path(self) -> Path:

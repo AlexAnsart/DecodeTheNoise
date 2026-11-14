@@ -32,6 +32,14 @@ class Settings(BaseSettings):
     context_dev_api_base: str = "https://api.context.dev/v1"
     context_dev_api_key: str = ""
 
+    # Workspaces: one folder per workspace, the account registry and the embedding cache.
+    # Written by the server, so it lives on a volume, never in the image.
+    workspaces_dir: Path = Path("data/workspaces")
+    # The probe pack the server reads (`probes.json`, `probes.npz`), and the evaluation reports
+    # behind it. Both are committed: they hold weights and measures, no text.
+    probes_dir: Path = Path("probes")
+    reports_dir: Path = Path("reports")
+
     git_commit: str = "dev"
 
     def embedding_key(self) -> EmbeddingKey:

@@ -103,7 +103,7 @@ def api(tmp_path: Path) -> Iterator[Api]:
         }
     )
     app = FastAPI()
-    app.include_router(analyze_router)
+    app.include_router(analyze_router, prefix="/api")
     app.state.build = build
     app.state.embedder = embedder
     app.state.coordinates = load_coordinates(build)

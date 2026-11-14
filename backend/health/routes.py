@@ -6,7 +6,7 @@ from pydantic import BaseModel
 from backend.map.store import MapBuild
 from backend.settings import get_settings
 
-router = APIRouter(prefix="/api", tags=["health"])
+router = APIRouter(tags=["health"])
 
 
 class Health(BaseModel):

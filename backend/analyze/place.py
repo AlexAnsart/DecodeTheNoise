@@ -7,13 +7,21 @@ is only set down beside the points it resembles most.
 import numpy as np
 
 
-def nearest(vectors: np.ndarray, vector: np.ndarray, k: int) -> tuple[np.ndarray, np.ndarray]:
-    """Indices and cosines of the `k` points nearest to `vector`, nearest first."""
-    scores = vectors @ vector
+def strongest(scores: np.ndarray, k: int) -> tuple[np.ndarray, np.ndarray]:
+    """Indices and values of the `k` highest scores, highest first. A score of minus infinity
+    marks a point to leave out (the point itself), and is never returned."""
     k = min(k, scores.size)
+    if k == 0:
+        return np.zeros(0, dtype=np.int64), np.zeros(0, dtype=np.float32)
     top = np.argpartition(-scores, k - 1)[:k]
     order = top[np.argsort(-scores[top], kind="stable")]
+    order = order[np.isfinite(scores[order])]
     return order, scores[order]
+
+
+def nearest(vectors: np.ndarray, vector: np.ndarray, k: int) -> tuple[np.ndarray, np.ndarray]:
+    """Indices and cosines of the `k` points nearest to `vector`, nearest first."""
+    return strongest(vectors @ vector, k)
 
 
 def neighbour_weights(scores: np.ndarray) -> np.ndarray:

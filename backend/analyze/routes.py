@@ -37,9 +37,10 @@ from backend.search.meaning import QueryEmbedder
 from backend.search.routes import get_embedder
 from backend.web_reader.context_dev import PageReader, PageUnreadable
 
-router = APIRouter(prefix="/api", tags=["analyze"])
+router = APIRouter(tags=["analyze"])
 
 REQUESTS_PER_WINDOW = 20
+EMPTY_MAP = "The map holds no point yet: there is nothing to place the text among."
 WINDOW_SECONDS = 60.0
 
 
@@ -54,8 +55,11 @@ def enforce_rate_limit(request: Request) -> None:
 
 
 def get_coordinates(
-    request: Request, _build: Annotated[MapBuild, Depends(get_build)]
+    request: Request, build: Annotated[MapBuild, Depends(get_build)]
 ) -> Coordinates:
+    if build.pos3 is not None and build.pos2 is not None:
+        # A workspace map: its layouts are in memory, and change as it grows.
+        return Coordinates(pos3=build.pos3, pos2=build.pos2)
     coordinates: Coordinates = request.app.state.coordinates
     return coordinates
 
@@ -105,6 +109,8 @@ def analyze(
         too_short = f"The text is under {MIN_TEXT_CHARS} characters: too short to be placed."
     if len(full) < MIN_TEXT_CHARS:
         return _abstain(source, too_short, full)
+    if build.manifest.n == 0:
+        return _abstain(source, EMPTY_MAP, full)
 
     embedded = beginning(opening, EMBED_BUDGET_CHARS)
     try:

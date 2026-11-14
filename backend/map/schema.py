@@ -9,6 +9,9 @@ from typing import Literal
 
 from pydantic import BaseModel
 
+from backend.probes.schema import ProbeInfo, ProbeReading
+from backend.review.schema import Review
+
 MANIFEST_FILE = "map.json"
 BUFFERS_FILE = "map.bin"
 ITEMS_FILE = "items.sqlite"
@@ -64,3 +67,22 @@ class MapManifest(BaseModel):
     columns: list[ColumnInfo]
     zones: list[ZoneInfo]
     buffers: dict[str, BufferSpec]
+    # A workspace map grows: `version` changes with every point, layout, name or review, and
+    # the buffers are fetched again. A build made offline keeps 0 and never changes.
+    live: bool = False
+    version: int = 0
+    # Probes that can be read on this map (`GET map/scores/{key}`: one float32 per point,
+    # NaN where the probe does not read the point). Filled by the server, not by the build.
+    probes: list[ProbeInfo] = []
+
+
+class PointReading(BaseModel):
+    """What the probes and the review say of one point, for its card."""
+
+    index: int
+    # The probes that flagged the point, strongest first.
+    probes: list[ProbeReading]
+    # One score per probe shown, flagged or not.
+    scores: dict[str, float]
+    # Null on a map built offline: only workspace items are reviewed.
+    review: Review | None

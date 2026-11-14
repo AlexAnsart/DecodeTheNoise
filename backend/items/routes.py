@@ -1,4 +1,4 @@
-"""Reads items by point index from the build's database."""
+"""Reads items by point index from the map's database, for tooltips, cards and lists."""
 
 import json
 from typing import Annotated
@@ -9,7 +9,7 @@ from backend.items.schema import Item, ItemsRequest, ItemsResponse
 from backend.map.deps import get_build
 from backend.map.store import MapBuild
 
-router = APIRouter(prefix="/api/items", tags=["items"])
+router = APIRouter(prefix="/map/items", tags=["map"])
 
 _COLUMNS = "idx, item_id, actor_id, text, created_at, lang, repost_of, urls, attrs"
 
@@ -27,7 +27,8 @@ def read_items(build: MapBuild, indices: list[int]) -> list[Item]:
         row[0]: Item(
             index=row[0],
             item_id=row[1],
-            actor_id=row[2],
+            # A workspace item may have no actor.
+            actor_id=row[2] or "",
             text=row[3],
             created_at=row[4],
             lang=row[5],

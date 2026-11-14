@@ -11,7 +11,7 @@ from backend.map.store import MapBuild
 from backend.search.meaning import QueryEmbedder, scores_to_items, scores_to_vector
 from backend.search.text import text_hits
 
-router = APIRouter(prefix="/api", tags=["search"])
+router = APIRouter(tags=["search"])
 
 MAX_QUERY_CHARS = 500
 MAX_SIMILAR_ITEMS = 5000
