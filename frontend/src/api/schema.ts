@@ -53,7 +53,25 @@ export const healthSchema = z.object({
   points: z.number().int(),
 })
 
+export const analysisSchema = z.object({
+  outcome: z.enum(['placed', 'not enough evidence']),
+  reason: z.string().nullable(),
+  source: z.object({
+    kind: z.enum(['text', 'url']),
+    url: z.string().nullable(),
+    title: z.string().nullable(),
+    read_at: z.string().nullable(),
+  }),
+  text: z.string(),
+  characters: z.number().int(),
+  position3: z.tuple([z.number(), z.number(), z.number()]).nullable(),
+  position2: z.tuple([z.number(), z.number()]).nullable(),
+  neighbours: z.array(z.object({ index: z.number().int(), score: z.number() })),
+  verdicts: z.array(z.unknown()),
+})
+
 export type Manifest = z.infer<typeof manifestSchema>
+export type Analysis = z.infer<typeof analysisSchema>
 export type BufferSpec = z.infer<typeof bufferSpecSchema>
 export type Item = z.infer<typeof itemSchema>
 export type Health = z.infer<typeof healthSchema>

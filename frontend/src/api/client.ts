@@ -1,8 +1,8 @@
 /* Every HTTP call to the backend goes through this module. */
 
 import type { z } from 'zod'
-import { healthSchema, itemsResponseSchema, manifestSchema } from './schema'
-import type { Health, Item, Manifest } from './schema'
+import { analysisSchema, healthSchema, itemsResponseSchema, manifestSchema } from './schema'
+import type { Analysis, Health, Item, Manifest } from './schema'
 
 export class ApiError extends Error {
   readonly status: number
@@ -57,6 +57,12 @@ export function fetchBuffers(build: string): Promise<ArrayBuffer> {
 export async function fetchItems(indices: number[], signal?: AbortSignal): Promise<Item[]> {
   const body = await getJson('/api/items', itemsResponseSchema, postJson({ indices }, signal))
   return body.items
+}
+
+/** Places a pasted text, or the page behind a pasted link, on the map. */
+export function analyze(input: { text: string } | { url: string }, signal?: AbortSignal): Promise<Analysis> {
+  const body = 'url' in input ? { text: null, url: input.url } : { text: input.text, url: null }
+  return getJson('/api/analyze', analysisSchema, postJson(body, signal))
 }
 
 /** One byte per point: 1 where the text holds every word of the query. */

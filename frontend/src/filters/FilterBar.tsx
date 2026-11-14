@@ -16,12 +16,14 @@ interface FilterBarProps {
   onFilters(filters: Filters): void
   onPick(index: number): void
   onLift(query: string): void
+  /** Drawn right after the search field. */
+  beside: ReactNode
   /** The tools of the map, drawn at the right end of the bar. */
   tools: ReactNode
 }
 
 /** Filters and search on the left, the tools of the map on the right. */
-export function FilterBar({ data, range, filters, onFilters, onPick, onLift, tools }: FilterBarProps): ReactElement {
+export function FilterBar({ data, range, filters, onFilters, onPick, onLift, beside, tools }: FilterBarProps): ReactElement {
   return (
     <div className="nm-bar">
       <ColumnFilter data={data} values={filters.values} onValues={(values) => onFilters({ ...filters, values })} />
@@ -49,6 +51,7 @@ export function FilterBar({ data, range, filters, onFilters, onPick, onLift, too
         onLift={onLift}
         onClear={() => filters.search && onFilters({ ...filters, search: null })}
       />
+      {beside}
       {tools}
     </div>
   )

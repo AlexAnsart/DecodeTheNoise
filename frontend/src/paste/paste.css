@@ -1,0 +1,117 @@
+.nm-paste {
+  position: absolute;
+  top: 8px;
+  right: calc(var(--nm-covered-right, 0px) + 8px);
+  z-index: 27;
+  display: flex;
+  flex-direction: column;
+  width: min(380px, calc(100% - 16px));
+  max-height: calc(100% - 16px);
+  padding: 0.55rem 0.65rem 0.65rem;
+  border: 1px solid var(--nm-border-strong);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--nm-menu-bg) 96%, transparent);
+  box-shadow: var(--nm-shadow);
+  font-size: 0.74rem;
+  line-height: 1.35;
+}
+
+.nm-paste__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.35rem;
+  flex: none;
+}
+
+.nm-paste__head p,
+.nm-paste__title {
+  margin: 0;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.nm-paste__title {
+  margin-top: 0.7rem;
+  flex: none;
+}
+
+.nm-paste__input {
+  display: block;
+  height: auto;
+  min-height: 4.6rem;
+  padding: 0.4rem 0.5rem;
+  line-height: 1.4;
+  resize: vertical;
+  font-family: inherit;
+}
+
+.nm-paste__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.45rem;
+  font-size: 0.68rem;
+}
+
+.nm-paste__actions > span {
+  flex: 1;
+  min-width: 0;
+}
+
+.nm-paste__result {
+  margin-top: 0.6rem;
+  padding-top: 0.55rem;
+  border-top: 1px solid var(--nm-border);
+  flex: none;
+}
+
+.nm-paste__source {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  margin: 0 0 0.4rem;
+}
+
+.nm-paste__source a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--nm-accent);
+  text-decoration: none;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nm-paste__source a:hover {
+  text-decoration: underline;
+}
+
+.nm-paste__source span,
+.nm-paste__note {
+  color: var(--nm-text-muted);
+  font-size: 0.68rem;
+}
+
+.nm-paste__verdict {
+  margin: 0;
+}
+
+.nm-paste__verdict--abstain {
+  color: var(--nm-warning);
+}
+
+.nm-paste__note {
+  margin: 0.4rem 0 0;
+}
+
+.nm-paste__note--error {
+  color: var(--nm-danger);
+}
+
+.nm-paste .nm-list {
+  margin: 0.4rem -0.2rem 0;
+  padding: 0 0.2rem 0.2rem;
+}

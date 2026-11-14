@@ -30,6 +30,8 @@ export interface Camera {
   fit(): void
   /** Puts a point in the middle of the free part of the canvas, zoom and angle kept. */
   centreOn(index: number, coveredRight: number): void
+  /** The same for a place that is not a point of the map. */
+  centreAt(position: Vec3, coveredRight: number): void
 }
 
 interface Previous {
@@ -86,11 +88,11 @@ export function useCamera(input: CameraInput): Camera {
     push(isFlat(before.shape) ? { ...kept, rotationX: whole.rotationX, rotationOrbit: whole.rotationOrbit } : kept)
   }, [deck, shape, positions, gap, ready, push])
 
-  const centreOn = useCallback(
-    (index: number, coveredRight: number) => {
+  const centreAt = useCallback(
+    (position: Vec3, coveredRight: number) => {
       const now = latest.current
       if (!view.current || !now.size) return
-      const centred: ViewState = { ...view.current, target: pointAt(now.positions, index) }
+      const centred: ViewState = { ...view.current, target: position }
       if (coveredRight <= 0) {
         push(centred)
         return
@@ -108,7 +110,12 @@ export function useCamera(input: CameraInput): Camera {
     [push],
   )
 
+  const centreOn = useCallback(
+    (index: number, coveredRight: number) => centreAt(pointAt(latest.current.positions, index), coveredRight),
+    [centreAt],
+  )
+
   const onView = useCallback((next: ViewState) => push(next), [push])
 
-  return { view, onView, fit, centreOn }
+  return { view, onView, fit, centreOn, centreAt }
 }

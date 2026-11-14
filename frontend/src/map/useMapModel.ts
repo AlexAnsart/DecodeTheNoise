@@ -1,6 +1,6 @@
 /* The state of the map view and the typed arrays derived from it. */
 
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import type { Relief } from '../axes/relief'
 import { litPoints, maskOfEntry, maskOfIndices, maskOfPeriod, paintPoints } from '../colour/emphasis'
 import type { Palette } from '../colour/palette'
@@ -51,7 +51,7 @@ export function useMapModel(data: MapData, palette: Palette): MapModel {
   const [shape, setShapeState] = useState<Shape>(storedShape)
   const [relief, setReliefState] = useState<Relief | null>(null)
   const [filters, setFilters] = useState<Filters>(NO_FILTERS)
-  const [selected, setSelected] = useState<number | null>(null)
+  const [chosen, setSelected] = useState<number | null>(null)
   const [picked, setPicked] = useState<Uint32Array | null>(null)
   const colouring = useColouring(data, palette)
   const range = useMemo(() => busyRange(data.ts), [data])
@@ -100,10 +100,8 @@ export function useMapModel(data: MapData, palette: Palette): MapModel {
     [legend, lit, relief, shape],
   )
 
-  useEffect(() => {
-    // A point the filter hides cannot stay selected: its card would point at nothing.
-    if (selected !== null && kept.values[selected] < 0.5) setSelected(null)
-  }, [selected, kept])
+  // A point the filter hides is not selected any more: its card would point at nothing.
+  const selected = chosen !== null && kept.values[chosen] >= 0.5 ? chosen : null
 
   return {
     shape,

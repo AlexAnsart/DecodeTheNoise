@@ -75,4 +75,4 @@ Set up on 14 Nov 2026. No secrets.
 | Health route | `/api/health` returns the commit and the map build being served |
 | Deploy | Push to `main`: the CI builds the images on CRACI and loads them on the server (`.github/workflows/ci.yml`, `deploy/up.sh`) |
 | Also on the server | Hermes Agent (`/docker/hermes-agent-yciq`), left as installed |
-| Firewall | None set in hPanel, `ufw` inactive: to do (22, 80, 443) |
+| Firewall | Hostinger firewall group `noisemap` (id 401111), active on the VPS: TCP 22, 80 and 443 from anywhere, everything else dropped. Hermes Agent is still reachable through Traefik, no longer on its direct port |

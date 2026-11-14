@@ -1,4 +1,4 @@
-import { Mouse } from 'lucide-react'
+import { ClipboardPaste, Mouse } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { KeyboardEvent, ReactElement } from 'react'
 import { AxesMenu } from '../axes/AxesMenu'
@@ -15,6 +15,8 @@ import { hasFilters } from '../filters/mask'
 import { LassoOverlay } from '../lasso/LassoOverlay'
 import { Legend } from '../legend/Legend'
 import { NeighbourDrawer } from '../neighbours/NeighbourDrawer'
+import { PastePanel } from '../paste/PastePanel'
+import { usePaste } from '../paste/usePaste'
 import { HoverTip } from '../picking/HoverTip'
 import { ItemCard } from '../picking/ItemCard'
 import { TimeScrubber } from '../scrubber/TimeScrubber'
@@ -55,6 +57,17 @@ export function MapView({ data }: { data: MapData }): ReactElement {
   const [composing, setComposing] = useState(false)
   const [drafts, setDrafts] = useState<Draft[] | null>(null)
   const [neighboursClosedFor, setNeighboursClosedFor] = useState<number | null>(null)
+  const [pasting, setPasting] = useState(false)
+  const paste = usePaste()
+  const analysis = paste.state.status === 'done' && paste.state.analysis.outcome === 'placed' ? paste.state.analysis : null
+
+  // Where the pasted text sits in the current shape. The date view has no place for it.
+  const pasted = useMemo(() => {
+    if (!analysis?.position3 || !analysis.position2 || shape === 'time') return null
+    const [x, y] = analysis.position2
+    const position: [number, number, number] = shape === '3d' ? analysis.position3 : shape === '2d' ? [x, y, 0] : [x, -y, 0]
+    return { position, neighbours: analysis.neighbours.map((neighbour) => neighbour.index) }
+  }, [analysis, shape])
 
   const marks = useMemo(() => {
     if (shape === 'time' && range) return timeMarks(range, flatSpan(data), boundsOf(model.positions))
@@ -62,7 +75,7 @@ export function MapView({ data }: { data: MapData }): ReactElement {
     return NO_MARKS
   }, [shape, range, relief, data, model.positions])
 
-  const stage = useMapStage({ data, model, palette, refs, lasso, edges, ringed, marks })
+  const stage = useMapStage({ data, model, palette, refs, lasso, edges, ringed, marks, pasted })
   const coveredRight = useCallback(() => refs.drawers.current?.offsetWidth ?? 0, [refs.drawers])
   const actions = useMapActions(model, stage, coveredRight)
 
@@ -74,6 +87,12 @@ export function MapView({ data }: { data: MapData }): ReactElement {
     refs.stage.current?.style.setProperty('--nm-covered-right', `${coveredRight()}px`)
     stage.place()
   }, [showNeighbours, showList, coveredRight, refs.stage, stage])
+
+  const { centreAt } = stage.camera
+  useEffect(() => {
+    // A text that has just been placed is brought to the middle of the free part of the map.
+    if (pasted) centreAt(pasted.position, coveredRight())
+  }, [pasted, centreAt, coveredRight])
 
   useEffect(() => {
     const onKey = (event: globalThis.KeyboardEvent): void => {
@@ -107,6 +126,21 @@ export function MapView({ data }: { data: MapData }): ReactElement {
         onFilters={model.setFilters}
         onPick={actions.goTo}
         onLift={actions.liftConcept}
+        beside={
+          <button
+            type="button"
+            className={`nm-tool${pasting ? ' is-active' : ''}`}
+            aria-pressed={pasting}
+            title="Place a text or the page behind a link on the map"
+            onClick={() => {
+              setPasting((value) => !value)
+              setComposing(false)
+            }}
+          >
+            <ClipboardPaste size={13} aria-hidden />
+            Paste a text or a link
+          </button>
+        }
         tools={
           <Toolbar
             shown={kept.shown}
@@ -117,7 +151,10 @@ export function MapView({ data }: { data: MapData }): ReactElement {
             composed={colouring.composed !== null}
             onFlat={(flat) => model.setShape(flat ? '2d' : '3d')}
             onLasso={setLasso}
-            onCompose={setComposing}
+            onCompose={(open) => {
+              setComposing(open)
+              if (open) setPasting(false)
+            }}
             colourMenu={<ColourMenu data={data} choice={colouring.choice} composed={colouring.composed !== null} hasDates={range !== null} onChoose={colouring.choose} />}
             axesMenu={
               <AxesMenu
@@ -204,6 +241,17 @@ export function MapView({ data }: { data: MapData }): ReactElement {
             onApply={colouring.compose}
             onLeave={() => colouring.compose(null)}
             onClose={() => setComposing(false)}
+          />
+        ) : null}
+        {pasting ? (
+          <PastePanel
+            data={data}
+            paste={paste}
+            unplaced={analysis && !pasted ? 'The date view has no place for a text without a date: switch to 2D or 3D to see it.' : null}
+            onShow={(index) => stage.camera.centreOn(index, coveredRight())}
+            onOpen={actions.goTo}
+            onRing={setRinged}
+            onClose={() => setPasting(false)}
           />
         ) : null}
         <div ref={refs.drawers} className="nm-drawers">

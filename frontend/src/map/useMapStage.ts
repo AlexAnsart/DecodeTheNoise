@@ -11,7 +11,7 @@ import { placeCard } from '../picking/placement'
 import type { Pointer } from '../picking/usePointer'
 import { usePointer } from '../picking/usePointer'
 import { pointAt } from './geometry'
-import type { Ring, Segment } from './layers'
+import type { Ring, Segment, Vec3 } from './layers'
 import { EDGES_LAYER, POINTS_LAYER, buildLayers } from './layers'
 import type { MapData } from './mapData'
 import { neighboursOf } from './mapData'
@@ -25,8 +25,14 @@ import { isFlat } from './views'
 const CONTROLLER = { doubleClickZoom: false, inertia: 300 }
 const SELECTED_RING_PX = 7
 const LISTED_RING_PX = 9
+const PASTED_RING_PX = 8
 /** A line picked this close to the selected point stands for the point itself. */
 const NEAR_SELECTED_PX = 9
+
+export interface Pasted {
+  position: Vec3
+  neighbours: number[]
+}
 
 export interface StageRefs {
   stage: RefObject<HTMLDivElement | null>
@@ -48,6 +54,8 @@ export interface StageInput {
   /** Point whose card is under the pointer in a list. */
   ringed: number | null
   marks: AxisMarks
+  /** A pasted text placed on the map: where it sits and the points it resembles most. */
+  pasted: Pasted | null
 }
 
 export interface Stage {
@@ -67,7 +75,7 @@ export interface Stage {
 }
 
 export function useMapStage(input: StageInput): Stage {
-  const { data, model, palette, refs, lasso, edges, ringed, marks } = input
+  const { data, model, palette, refs, lasso, edges, ringed, marks, pasted } = input
   const { positions, colours, kept, gap, shape, selected } = model
   const latest = useRef(input)
   const [onEdge, setOnEdge] = useState(false)
@@ -150,17 +158,26 @@ export function useMapStage(input: StageInput): Stage {
   }, [deck, camera, freeWidth])
 
   const segments = useMemo<Segment[]>(() => {
-    if (selected === null || !edges) return []
-    const from = pointAt(positions, selected)
-    return neighbours.map((other) => ({ from, to: pointAt(positions, other), index: other }))
-  }, [selected, edges, neighbours, positions])
+    const out: Segment[] = []
+    if (selected !== null && edges) {
+      const from = pointAt(positions, selected)
+      for (const other of neighbours) out.push({ from, to: pointAt(positions, other), index: other })
+    }
+    if (pasted) {
+      for (const other of pasted.neighbours) {
+        if (kept.values[other] >= 0.5) out.push({ from: pasted.position, to: pointAt(positions, other), index: other })
+      }
+    }
+    return out
+  }, [selected, edges, neighbours, positions, pasted, kept])
 
   const rings = useMemo<Ring[]>(() => {
     const out: Ring[] = []
     if (selected !== null) out.push({ position: pointAt(positions, selected), radius: SELECTED_RING_PX, filled: false })
     if (ringed !== null && ringed !== selected) out.push({ position: pointAt(positions, ringed), radius: LISTED_RING_PX, filled: true })
+    if (pasted) out.push({ position: pasted.position, radius: PASTED_RING_PX, filled: true })
     return out
-  }, [selected, ringed, positions])
+  }, [selected, ringed, positions, pasted])
 
   useEffect(() => {
     deck.current?.setProps({
