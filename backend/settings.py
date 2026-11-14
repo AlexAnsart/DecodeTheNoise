@@ -27,6 +27,11 @@ class Settings(BaseSettings):
     llm_api_key: str = ""
     llm_model: str = ""
 
+    # Web reader: Context.dev turns a pasted link into clean text. Without a key the paste box
+    # still takes text.
+    context_dev_api_base: str = "https://api.context.dev/v1"
+    context_dev_api_key: str = ""
+
     git_commit: str = "dev"
 
     def embedding_key(self) -> EmbeddingKey:

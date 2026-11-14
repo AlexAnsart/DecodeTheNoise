@@ -20,6 +20,8 @@ services:
       LLM_API_BASE: ${HOSTINGER_ROUTER_API_BASE:-https://router.hostinger.com/v1}
       LLM_API_KEY: ${HOSTINGER_ROUTER_API_KEY_PROD:-}
       LLM_MODEL: ${LLM_MODEL:-}
+      # Web reader for pasted links. Empty: the paste box takes text only.
+      CONTEXT_DEV_API_KEY: ${CONTEXT_DEV_API_KEY:-}
       GIT_COMMIT: ${NOISEMAP_TAG:-local}
     volumes:
       # Map builds are made offline and copied here; they never go through git.
