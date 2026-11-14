@@ -2,8 +2,9 @@ import { Moon, Sun } from 'lucide-react'
 import type { ReactElement } from 'react'
 import { MapScreen } from '../map/MapScreen'
 import { useTheme } from '../theme/theme'
-import { SOURCE_URL } from './source'
 import './app.css'
+
+const SOURCE_URL = 'https://github.com/AlexAnsart/DecodeTheNoise'
 
 export function App(): ReactElement {
   const [theme, toggleTheme] = useTheme()

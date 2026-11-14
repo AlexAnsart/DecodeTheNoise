@@ -11,8 +11,6 @@ COPY pyproject.toml uv.lock ./
 RUN uv sync --locked --no-dev
 
 COPY backend ./backend
-# The evaluation reports: a detector layer is served only with its measured reliability.
-COPY reports ./reports
 
 ENV PATH="/app/.venv/bin:$PATH"
 EXPOSE 8000

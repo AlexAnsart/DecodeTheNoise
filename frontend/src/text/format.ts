@@ -28,12 +28,6 @@ export function formatMoment(ms: number): string {
   return `${moment.format(ms)} UTC`
 }
 
-/** A rate as a percentage: one decimal under 10% when it says something, none above. */
-export function formatRate(value: number): string {
-  const percent = value * 100
-  return `${percent >= 10 ? Math.round(percent) : Number(percent.toFixed(1))}%`
-}
-
 /** `1 point`, `2 points`. */
 export function plural(value: number, one: string, many: string): string {
   return `${formatCount(value)} ${value === 1 ? one : many}`

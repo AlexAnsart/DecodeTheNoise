@@ -17,7 +17,6 @@ import { Legend } from '../legend/Legend'
 import { NeighbourDrawer } from '../neighbours/NeighbourDrawer'
 import { PastedLabel } from '../paste/PastedLabel'
 import { PastePanel } from '../paste/PastePanel'
-import { ReliabilityDialog } from '../reliability/ReliabilityDialog'
 import { usePaste } from '../paste/usePaste'
 import { usePastedPoint } from '../paste/usePastedPoint'
 import { HoverTip } from '../picking/HoverTip'
@@ -25,10 +24,6 @@ import { ItemCard } from '../picking/ItemCard'
 import { TimeScrubber } from '../scrubber/TimeScrubber'
 import { SelectionDrawer } from '../selection/SelectionDrawer'
 import { SelectionPill } from '../selection/SelectionPill'
-import { SwarmDrawer } from '../swarms/SwarmDrawer'
-import { swarmMask } from '../swarms/swarmPoints'
-import { SwarmVerdict } from '../swarms/SwarmVerdict'
-import { useSwarmLayer } from '../swarms/useSwarmLayer'
 import { plural } from '../text/format'
 import { useTheme } from '../theme/theme'
 import { DisplayMenu } from '../toolbar/DisplayMenu'
@@ -70,9 +65,6 @@ export function MapView({ data }: { data: MapData }): ReactElement {
   const [drafts, setDrafts] = useState<Draft[] | null>(null)
   const [neighboursClosedFor, setNeighboursClosedFor] = useState<number | null>(null)
   const [pasting, setPasting] = useState(false)
-  const swarmLayer = useSwarmLayer()
-  const [openSwarm, setOpenSwarm] = useState<number | null>(null)
-  const [reliability, setReliability] = useState(false)
   const [locateAsked, setLocateAsked] = useState(0)
   const paste = usePaste()
   const pastedPoint = usePastedPoint(paste.state, shape, selected)
@@ -101,7 +93,7 @@ export function MapView({ data }: { data: MapData }): ReactElement {
     // The floating panels keep clear of the drawers, and the card is placed in the free part.
     refs.stage.current?.style.setProperty('--nm-covered-right', `${coveredRight()}px`)
     stage.place()
-  }, [showNeighbours, showList, showPastedNeighbours, openSwarm, coveredRight, refs.stage, stage])
+  }, [showNeighbours, showList, showPastedNeighbours, coveredRight, refs.stage, stage])
 
   const { centreAt } = stage.camera
   const { positions } = model
@@ -153,13 +145,6 @@ export function MapView({ data }: { data: MapData }): ReactElement {
     setLasso((value) => !value)
   }
 
-  // Colours the posts of a swarm against the rest, when the map draws some of them.
-  const swarmColouring = (id: number): (() => void) | null => {
-    const name = swarmLayer?.swarms.find((swarm) => swarm.id === id)?.name
-    const mask = name ? swarmMask(data, name) : null
-    return name && mask ? () => colouring.compose([{ label: name, mask }]) : null
-  }
-
   const tipEntry = stage.pointer.tipIndex === null ? null : colouring.legend.entries[colouring.legend.entryOf[stage.pointer.tipIndex]]
   const tipScore =
     shape === 'relief' && relief && stage.pointer.tipIndex !== null
@@ -205,7 +190,6 @@ export function MapView({ data }: { data: MapData }): ReactElement {
               setComposing(open)
               if (open) setPasting(false)
             }}
-            onReliability={() => setReliability(true)}
             colourMenu={<ColourMenu data={data} choice={colouring.choice} composed={colouring.composed !== null} hasDates={range !== null} onChoose={colouring.choose} />}
             axesMenu={
               <AxesMenu
@@ -289,16 +273,7 @@ export function MapView({ data }: { data: MapData }): ReactElement {
               card={refs.card}
               neighbours={stage.neighbours.length}
               canOpenNeighbours={neighboursClosedFor === selected}
-              onOpenNeighbours={() => {
-                setOpenSwarm(null)
-                setNeighboursClosedFor(null)
-              }}
-              verdicts={(item) => {
-                const verdict = swarmLayer?.actors[item.actor_id]
-                return swarmLayer && verdict ? (
-                  <SwarmVerdict layer={swarmLayer} verdict={verdict} onOpenSwarm={setOpenSwarm} onReliability={() => setReliability(true)} />
-                ) : null
-              }}
+              onOpenNeighbours={() => setNeighboursClosedFor(null)}
               onClose={() => model.setSelected(null)}
             />
           </div>
@@ -318,11 +293,6 @@ export function MapView({ data }: { data: MapData }): ReactElement {
           <PastePanel
             paste={paste}
             unplaced={analysis && !pasted ? 'The date view has no place for a text without a date: switch to 2D or 3D to see it.' : null}
-            noVerdict={
-              swarmLayer
-                ? 'No verdict on a pasted text: the coordination detector judges an account by its posting history, which a pasted text does not have. Not enough evidence.'
-                : 'No detector is shown yet: a layer appears here only once its precision and false-positive rate are measured.'
-            }
             onLocate={() => {
               model.setSelected(null)
               pastedPoint.setOpen(true)
@@ -332,17 +302,7 @@ export function MapView({ data }: { data: MapData }): ReactElement {
           />
         ) : null}
         <div ref={refs.drawers} className="nm-drawers">
-          {openSwarm !== null && swarmLayer ? (
-            <SwarmDrawer
-              data={data}
-              layer={swarmLayer}
-              id={openSwarm}
-              onColour={swarmColouring(openSwarm)}
-              onReliability={() => setReliability(true)}
-              onClose={() => setOpenSwarm(null)}
-            />
-          ) : null}
-          {openSwarm === null && showNeighbours && selected !== null ? (
+          {showNeighbours && selected !== null ? (
             <NeighbourDrawer
               data={data}
               listKey={`neighbours:${selected}`}
@@ -353,7 +313,7 @@ export function MapView({ data }: { data: MapData }): ReactElement {
               onClose={() => setNeighboursClosedFor(selected)}
             />
           ) : null}
-          {openSwarm === null && pastedNeighbours ? (
+          {pastedNeighbours ? (
             <NeighbourDrawer
               data={data}
               listKey={`neighbours:pasted:${pastedNeighbours.join('-')}`}
@@ -386,7 +346,6 @@ export function MapView({ data }: { data: MapData }): ReactElement {
         </div>
         {lasso ? null : <ControlsHint deep={deep} />}
       </div>
-      {reliability ? <ReliabilityDialog onClose={() => setReliability(false)} /> : null}
     </div>
   )
 }

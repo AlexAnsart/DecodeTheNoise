@@ -11,16 +11,12 @@ interface PastePanelProps {
   paste: Paste
   /** Set when the current shape of the map has no place for a pasted text. */
   unplaced: string | null
-  /** Why the pasted text carries no verdict. */
-  noVerdict: string
   /** Brings the camera back onto the pasted text. */
   onLocate(): void
   onClose(): void
 }
 
-type ResultProps = Pick<PastePanelProps, 'unplaced' | 'noVerdict' | 'onLocate'> & { analysis: Analysis }
-
-function Result({ analysis, unplaced, noVerdict, onLocate }: ResultProps): ReactElement {
+function Result({ analysis, unplaced, onLocate }: { analysis: Analysis; unplaced: string | null; onLocate(): void }): ReactElement {
   const { source } = analysis
   return (
     <div className="nm-paste__result">
@@ -53,14 +49,16 @@ function Result({ analysis, unplaced, noVerdict, onLocate }: ResultProps): React
         </button>
       ) : null}
       {analysis.outcome === 'placed' ? (
-        <p className="nm-paste__note">{noVerdict}</p>
+        <p className="nm-paste__note">
+          No detector is shown yet: a layer appears here only once its precision and false-positive rate are measured.
+        </p>
       ) : null}
     </div>
   )
 }
 
 /** A text or a link pasted by the user, placed on the map as a point among the others. */
-export function PastePanel({ paste, unplaced, noVerdict, onLocate, onClose }: PastePanelProps): ReactElement {
+export function PastePanel({ paste, unplaced, onLocate, onClose }: PastePanelProps): ReactElement {
   const [input, setInput] = useState('')
   const { state } = paste
   const busy = state.status === 'reading'
@@ -121,7 +119,7 @@ export function PastePanel({ paste, unplaced, noVerdict, onLocate, onClose }: Pa
       </form>
       {busy ? <p className="nm-paste__note">{state.what === 'link' ? 'Reading the page, then placing it…' : 'Placing the text…'}</p> : null}
       {state.status === 'error' ? <p className="nm-paste__note nm-paste__note--error">{state.message}</p> : null}
-      {done ? <Result analysis={done} unplaced={unplaced} noVerdict={noVerdict} onLocate={onLocate} /> : null}
+      {done ? <Result analysis={done} unplaced={unplaced} onLocate={onLocate} /> : null}
     </section>
   )
 }

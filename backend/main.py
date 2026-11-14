@@ -14,14 +14,10 @@ from backend.health.routes import router as health_router
 from backend.items.routes import router as items_router
 from backend.map.routes import router as map_router
 from backend.map.store import load_build
-from backend.metrics.routes import router as metrics_router
-from backend.metrics.store import load_metrics
 from backend.model_client.embedding import EmbeddingClient
 from backend.search.meaning import QueryEmbedder
 from backend.search.routes import router as search_router
 from backend.settings import get_settings
-from backend.swarms.routes import load_swarms
-from backend.swarms.routes import router as swarms_router
 from backend.web_reader.context_dev import ContextDevReader
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
@@ -38,9 +34,6 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     )
     app.state.build = load_build(settings.data_build_dir)
     app.state.embedder = QueryEmbedder(client)
-    # Detector layers: each is served only with its evaluation report.
-    app.state.metrics = load_metrics(settings.reports_dir)
-    app.state.swarms = load_swarms(settings.data_build_dir)
     # The paste box: the layouts to place a text, a reader for links, a limit per client.
     reader = (
         ContextDevReader(settings.context_dev_api_key, settings.context_dev_api_base)
@@ -60,16 +53,7 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
 
 def create_app() -> FastAPI:
     app = FastAPI(title="NoiseMap API", lifespan=lifespan)
-    routers = (
-        health_router,
-        map_router,
-        items_router,
-        search_router,
-        analyze_router,
-        swarms_router,
-        metrics_router,
-    )
-    for router in routers:
+    for router in (health_router, map_router, items_router, search_router, analyze_router):
         app.include_router(router)
     return app
 

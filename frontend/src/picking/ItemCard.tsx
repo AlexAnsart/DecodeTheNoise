@@ -1,6 +1,5 @@
 import { Waypoints, X } from 'lucide-react'
-import type { ReactElement, ReactNode, RefObject } from 'react'
-import type { Item } from '../api/schema'
+import type { ReactElement, RefObject } from 'react'
 import { ItemSummary } from '../items/ItemSummary'
 import { useItems } from '../items/useItems'
 import type { MapData } from '../map/mapData'
@@ -15,8 +14,6 @@ interface ItemCardProps {
   /** The neighbour drawer was closed for this point: the card offers to open it again. */
   canOpenNeighbours: boolean
   onOpenNeighbours(): void
-  /** The verdicts on the item or on the account behind it, each with its evidence. */
-  verdicts(item: Item): ReactNode
   onClose(): void
 }
 
@@ -28,7 +25,7 @@ function name(data: MapData, key: string, index: number): string | null {
 
 /** The card of the selected point. Its position is set after each frame, so it follows the camera. */
 export function ItemCard(props: ItemCardProps): ReactElement {
-  const { data, index, card, neighbours, canOpenNeighbours, onOpenNeighbours, verdicts, onClose } = props
+  const { data, index, card, neighbours, canOpenNeighbours, onOpenNeighbours, onClose } = props
   const { items, loading, error } = useItems([index], `card:${index}`)
   const item = items.find((candidate) => candidate.index === index)
   const category = name(data, 'category', index)
@@ -45,7 +42,6 @@ export function ItemCard(props: ItemCardProps): ReactElement {
       </header>
       <div className="nm-card__body">
         {item ? <ItemSummary item={item} actor={name(data, 'actor', index)} clamp={null} /> : null}
-        {item ? verdicts(item) : null}
         {!item && loading ? <p className="nm-item-state">Reading the item…</p> : null}
         {error ? <p className="nm-item-state nm-item-state--error">{error}</p> : null}
       </div>

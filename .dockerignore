@@ -12,6 +12,7 @@ data
 models
 demos
 docs
+reports
 tests
 .local
 .claude
