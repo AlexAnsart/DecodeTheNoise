@@ -34,6 +34,7 @@ from backend.search.meaning import QueryEmbedder
 from backend.search.routes import router as search_router
 from backend.services import start_services, stop_services
 from backend.settings import get_settings
+from backend.voices.routes import router as voices_router
 from backend.web_reader.context_dev import ContextDevReader
 from backend.workspace.routes import router as workspace_router
 
@@ -45,7 +46,7 @@ DAY = 86_400.0
 # Read by anyone, on the demo build.
 PUBLIC = (health_router, accounts_router, sample_router, reports_router)
 # The map routes: the demo build under /api, the caller's workspace under /api/v1.
-MAP = (map_router, items_router, search_router, analyze_router)
+MAP = (map_router, items_router, search_router, analyze_router, voices_router)
 # What only the owner of a workspace does.
 OWNER = (workspace_router, ingest_router, events_router)
 
