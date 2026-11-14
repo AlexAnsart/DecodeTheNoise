@@ -14,6 +14,12 @@ Source: the challenge brief (`Challenge.md`) and Hostinger's documentation, read
 
 The hard requirement: the final product runs on Hostinger infrastructure, with a public URL the judges can open.
 
+**How to claim it:** [`event/hostinger-access.md`](event/hostinger-access.md). The team gets a coupon code at the Hostinger booth and orders the KVM 2 plan for one month from the Hermes Agent application page, with "5000 Hostinger AI Credits" (they pay for the AI Router) and "Instant web scraping". Consequences:
+
+- The VPS is created from the Hermes Agent template, not from a template we chose. Check on first login what it runs and which ports it holds before starting our own stack.
+- The message does not say how to claim the free domain: ask at the booth.
+- What "Instant web scraping" gives (an API, a tool for the agent) was not checked.
+
 ## AI Router
 
 | | |
@@ -57,12 +63,16 @@ Sources: [Connector docs](https://docs.hostinger.com/hostinger-connector), [manu
 
 ## Deployment record
 
-Fill in once set up. No secrets.
+Set up on 14 Nov 2026. No secrets.
 
 | | |
 | --- | --- |
-| VPS IP | |
-| Domain | |
-| Compose project path on the server | |
-| Reverse proxy | |
-| Health route | |
+| VPS | KVM 2, id 2160938, `srv2160938.hstgr.cloud`, x86-64, Ubuntu 24.04 with Docker and Traefik (template of the Hermes Agent application) |
+| VPS IP | 153.92.223.45 |
+| Public URL | `https://noisemap.srv2160938.hstgr.cloud`. Every subdomain of the server's host name resolves to it; no domain was claimed yet |
+| Compose project path on the server | `/docker/noisemap` (a clone of this repository; `.env` and `data/build/` live there and are not in git) |
+| Reverse proxy | The Traefik container Hostinger installs (`/docker/traefik`, host network, ports 80 and 443, Let's Encrypt by HTTP challenge). Our services are published by labels in `deploy/docker-compose.yml` |
+| Health route | `/api/health` returns the commit and the map build being served |
+| Deploy | Push to `main`: the CI builds the images on CRACI and loads them on the server (`.github/workflows/ci.yml`, `deploy/up.sh`) |
+| Also on the server | Hermes Agent (`/docker/hermes-agent-yciq`), left as installed |
+| Firewall | None set in hPanel, `ufw` inactive: to do (22, 80, 443) |

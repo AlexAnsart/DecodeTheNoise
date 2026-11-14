@@ -1,30 +1,50 @@
-# DecodeTheNoise
+# NoiseMap
 
-Telling signal from noise on the web, with the evidence shown. An entry to the Hostinger challenge "Decode the Noise" at [Junction 2026](https://2026.hackjunction.com/) (Espoo, 13 to 15 November 2026).
+Every post becomes a point on a 3D meaning map. Switch on layers to see what is coordinated, what is manipulative and who is behind it. An entry to the Hostinger challenge "Decode the Noise" at [Junction 2026](https://2026.hackjunction.com/) (Espoo, 13 to 15 November 2026).
 
-**Status:** project set up, no product code yet. Live URL: to come.
+**Live:** <https://noisemap.srv2160938.hstgr.cloud> (Hostinger VPS).
 
-## The challenge
+**Status:** the map is up on sample data (a sample of the IRA tweets published by FiveThirtyEight, embedded with EmbeddingGemma). No detector is shown yet: a layer appears in the product only once its evaluation report exists.
 
-Build a deployed, working system that detects one or more of: coordinated inauthentic behaviour, propaganda techniques in text, automated traffic in server logs, or the trustworthiness of a source. It must run on Hostinger infrastructure and report honest precision and false-positive rates. Full brief: [`docs/Challenge.md`](docs/Challenge.md).
-
-## Repository
+## What is here
 
 | Path | Content |
 | --- | --- |
-| [`docs/strategy.md`](docs/strategy.md) | Ideas, directions, open decisions, timeline |
-| [`docs/hackathon.md`](docs/hackathon.md) | Deadlines, rules, submission checklist, judging |
-| [`docs/research/`](docs/research/) | Datasets, methods and published results for each direction |
-| [`docs/hostinger.md`](docs/hostinger.md) | VPS, AI Router, MCP server |
-| [`docs/tech-challenges/`](docs/tech-challenges/) | Partner tech challenges that can be combined with the main one |
+| [`frontend/`](frontend/) | The web app: React, TypeScript, Vite, deck.gl. The point cloud in 2D and 3D, colour by attribute, legend, filters, search, time window, lasso, neighbours by meaning |
+| [`backend/`](backend/) | The API: FastAPI. Loads one map build at start-up; serves typed arrays, item content, search by words and similarity by meaning |
+| [`pipelines/`](pipelines/) | Offline steps that make a map build: ingest, embed, layout, neighbours, zones, pack |
+| [`deploy/`](deploy/) | Images and the Compose stack of the server |
+| [`.github/workflows/ci.yml`](.github/workflows/ci.yml) | Checks, image build and deploy, on CRACI runners |
+| [`reports/`](reports/) | Run log of the pipeline; evaluation reports to come |
+| [`docs/`](docs/) | The brief, the specification ([`docs/spec.md`](docs/spec.md)), research, Hostinger notes, tech challenges |
 
-## Setup
+## Run it locally
+
+Needs [uv](https://docs.astral.sh/uv/), Node.js 22 and [Ollama](https://ollama.com/) with `ollama pull embeddinggemma:300m-qat-q8_0`.
 
 ```
-cp .env.example .env    # then fill in the Hostinger AI Router key
+cp .env.example .env
+
+# 1. Make a small map build under data/build/ (downloads the dataset on first run)
+uv run --group pipelines python -m pipelines.ingest --help
+
+# 2. API on :8000, serving data/build/current
+uv run uvicorn backend.main:app --port 8000
+
+# 3. Web app on :5173, proxying /api to the API
+cd frontend && npm install && npm run dev
 ```
 
-The Hostinger MCP server is registered in `.mcp.json`; it asks for sign-in on first use.
+Checks:
+
+```
+uv run ruff check . && uv run ruff format --check . && uv run pytest
+cd frontend && npx tsc -b && npm run build
+```
+
+## How it is deployed
+
+A push to `main` runs the checks on CRACI runners, builds the two images there, copies them to the Hostinger VPS over SSH and starts the stack ([`deploy/docker-compose.yml`](deploy/docker-compose.yml)): the API, the static web app and an Ollama container with EmbeddingGemma, published by the Traefik proxy that the server already runs. Map builds are made offline and copied to the server; they never go through git.
 
 ## Licence
 
