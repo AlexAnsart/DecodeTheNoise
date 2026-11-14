@@ -5,6 +5,8 @@ import type { DataSource } from '../source/source'
 import { getBytes, getJson, jsonBody, withKey } from './http'
 import { analysisSchema, healthSchema, itemsResponseSchema, manifestSchema, pointReadingSchema } from './schema'
 import type { Analysis, Health, Item, Manifest, PointReading } from './schema'
+import { voicesSchema } from './voicesSchema'
+import type { Voices } from './voicesSchema'
 
 export { ApiError } from './http'
 
@@ -26,6 +28,8 @@ export interface MapApi {
   scores(probeKey: string, signal?: AbortSignal): Promise<Float32Array>
   /** What the probes and the review say of one point. */
   reading(index: number, signal?: AbortSignal): Promise<PointReading>
+  /** Whether the actors behind the given points each have a voice of their own. */
+  voices(indices: number[], signal?: AbortSignal): Promise<Voices>
 }
 
 export function fetchHealth(): Promise<Health> {
@@ -58,5 +62,6 @@ export function createMapApi(source: DataSource): MapApi {
     similarityToItems: async (indices, signal) => new Float32Array(await getBytes(`${base}/similarity/items`, post({ indices }, signal))),
     scores: async (probeKey, signal) => new Float32Array(await getBytes(`${base}/map/scores/${text(probeKey)}`, get(signal))),
     reading: (index, signal) => getJson(`${base}/map/reading/${index}`, pointReadingSchema, get(signal)),
+    voices: (indices, signal) => getJson(`${base}/voices`, voicesSchema, post({ indices }, signal)),
   }
 }

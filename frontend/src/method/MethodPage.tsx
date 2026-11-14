@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import type { ReactElement, ReactNode } from 'react'
 import { PATHS, navigate, useHash } from '../route/useRoute'
+import { VoicesMethod } from '../voices/VoicesMethod'
 import { ApiReference } from './ApiReference'
 import { LimitsTable } from './LimitsTable'
 import { ProbeTable } from './ProbeTable'
@@ -10,6 +11,7 @@ import './method.css'
 const SECTIONS: { id: string; title: string; body: ReactNode | null }[] = [
   { id: 'how', title: 'How it works', body: null },
   { id: 'probes', title: 'Probes and their reliability', body: <ProbeTable /> },
+  { id: 'voices', title: 'One voice or several: the check and its reliability', body: <VoicesMethod /> },
   { id: 'api', title: 'The API', body: <ApiReference /> },
   { id: 'limits', title: 'Limits', body: <LimitsTable /> },
   { id: 'claims', title: 'What NoiseMap does not claim', body: null },

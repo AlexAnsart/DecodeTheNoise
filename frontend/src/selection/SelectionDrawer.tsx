@@ -6,6 +6,7 @@ import type { MapData } from '../map/mapData'
 import '../neighbours/drawers.css'
 import { Popover } from '../popover/Popover'
 import { plural } from '../text/format'
+import { VoicesCheck } from '../voices/VoicesCheck'
 
 const SORT_KEY = 'noisemap.selection.newestFirst'
 
@@ -98,6 +99,7 @@ export function SelectionDrawer(props: SelectionDrawerProps): ReactElement {
           </button>
         ))}
       </Popover>
+      <VoicesCheck indices={indices} onOpen={onOpen} />
       <ItemList
         data={data}
         indices={sorted}

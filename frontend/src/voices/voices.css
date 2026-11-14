@@ -1,0 +1,322 @@
+/* The "one voice, or several?" check, at the top of the selection drawer. The list below keeps
+   its own scroll; a tall answer scrolls inside the block, and can be folded. */
+
+.nm-voices {
+  display: flex;
+  flex-direction: column;
+  flex: none;
+  max-height: 64%;
+  border-bottom: 1px solid var(--nm-border-strong);
+  background: color-mix(in srgb, var(--nm-accent) 4%, transparent);
+  font-size: 0.72rem;
+  line-height: 1.4;
+}
+
+.nm-voices p {
+  margin: 0;
+}
+
+.nm-voices__head {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 26px;
+  padding: 0.45rem 0.5rem 0.3rem 0.75rem;
+  flex: none;
+}
+
+/* The title stays in place; what is under it scrolls. */
+.nm-voices__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  min-height: 0;
+  padding: 0 0.75rem 0.7rem;
+  overflow-y: auto;
+}
+
+.nm-voices__body:empty {
+  display: none;
+}
+
+.nm-voices__head h3 {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 650;
+}
+
+.nm-voices__chip {
+  flex: none;
+  padding: 0.05rem 0.5rem;
+  border: 1px solid color-mix(in srgb, var(--chip) 55%, transparent);
+  border-radius: 999px;
+  color: var(--chip);
+  font-size: 0.66rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.nm-voices__chip--one-voice {
+  --chip: var(--nm-level-possible);
+}
+
+.nm-voices__chip--separate-voices {
+  --chip: var(--nm-success);
+}
+
+.nm-voices__chip--not-enough-evidence {
+  --chip: var(--nm-text-muted);
+}
+
+.nm-voices__run {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.nm-voices__busy {
+  color: var(--nm-text-muted);
+}
+
+.nm-voices__fine {
+  color: var(--nm-text-muted);
+  font-size: 0.66rem;
+}
+
+.nm-voices__label {
+  color: var(--nm-text-muted);
+  font-size: 0.64rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.nm-voices__result {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.nm-voices__result .nm-verdict {
+  padding: 0.4rem 0.55rem;
+}
+
+.nm-voices__result .nm-verdict__label {
+  font-size: 0.82rem;
+}
+
+.nm-voices__verdict--separate {
+  --level: var(--nm-success);
+}
+
+.nm-voices__verdict--none {
+  --level: var(--nm-text-muted);
+}
+
+.nm-voices__reading {
+  margin-top: 0.2rem !important;
+}
+
+.nm-voices__reading--muted {
+  color: var(--nm-text-muted);
+}
+
+.nm-voices__trust {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.4rem 0.55rem;
+  border: 1px solid var(--nm-border);
+  border-radius: 6px;
+}
+
+/* The gauge. */
+.nm-voice-scale {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 0.1rem 0.1rem 0;
+}
+
+.nm-voice-scale__ends {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  color: var(--nm-text-muted);
+  font-size: 0.64rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.nm-voice-scale__track {
+  position: relative;
+  height: 12px;
+  margin: 0.25rem 0 0.1rem;
+}
+
+.nm-voice-scale__fill {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--nm-surface-3);
+}
+
+.nm-voice-scale__zone,
+.nm-voice-scale__band {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+}
+
+.nm-voice-scale__zone {
+  left: 0;
+  background: color-mix(in srgb, var(--nm-level-possible) 55%, transparent);
+}
+
+.nm-voice-scale__band {
+  background: color-mix(in srgb, var(--nm-success) 45%, transparent);
+}
+
+.nm-voice-scale__tick {
+  position: absolute;
+  top: -3px;
+  bottom: -3px;
+  width: 1px;
+  background: var(--nm-level-possible);
+}
+
+.nm-voice-scale__mark {
+  position: absolute;
+  top: -6px;
+  bottom: -6px;
+  width: 4px;
+  margin-left: -2px;
+  border-radius: 2px;
+  background: var(--nm-text);
+  box-shadow: 0 0 0 2px var(--nm-surface-1);
+}
+
+.nm-voice-scale__here {
+  position: relative;
+  height: 1.25rem;
+}
+
+.nm-voice-scale__here span {
+  position: absolute;
+  top: 3px;
+  font-weight: 600;
+  white-space: nowrap;
+  transform: translateX(var(--shift));
+}
+
+.nm-voice-scale__here b {
+  margin-left: 0.25rem;
+  padding: 0 0.3rem;
+  border-radius: 4px;
+  background: var(--nm-surface-3);
+  font-weight: 700;
+}
+
+.nm-voice-scale__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.15rem 0.9rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--nm-text-muted);
+  font-size: 0.66rem;
+}
+
+.nm-voice-scale__legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.nm-voice-scale__swatch {
+  width: 10px;
+  height: 10px;
+  flex: none;
+  border-radius: 3px;
+}
+
+.nm-voice-scale__swatch--zone {
+  background: color-mix(in srgb, var(--nm-level-possible) 55%, transparent);
+}
+
+.nm-voice-scale__swatch--band {
+  background: color-mix(in srgb, var(--nm-success) 45%, transparent);
+}
+
+/* The evidence: posts by different actors that say the same thing. */
+.nm-voice-pairs {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.nm-voice-pair {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--nm-border);
+  border-radius: 8px;
+  background: var(--nm-surface-2);
+}
+
+.nm-voice-pair__post {
+  display: grid;
+  grid-template-columns: 4.2rem minmax(0, 1fr);
+  gap: 0.5rem;
+  padding: 0.4rem 0.55rem;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--nm-text);
+  font-size: 0.72rem;
+  line-height: 1.35;
+  text-align: left;
+}
+
+.nm-voice-pair__post + .nm-voice-pair__post {
+  border-top: 1px dashed var(--nm-border-strong);
+  border-radius: 0 0 8px 8px;
+}
+
+.nm-voice-pair__post:hover {
+  background: color-mix(in srgb, var(--nm-accent) 8%, transparent);
+}
+
+.nm-voice-pair__actor {
+  color: var(--nm-text-muted);
+  font-size: 0.66rem;
+  font-weight: 600;
+}
+
+.nm-voice-pair__text {
+  display: -webkit-box;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+}
+
+/* The method page: how the check is measured. */
+.nm-voices-method__sizes td > span {
+  white-space: normal;
+}
+
+/* Long column titles wrap here, so the table fits the page; the group size stays on one line. */
+.nm-voices-method__sizes thead th {
+  white-space: normal;
+}
+
+.nm-voices-method__sizes tbody th {
+  white-space: nowrap;
+}
