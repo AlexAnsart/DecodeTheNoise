@@ -62,81 +62,26 @@
   pointer-events: none;
 }
 
-/* The centre of rotation: translucent at rest, plain and named while the map is turned. */
+/* The centre of rotation: a small ring around a dot, translucent at rest, plain while the map
+   is turned. */
 .nm-pivot {
   position: absolute;
   top: 0;
   left: 0;
   z-index: 3;
-  width: 72px;
-  height: 72px;
-  color: var(--nm-accent);
-  opacity: 0.6;
+  box-sizing: border-box;
+  width: 13px;
+  height: 13px;
+  border: 1.5px solid color-mix(in srgb, var(--nm-accent) 70%, transparent);
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--nm-accent) 0 2px, transparent 2.6px);
+  opacity: 0.5;
   pointer-events: none;
   transition: opacity 0.15s ease;
 }
 
-.nm-pivot svg {
-  display: block;
-}
-
-.nm-pivot__glow {
-  fill: color-mix(in srgb, currentColor 16%, transparent);
-}
-
-.nm-pivot__orbit {
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.5;
-  stroke-dasharray: 4 3;
-}
-
-.nm-pivot__ring {
-  fill: color-mix(in srgb, var(--nm-surface-0) 55%, transparent);
-  stroke: currentColor;
-  stroke-width: 2;
-}
-
-.nm-pivot__cross {
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.5;
-  stroke-linecap: round;
-}
-
-.nm-pivot__arrow,
-.nm-pivot__dot {
-  fill: currentColor;
-}
-
-.nm-pivot span {
-  position: absolute;
-  top: calc(100% - 6px);
-  left: 50%;
-  transform: translateX(-50%);
-  padding: 0.15rem 0.45rem;
-  border: 1px solid color-mix(in srgb, var(--nm-accent) 35%, transparent);
-  border-radius: 999px;
-  background: var(--nm-menu-bg);
-  color: var(--nm-text);
-  font-size: 0.66rem;
-  font-weight: 600;
-  line-height: 1.3;
-  white-space: nowrap;
-  opacity: 0;
-  transition: opacity 0.15s ease;
-}
-
-.nm-stage.is-turning .nm-pivot,
-.nm-stage.is-turning .nm-pivot span {
+.nm-stage.is-turning .nm-pivot {
   opacity: 1;
-}
-
-/* Each floating element has its own compositor layer. Left to the browser, the elements over
-   the canvas are merged into one large layer, which some graphics drivers draw opaque: blank
-   rectangles then hide the points around a tooltip or between two panels. */
-.nm-stage > :not(.nm-stage__canvas) {
-  will-change: transform;
 }
 
 .nm-controls {

@@ -15,11 +15,6 @@
   will-change: transform;
 }
 
-.nm-tip[hidden] {
-  display: block;
-  visibility: hidden;
-}
-
 .nm-tip p {
   margin: 0;
 }
@@ -77,7 +72,7 @@
   color: var(--nm-accent);
 }
 
-/* Zero-sized on purpose: a full-size layer over the canvas is what the browser may draw opaque. */
+/* Zero-sized: it gives the card its level above the canvas and takes no pointer from it. */
 .nm-card-layer {
   position: absolute;
   top: 0;

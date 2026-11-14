@@ -18,6 +18,7 @@ import { NeighbourDrawer } from '../neighbours/NeighbourDrawer'
 import { PastedLabel } from '../paste/PastedLabel'
 import { PastePanel } from '../paste/PastePanel'
 import { usePaste } from '../paste/usePaste'
+import { usePastedPoint } from '../paste/usePastedPoint'
 import { HoverTip } from '../picking/HoverTip'
 import { ItemCard } from '../picking/ItemCard'
 import { TimeScrubber } from '../scrubber/TimeScrubber'
@@ -28,7 +29,6 @@ import { useTheme } from '../theme/theme'
 import { DisplayMenu } from '../toolbar/DisplayMenu'
 import { Toolbar } from '../toolbar/Toolbar'
 import { ControlsHint } from './ControlsHint'
-import { PivotMark } from './PivotMark'
 import { boundsOf, flatSpan, pointAt } from './geometry'
 import type { MapData } from './mapData'
 import { useMapActions } from './useMapActions'
@@ -65,18 +65,15 @@ export function MapView({ data }: { data: MapData }): ReactElement {
   const [drafts, setDrafts] = useState<Draft[] | null>(null)
   const [neighboursClosedFor, setNeighboursClosedFor] = useState<number | null>(null)
   const [pasting, setPasting] = useState(false)
-  // The pasted text wears its label until the next click on the map, then is a point like the others.
-  const [pastedLit, setPastedLit] = useState(true)
+  const [locateAsked, setLocateAsked] = useState(0)
   const paste = usePaste()
-  const analysis = paste.state.status === 'done' && paste.state.analysis.outcome === 'placed' ? paste.state.analysis : null
-
-  // Where the pasted text sits in the current shape. The date view has no place for it.
-  const pasted = useMemo(() => {
-    if (!analysis?.position3 || !analysis.position2 || shape === 'time') return null
-    const [x, y] = analysis.position2
-    const position: [number, number, number] = shape === '3d' ? analysis.position3 : shape === '2d' ? [x, y, 0] : [x, -y, 0]
-    return { position, neighbours: analysis.neighbours.map((neighbour) => neighbour.index), highlighted: pastedLit }
-  }, [analysis, shape, pastedLit])
+  const pastedPoint = usePastedPoint(paste.state, shape, selected)
+  const { analysis, point: pasted } = pastedPoint
+  // The list beside the pasted text while it is open: its nearest items the filters still show.
+  const pastedNeighbours = useMemo(
+    () => (pasted?.highlighted && !lasso ? pasted.neighbours.filter((other) => kept.values[other] >= 0.5) : null),
+    [pasted, lasso, kept],
+  )
 
   const marks = useMemo(() => {
     if (shape === 'time' && range) return timeMarks(range, flatSpan(data), boundsOf(model.positions))
@@ -84,18 +81,19 @@ export function MapView({ data }: { data: MapData }): ReactElement {
     return NO_MARKS
   }, [shape, range, relief, data, model.positions])
 
-  const stage = useMapStage({ data, model, palette, refs, lasso, edges, ringed, marks, pasted, onCanvasClick: () => setPastedLit(false) })
+  const stage = useMapStage({ data, model, palette, refs, lasso, edges, ringed, marks, pasted, onCanvasClick: () => pastedPoint.setOpen(false) })
   const coveredRight = useCallback(() => refs.drawers.current?.offsetWidth ?? 0, [refs.drawers])
   const actions = useMapActions(model, stage, coveredRight)
 
   const showNeighbours = selected !== null && stage.neighbours.length > 0 && !lasso && neighboursClosedFor !== selected
   const showList = picked !== null && listOpen
+  const showPastedNeighbours = pastedNeighbours !== null
 
   useEffect(() => {
     // The floating panels keep clear of the drawers, and the card is placed in the free part.
     refs.stage.current?.style.setProperty('--nm-covered-right', `${coveredRight()}px`)
     stage.place()
-  }, [showNeighbours, showList, coveredRight, refs.stage, stage])
+  }, [showNeighbours, showList, showPastedNeighbours, coveredRight, refs.stage, stage])
 
   const { centreAt } = stage.camera
   const { positions } = model
@@ -113,23 +111,31 @@ export function MapView({ data }: { data: MapData }): ReactElement {
     centreAt(pasted.position, coveredRight() + (pasting ? PASTE_PANEL_WIDTH : 0), reach)
   }, [pasted, positions, centreAt, coveredRight, pasting])
   useEffect(() => {
-    // A text that has just been placed: it wears its label and the camera goes to it.
+    // A text that has just been placed opens like a clicked point: the panel gives way to the
+    // list of its neighbours, and the camera is asked to go to it.
     if (!analysis) return
-    setPastedLit(true)
-    locatePasted()
-    // Only a new placement moves the camera and brings the label back, not a change of shape.
+    model.setSelected(null)
+    setPasting(false)
+    setLocateAsked((count) => count + 1)
+    // Only a new placement does this, not a change of what surrounds it.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [analysis])
+  useEffect(() => {
+    // After the render that opened the list: the camera knows the width the list covers.
+    if (locateAsked > 0) locatePasted()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [locateAsked])
 
   useEffect(() => {
     const onKey = (event: globalThis.KeyboardEvent): void => {
       if (event.key !== 'Escape') return
       if (lasso) setLasso(false)
       else if (selected !== null) model.setSelected(null)
+      else pastedPoint.setOpen(false)
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [lasso, selected, model])
+  }, [lasso, selected, model, pastedPoint])
 
   const onStageKey = (event: KeyboardEvent<HTMLDivElement>): void => {
     if (event.key.toLowerCase() !== 'l' || event.ctrlKey || event.metaKey || event.altKey || event.repeat) return
@@ -216,9 +222,17 @@ export function MapView({ data }: { data: MapData }): ReactElement {
         {actions.busy ? <p className="nm-stage__status">Computing the scores…</p> : null}
         {marks.words.length > 0 ? <AxisWords ref={refs.words} words={marks.words} /> : null}
         {pasted && analysis ? (
-          <PastedLabel analysis={analysis} label={refs.pastedLabel} highlighted={pastedLit} onHighlight={() => setPastedLit(true)} />
+          <PastedLabel
+            analysis={analysis}
+            label={refs.pastedLabel}
+            open={pasted.highlighted}
+            onToggle={() => {
+              model.setSelected(null)
+              pastedPoint.setOpen(!pasted.highlighted)
+            }}
+          />
         ) : null}
-        {deep ? <PivotMark mark={refs.pivot} /> : null}
+        {deep ? <div ref={refs.pivot} className="nm-pivot" aria-hidden /> : null}
         {lasso ? (
           <LassoOverlay
             deep={deep}
@@ -277,16 +291,13 @@ export function MapView({ data }: { data: MapData }): ReactElement {
         ) : null}
         {pasting ? (
           <PastePanel
-            data={data}
             paste={paste}
             unplaced={analysis && !pasted ? 'The date view has no place for a text without a date: switch to 2D or 3D to see it.' : null}
             onLocate={() => {
-              setPastedLit(true)
-              locatePasted()
+              model.setSelected(null)
+              pastedPoint.setOpen(true)
+              setLocateAsked((count) => count + 1)
             }}
-            onShow={(index) => stage.camera.centreOn(index, coveredRight())}
-            onOpen={actions.goTo}
-            onRing={setRinged}
             onClose={() => setPasting(false)}
           />
         ) : null}
@@ -294,12 +305,23 @@ export function MapView({ data }: { data: MapData }): ReactElement {
           {showNeighbours && selected !== null ? (
             <NeighbourDrawer
               data={data}
-              of={selected}
+              listKey={`neighbours:${selected}`}
               neighbours={stage.neighbours}
               onShow={(index) => stage.camera.centreOn(index, coveredRight())}
               onOpen={actions.goTo}
               onRing={setRinged}
               onClose={() => setNeighboursClosedFor(selected)}
+            />
+          ) : null}
+          {pastedNeighbours ? (
+            <NeighbourDrawer
+              data={data}
+              listKey={`neighbours:pasted:${pastedNeighbours.join('-')}`}
+              neighbours={pastedNeighbours}
+              onShow={(index) => stage.camera.centreOn(index, coveredRight())}
+              onOpen={actions.goTo}
+              onRing={setRinged}
+              onClose={() => pastedPoint.setOpen(false)}
             />
           ) : null}
           {showList && picked ? (

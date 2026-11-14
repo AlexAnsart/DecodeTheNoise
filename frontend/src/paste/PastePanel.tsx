@@ -2,23 +2,17 @@ import { ExternalLink, LocateFixed, X } from 'lucide-react'
 import { useState } from 'react'
 import type { ReactElement } from 'react'
 import type { Analysis } from '../api/schema'
-import { ItemList } from '../items/ItemList'
-import type { MapData } from '../map/mapData'
 import { formatCount, formatMoment } from '../text/format'
 import type { Paste } from './usePaste'
 import { asLink } from './usePaste'
 import './paste.css'
 
 interface PastePanelProps {
-  data: MapData
   paste: Paste
   /** Set when the current shape of the map has no place for a pasted text. */
   unplaced: string | null
   /** Brings the camera back onto the pasted text. */
   onLocate(): void
-  onShow(index: number): void
-  onOpen(index: number): void
-  onRing(index: number | null): void
   onClose(): void
 }
 
@@ -37,7 +31,7 @@ function Result({ analysis, unplaced, onLocate }: { analysis: Analysis; unplaced
       ) : null}
       {analysis.outcome === 'placed' ? (
         <p className="nm-paste__verdict">
-          It is on the map now: the point labelled “{source.kind === 'url' ? 'Your link' : 'Your text'}”, tied to the items it resembles most.
+          It is on the map now, as a point like the others. Click it to see the items it resembles most.
           {analysis.characters > analysis.text.length
             ? ` The first ${formatCount(analysis.text.length)} of ${formatCount(analysis.characters)} characters were read.`
             : ''}
@@ -63,8 +57,8 @@ function Result({ analysis, unplaced, onLocate }: { analysis: Analysis; unplaced
   )
 }
 
-/** A text or a link pasted by the user, placed on the map with the items it resembles most. */
-export function PastePanel({ data, paste, unplaced, onLocate, onShow, onOpen, onRing, onClose }: PastePanelProps): ReactElement {
+/** A text or a link pasted by the user, placed on the map as a point among the others. */
+export function PastePanel({ paste, unplaced, onLocate, onClose }: PastePanelProps): ReactElement {
   const [input, setInput] = useState('')
   const { state } = paste
   const busy = state.status === 'reading'
@@ -126,19 +120,6 @@ export function PastePanel({ data, paste, unplaced, onLocate, onShow, onOpen, on
       {busy ? <p className="nm-paste__note">{state.what === 'link' ? 'Reading the page, then placing it…' : 'Placing the text…'}</p> : null}
       {state.status === 'error' ? <p className="nm-paste__note nm-paste__note--error">{state.message}</p> : null}
       {done ? <Result analysis={done} unplaced={unplaced} onLocate={onLocate} /> : null}
-      {done && done.neighbours.length > 0 ? (
-        <>
-          <p className="nm-paste__title">Nearest items by meaning</p>
-          <ItemList
-            data={data}
-            indices={done.neighbours.map((neighbour) => neighbour.index)}
-            listKey={`paste:${done.neighbours.map((neighbour) => neighbour.index).join('-')}`}
-            onShow={onShow}
-            onOpen={onOpen}
-            onRing={onRing}
-          />
-        </>
-      ) : null}
     </section>
   )
 }

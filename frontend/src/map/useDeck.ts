@@ -11,6 +11,8 @@ import { readView, viewFor } from './views'
 
 const log = logger('map')
 const MAX_LOGGED_ERRORS = 50
+/** Names of the renderers that draw on the CPU: the browser has no hardware acceleration. */
+const SOFTWARE_RENDERER = /swiftshader|basic render|llvmpipe|software/i
 
 /** The map has one view at a time: flat or in depth. */
 export type MapDeck = Deck<OrbitView | OrthographicView>
@@ -65,6 +67,9 @@ export function useDeck(host: RefObject<HTMLDivElement | null>, shape: Shape, ev
         onAfterRender: () => latest.current.onFrame(),
         getCursor: (state) => latest.current.cursor(state),
         onResize: ({ width, height }) => setSize({ width, height }),
+        // The styles adapt to a browser that composes the page on the CPU (theme/base.css).
+        onDeviceInitialized: (device) =>
+          document.documentElement.classList.toggle('is-software', SOFTWARE_RENDERER.test(device.info.renderer)),
         onError: (error) => {
           const message = error?.message ?? 'unknown rendering error'
           if (/webgl/i.test(message)) setFailed(true)

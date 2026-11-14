@@ -62,6 +62,13 @@ input:focus-visible {
   scrollbar-color: var(--nm-scroll-thumb) var(--nm-scroll-track);
 }
 
+/* Without hardware acceleration the browser composes the page on the CPU, and that path leaves
+   stale strips and blank rectangles on the canvas wherever a scrollbar is drawn over it. The
+   lists still scroll; only the bar is not drawn. */
+.is-software * {
+  scrollbar-width: none;
+}
+
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;

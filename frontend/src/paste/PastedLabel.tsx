@@ -9,25 +9,26 @@ interface PastedLabelProps {
   /** Moved after each frame to where the pasted text sits on the screen. */
   label: RefObject<HTMLDivElement | null>
   /** Just placed, or clicked: it wears its label. Otherwise it looks like any other point. */
-  highlighted: boolean
-  onHighlight(): void
+  open: boolean
+  onToggle(): void
 }
 
-/** The pasted text as a point of the map. It is labelled when it has just been placed; after a
- *  click elsewhere it is a point like the others, which still says what it is on hover and takes
- *  its label back on click. */
-export function PastedLabel({ analysis, label, highlighted, onHighlight }: PastedLabelProps): ReactElement {
+/** The pasted text as a point of the map. Open when it has just been placed: labelled, tied to
+ *  its neighbours, their list beside the map. After a click elsewhere it is a point like the
+ *  others, which still says what it is on hover and opens again on click. */
+export function PastedLabel({ analysis, label, open, onToggle }: PastedLabelProps): ReactElement {
   const { source } = analysis
   const isLink = source.kind === 'url'
   return (
-    <div ref={label} className={`nm-pasted${highlighted ? ' is-lit' : ''}`}>
+    <div ref={label} className={`nm-pasted${open ? ' is-lit' : ''}`}>
       <button
         type="button"
         className="nm-pasted__dot"
-        onClick={onHighlight}
+        onClick={onToggle}
+        aria-expanded={open}
         aria-label={isLink ? 'The page you pasted' : 'The text you pasted'}
       />
-      {highlighted ? (
+      {open ? (
         <span className="nm-pasted__pill">
           <ClipboardPaste size={12} aria-hidden />
           {isLink ? 'Your link' : 'Your text'}
@@ -43,7 +44,7 @@ export function PastedLabel({ analysis, label, highlighted, onHighlight }: Paste
         ) : null}
         <p className="nm-pasted__text">{analysis.text}</p>
         <p className="nm-pasted__meta">
-          {highlighted
+          {open
             ? `Placed among its ${plural(analysis.neighbours.length, 'nearest item', 'nearest items')} by meaning: the lines lead to them.`
             : 'Click to see the items it resembles most.'}
         </p>

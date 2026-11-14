@@ -30,7 +30,8 @@ function value(data: MapData, key: string, index: number): string | null {
   return code === NO_VALUE ? null : column.names[code]
 }
 
-/** The tooltip box always exists, hidden, so it can follow the pointer without a render. */
+/** The tooltip box always exists, so its place can be set without a render. While hidden it is
+ *  out of the layout: a hidden box left over the canvas is not repainted by every browser. */
 export function HoverTip(props: HoverTipProps): ReactElement {
   const { data, index, tip, entry, score, neighbourOfSelected, onSettle } = props
   const item = useItem(index)
