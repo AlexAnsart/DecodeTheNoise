@@ -1,0 +1,134 @@
+.nm-map {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+}
+
+.nm-stage {
+  position: relative;
+  flex: 1;
+  min-height: 320px;
+  margin: 0 0.65rem 0.65rem;
+  overflow: hidden;
+  border: 1px solid var(--nm-border);
+  border-radius: 10px;
+  background: var(--nm-surface-0);
+}
+
+.nm-stage:focus-visible {
+  outline-offset: -2px;
+}
+
+.nm-stage__canvas {
+  position: absolute;
+  inset: 0;
+}
+
+.nm-stage__message {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 1rem;
+  color: var(--nm-text-muted);
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+.nm-stage__message--over {
+  z-index: 6;
+  pointer-events: none;
+}
+
+.nm-stage__status {
+  position: absolute;
+  top: 12px;
+  left: calc((100% - var(--nm-covered-right, 0px)) / 2);
+  z-index: 26;
+  margin: 0;
+  padding: 0.45rem 0.8rem;
+  transform: translateX(-50%);
+  border: 1px solid var(--nm-border);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--nm-menu-bg) 94%, transparent);
+  box-shadow: var(--nm-shadow);
+  font-size: 0.74rem;
+  line-height: 1.2;
+  pointer-events: none;
+}
+
+.nm-pivot {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 3;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--nm-text) 45%, transparent);
+  pointer-events: none;
+}
+
+.nm-gestures {
+  position: absolute;
+  right: calc(var(--nm-covered-right, 0px) + 0.6rem);
+  bottom: 0.6rem;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border: 1px solid var(--nm-border);
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--nm-menu-bg) 94%, transparent);
+  color: var(--nm-text-muted);
+}
+
+.nm-gestures p {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 6px);
+  display: none;
+  width: max-content;
+  margin: 0;
+  padding: 0.4rem 0.6rem;
+  border: 1px solid var(--nm-border);
+  border-radius: 8px;
+  background: var(--nm-menu-bg);
+  box-shadow: var(--nm-shadow);
+  color: var(--nm-text);
+  font-size: 0.7rem;
+  line-height: 1.5;
+}
+
+.nm-gestures:hover p {
+  display: block;
+}
+
+.nm-screen-state {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 2rem;
+  color: var(--nm-text-muted);
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+.nm-screen-state strong {
+  color: var(--nm-text);
+  font-size: 0.95rem;
+}
+
+.nm-screen-state--error strong {
+  color: var(--nm-danger);
+}

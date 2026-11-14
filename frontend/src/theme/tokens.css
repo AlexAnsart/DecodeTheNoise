@@ -1,0 +1,117 @@
+/* Design tokens, defined once. Components use these variables and never a colour literal. */
+
+:root {
+  --nm-font: Inter, Avenir, Helvetica, Arial, sans-serif;
+  --nm-font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --nm-radius-sm: 6px;
+  --nm-radius-md: 10px;
+  --nm-radius-lg: 16px;
+  --nm-control-h: 26px;
+
+  /* Categorical palette of the map. The accent is left out: it marks the selection. */
+  --nm-cat-1: #4e8df5;
+  --nm-cat-2: #f2a93b;
+  --nm-cat-3: #e5534b;
+  --nm-cat-4: #4fb477;
+  --nm-cat-5: #a97cf2;
+  --nm-cat-6: #ef7db0;
+  --nm-cat-7: #d4c04a;
+  --nm-cat-8: #a3714f;
+  --nm-cat-9: #f07c3e;
+  --nm-cat-10: #9ccb5a;
+  --nm-cat-11: #c05bc0;
+  --nm-cat-12: #3e9c8f;
+  /* Date gradient, old to recent. */
+  --nm-date-1: #5465d6;
+  --nm-date-2: #a44ca8;
+  --nm-date-3: #f07c3e;
+  --nm-date-4: #f5d547;
+  --nm-rest: #8c8880;
+}
+
+html[data-theme='dark'] {
+  color-scheme: dark;
+  --nm-bg: #1e2530;
+  --nm-bg-2: #27303e;
+  --nm-accent: #2ad3f5;
+  --nm-accent-alt: #40b4d2;
+  --nm-on-accent: #071017;
+  --nm-text: #ffffff;
+  --nm-text-muted: #a3adb8;
+  --nm-placeholder: #6b7280;
+  --nm-surface-0: #080b10;
+  --nm-surface-1: #0f1520;
+  --nm-surface-2: #1a202e;
+  --nm-surface-3: #27303e;
+  --nm-border: color-mix(in srgb, var(--nm-accent) 12%, transparent);
+  --nm-border-strong: color-mix(in srgb, var(--nm-accent) 30%, transparent);
+  --nm-focus-ring: color-mix(in srgb, var(--nm-accent) 50%, transparent);
+  --nm-danger: #f87171;
+  --nm-success: #4ade80;
+  --nm-warning: #fbbf24;
+  --nm-overlay: rgba(0, 0, 0, 0.65);
+  --nm-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  --nm-shadow-lg: 0 24px 64px rgba(0, 0, 0, 0.7);
+  --nm-shadow-card: 0 16px 40px rgba(0, 0, 0, 0.5);
+  --nm-scroll-thumb: rgba(72, 82, 98, 0.95);
+  --nm-scroll-track: rgba(18, 22, 30, 0.5);
+  --nm-control-bg: rgba(10, 13, 19, 0.92);
+  --nm-menu-bg: rgba(14, 18, 26, 0.98);
+  --nm-input-bg: rgba(8, 12, 18, 0.85);
+  --nm-inset-bg: rgba(0, 0, 0, 0.25);
+  --nm-inset-bg-focus: rgba(0, 0, 0, 0.35);
+  --nm-hover-bg: rgba(255, 255, 255, 0.06);
+  --nm-shell-bg: linear-gradient(135deg, #1e2530 0%, #11151c 60%, #080b10 100%);
+  --nm-minimap-bg: rgba(9, 13, 20, 0.92);
+  --nm-minimap-bar: rgba(122, 162, 196, 0.5);
+  --nm-minimap-mask: rgba(0, 0, 0, 0.32);
+  --nm-window-fill: color-mix(in srgb, var(--nm-accent) 10%, transparent);
+  --nm-window-stroke: color-mix(in srgb, var(--nm-accent) 55%, transparent);
+  --nm-axis-text: #8d99a6;
+  --nm-axis-text-strong: #c9d4de;
+  --nm-point-highlight: #ffffff;
+}
+
+/* Light: dusty indigo on warm limestone. */
+html[data-theme='light'] {
+  color-scheme: light;
+  --nm-bg: #e4dfd4;
+  --nm-bg-2: #e4dfd4;
+  --nm-accent: #4a5182;
+  --nm-accent-alt: #3f456f;
+  --nm-on-accent: #f4f0e8;
+  --nm-text: #3c3a34;
+  --nm-text-muted: #6a6760;
+  --nm-placeholder: #8e8a82;
+  --nm-surface-0: #e4dfd4;
+  --nm-surface-1: #ebe6dc;
+  --nm-surface-2: #f0ebe3;
+  --nm-surface-3: #d9d3c8;
+  --nm-border: #cfc8bb;
+  --nm-border-strong: #bfb7a9;
+  --nm-focus-ring: color-mix(in srgb, var(--nm-accent) 22%, transparent);
+  --nm-danger: #a84842;
+  --nm-success: #3d6e45;
+  --nm-warning: #8a6b1c;
+  --nm-overlay: rgba(60, 58, 52, 0.42);
+  --nm-shadow: 0 1px 3px rgba(60, 58, 52, 0.08), 0 8px 24px rgba(60, 58, 52, 0.08);
+  --nm-shadow-lg: 0 8px 32px rgba(60, 58, 52, 0.14);
+  --nm-shadow-card: 0 8px 32px rgba(60, 58, 52, 0.14);
+  --nm-scroll-thumb: #bfb7a9;
+  --nm-scroll-track: #e4dfd4;
+  --nm-control-bg: #ebe6dc;
+  --nm-menu-bg: #f0ebe3;
+  --nm-input-bg: #ebe6dc;
+  --nm-inset-bg: #d9d3c8;
+  --nm-inset-bg-focus: #d4cec3;
+  --nm-hover-bg: rgba(60, 58, 52, 0.06);
+  --nm-shell-bg: #e4dfd4;
+  --nm-minimap-bg: #d9d3c8;
+  --nm-minimap-bar: rgba(106, 103, 96, 0.4);
+  --nm-minimap-mask: rgba(40, 36, 30, 0.14);
+  --nm-window-fill: color-mix(in srgb, var(--nm-accent) 12%, transparent);
+  --nm-window-stroke: color-mix(in srgb, var(--nm-accent) 50%, transparent);
+  --nm-axis-text: #6a6760;
+  --nm-axis-text-strong: #3c3a34;
+  --nm-point-highlight: #3c3a34;
+}

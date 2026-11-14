@@ -1,0 +1,100 @@
+.nm-app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+
+.nm-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  height: 40px;
+  padding: 0 0.65rem 0 0.8rem;
+  border-bottom: 1px solid var(--nm-border);
+  background: var(--nm-surface-1);
+  flex: none;
+}
+
+.nm-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-width: 0;
+  font-size: 0.86rem;
+}
+
+.nm-brand strong {
+  font-weight: 650;
+  letter-spacing: 0.01em;
+}
+
+.nm-brand__line {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--nm-text-muted);
+  font-size: 0.74rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nm-brand__mark {
+  position: relative;
+  width: 18px;
+  height: 18px;
+  flex: none;
+}
+
+.nm-brand__mark i {
+  position: absolute;
+  border-radius: 50%;
+}
+
+.nm-brand__mark i:nth-child(1) {
+  top: 2px;
+  left: 6px;
+  width: 7px;
+  height: 7px;
+  background: var(--nm-accent);
+}
+
+.nm-brand__mark i:nth-child(2) {
+  bottom: 1px;
+  left: 0;
+  width: 6px;
+  height: 6px;
+  background: var(--nm-cat-1);
+}
+
+.nm-brand__mark i:nth-child(3) {
+  right: 0;
+  bottom: 3px;
+  width: 5px;
+  height: 5px;
+  background: var(--nm-cat-2);
+}
+
+.nm-header__nav {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  flex: none;
+}
+
+.nm-header__nav a {
+  color: var(--nm-text-muted);
+  font-size: 0.74rem;
+  text-decoration: none;
+}
+
+.nm-header__nav a:hover {
+  color: var(--nm-text);
+}
+
+.nm-main {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+}

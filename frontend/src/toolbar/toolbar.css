@@ -1,0 +1,35 @@
+.nm-tools {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-left: auto;
+}
+
+.nm-tools__count {
+  margin-right: 0.15rem;
+  color: var(--nm-text-muted);
+  font-size: 0.7rem;
+  white-space: nowrap;
+}
+
+.nm-display-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-height: 28px;
+  padding: 0 0.45rem;
+  border-radius: 5px;
+  font-size: 0.74rem;
+  cursor: pointer;
+}
+
+.nm-display-row:hover {
+  background: color-mix(in srgb, var(--nm-accent) 8%, transparent);
+}
+
+.nm-display-row.is-disabled {
+  opacity: 0.4;
+  cursor: default;
+}

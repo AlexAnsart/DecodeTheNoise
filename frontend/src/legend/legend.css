@@ -1,0 +1,155 @@
+.nm-legend {
+  position: absolute;
+  left: 8px;
+  bottom: 8px;
+  z-index: 25;
+  display: flex;
+  flex-direction: column;
+  min-width: 200px;
+  max-width: min(290px, calc(100% - 16px));
+  max-height: calc(100% - 16px);
+  border: 1px solid var(--nm-border);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--nm-menu-bg) 94%, transparent);
+  box-shadow: var(--nm-shadow);
+  font-size: 0.72rem;
+  line-height: 1.2;
+}
+
+.nm-legend.is-raised {
+  bottom: 72px;
+  max-height: calc(100% - 80px);
+}
+
+.nm-legend__head {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  height: 26px;
+  padding: 0 0.25rem 0 0.2rem;
+  flex: none;
+}
+
+.nm-legend__title {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  flex: 1;
+  min-width: 0;
+  height: 22px;
+  padding: 0 0.35rem;
+  border: none;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--nm-text);
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-align: left;
+}
+
+.nm-legend__title > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nm-legend__title:hover,
+.nm-legend__eye:hover {
+  background: color-mix(in srgb, var(--nm-accent) 8%, transparent);
+}
+
+.nm-legend__eye {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border: none;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--nm-text-muted);
+}
+
+.nm-legend__eye:hover {
+  color: var(--nm-text);
+}
+
+.nm-legend__rows {
+  max-height: 40vh;
+  overflow-y: auto;
+  padding: 0 0.2rem 0.25rem;
+  border-top: 1px solid var(--nm-border);
+}
+
+.nm-legend__row {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  width: 100%;
+  min-height: 24px;
+  padding: 0 0.35rem;
+  border: none;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--nm-text);
+  font-size: 0.72rem;
+  text-align: left;
+}
+
+.nm-legend__row:hover {
+  background: color-mix(in srgb, var(--nm-accent) 8%, transparent);
+}
+
+.nm-legend__swatch {
+  flex: none;
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 50%;
+  background: var(--swatch);
+  border: 2px solid var(--swatch);
+}
+
+.nm-legend__row.is-hidden .nm-legend__swatch {
+  background: transparent;
+}
+
+.nm-legend__row.is-hidden .nm-legend__label {
+  color: var(--nm-text-muted);
+}
+
+.nm-legend__label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nm-legend__count {
+  color: var(--nm-text-muted);
+}
+
+.nm-legend__dates {
+  padding: 0.45rem 0.35rem 0.2rem;
+}
+
+.nm-legend__gradient {
+  height: 8px;
+  border-radius: 4px;
+}
+
+.nm-legend__ticks {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.4rem;
+  margin-top: 0.25rem;
+  color: var(--nm-text-muted);
+  font-size: 0.62rem;
+  white-space: nowrap;
+}
+
+.nm-legend__note {
+  margin: 0.3rem 0 0;
+  color: var(--nm-text-muted);
+  font-size: 0.64rem;
+}

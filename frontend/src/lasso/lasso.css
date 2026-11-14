@@ -1,0 +1,62 @@
+.nm-lasso {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  cursor: crosshair;
+  touch-action: none;
+}
+
+.nm-lasso__svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.nm-lasso__svg path {
+  fill: color-mix(in srgb, var(--nm-accent) 12%, transparent);
+  stroke: var(--nm-accent);
+  stroke-width: 1.5;
+  stroke-dasharray: 4 3;
+}
+
+.nm-lasso--add .nm-lasso__svg path {
+  fill: color-mix(in srgb, var(--nm-accent) 18%, transparent);
+  stroke-dasharray: none;
+}
+
+.nm-lasso--remove .nm-lasso__svg path {
+  fill: color-mix(in srgb, var(--nm-danger) 14%, transparent);
+  stroke: var(--nm-danger);
+  stroke-dasharray: none;
+}
+
+.nm-lasso--overlap .nm-lasso__svg path {
+  stroke-width: 2;
+  stroke-dasharray: 1 4;
+  stroke-linecap: round;
+}
+
+.nm-lasso__hint {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  max-width: min(420px, calc(100% - 24px));
+  margin: 0;
+  padding: 0.4rem 0.75rem;
+  transform: translateX(-50%);
+  border: 1px solid color-mix(in srgb, var(--nm-accent) 30%, transparent);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--nm-menu-bg) 94%, transparent);
+  box-shadow: var(--nm-shadow);
+  font-size: 0.7rem;
+  line-height: 1.35;
+  text-align: center;
+  pointer-events: none;
+}
+
+.nm-lasso__hint > span {
+  display: block;
+  color: var(--nm-text-muted);
+}

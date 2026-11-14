@@ -1,0 +1,277 @@
+/* Page base and the shared controls: buttons, icon buttons, segmented pairs, switches. */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
+body {
+  font-family: var(--nm-font);
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: var(--nm-text);
+  background: var(--nm-shell-bg);
+}
+
+button,
+input,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: default;
+}
+
+:focus {
+  outline: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--nm-focus-ring);
+  outline-offset: 2px;
+}
+
+button:focus-visible,
+input:focus-visible {
+  outline-offset: 1px;
+  border-radius: 6px;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--nm-scroll-thumb) var(--nm-scroll-track);
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--nm-scroll-track);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--nm-scroll-thumb);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--nm-text-muted);
+}
+
+.nm-btn-primary,
+.nm-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0.45rem 1rem;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  line-height: 1.2;
+  transition:
+    opacity 0.15s ease,
+    transform 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.nm-btn-primary {
+  border: none;
+  background: linear-gradient(135deg, var(--nm-accent), var(--nm-accent-alt));
+  color: var(--nm-on-accent);
+  font-weight: 600;
+}
+
+.nm-btn-primary:hover:not(:disabled) {
+  opacity: 0.88;
+  transform: translateY(-1px);
+}
+
+.nm-btn-primary:disabled,
+.nm-btn-secondary:disabled {
+  opacity: 0.45;
+}
+
+.nm-btn-secondary {
+  background: var(--nm-control-bg);
+  border: 1px solid color-mix(in srgb, var(--nm-accent) 20%, transparent);
+  color: var(--nm-text-muted);
+  font-weight: 500;
+}
+
+.nm-btn-secondary:hover:not(:disabled) {
+  border-color: color-mix(in srgb, var(--nm-accent) 45%, transparent);
+  color: var(--nm-text);
+}
+
+.nm-btn-small {
+  padding: 0.3rem 0.65rem;
+  font-size: 0.72rem;
+}
+
+/* Toolbar control: every one is 26px high with a 6px radius. */
+.nm-tool {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  height: var(--nm-control-h);
+  padding: 0 0.5rem;
+  border: 1px solid color-mix(in srgb, var(--nm-accent) 18%, transparent);
+  border-radius: var(--nm-radius-sm);
+  background: transparent;
+  color: var(--nm-text-muted);
+  font-size: 0.72rem;
+  line-height: 1;
+  white-space: nowrap;
+  position: relative;
+  transition:
+    background 0.12s ease,
+    color 0.12s ease,
+    border-color 0.12s ease;
+}
+
+.nm-tool:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--nm-accent) 8%, transparent);
+  color: var(--nm-text);
+}
+
+.nm-tool.is-active,
+.nm-tool[aria-expanded='true'] {
+  background: color-mix(in srgb, var(--nm-accent) 16%, transparent);
+  color: var(--nm-accent);
+}
+
+.nm-tool:disabled {
+  opacity: 0.4;
+}
+
+.nm-tool--icon {
+  width: var(--nm-control-h);
+  padding: 0;
+}
+
+.nm-tool--marked::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--nm-accent);
+}
+
+.nm-segmented {
+  display: inline-flex;
+  height: var(--nm-control-h);
+  border: 1px solid color-mix(in srgb, var(--nm-accent) 18%, transparent);
+  border-radius: var(--nm-radius-sm);
+  overflow: hidden;
+}
+
+.nm-segmented > button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0 0.6rem;
+  border: none;
+  border-right: 1px solid color-mix(in srgb, var(--nm-accent) 12%, transparent);
+  background: transparent;
+  color: var(--nm-text-muted);
+  font-size: 0.72rem;
+  line-height: 1;
+  transition:
+    background 0.12s ease,
+    color 0.12s ease;
+}
+
+.nm-segmented > button:last-child {
+  border-right: none;
+}
+
+.nm-segmented > button:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--nm-accent) 8%, transparent);
+}
+
+.nm-segmented > button.is-active {
+  background: color-mix(in srgb, var(--nm-accent) 18%, transparent);
+  color: var(--nm-text);
+}
+
+.nm-segmented > button:disabled {
+  opacity: 0.35;
+}
+
+.nm-segmented--wide {
+  display: flex;
+  width: 100%;
+}
+
+.nm-segmented--wide > button {
+  flex: 1;
+  justify-content: center;
+}
+
+.nm-switch {
+  position: relative;
+  flex: none;
+  width: 1.7rem;
+  height: 0.95rem;
+  border: none;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--nm-text-muted) 35%, transparent);
+  padding: 0;
+  transition: background 0.15s ease;
+}
+
+.nm-switch::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: calc(0.95rem - 4px);
+  height: calc(0.95rem - 4px);
+  border-radius: 50%;
+  background: var(--nm-text);
+  transition: transform 0.15s ease;
+}
+
+.nm-switch[aria-checked='true'] {
+  background: var(--nm-accent);
+}
+
+.nm-switch[aria-checked='true']::after {
+  transform: translateX(0.75rem);
+  background: var(--nm-on-accent);
+}
+
+.nm-muted {
+  color: var(--nm-text-muted);
+}
+
+.nm-num {
+  font-variant-numeric: tabular-nums;
+}

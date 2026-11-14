@@ -1,0 +1,38 @@
+.nm-selection-pill {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 28;
+  display: flex;
+  align-items: center;
+  height: 26px;
+  border: 1px solid color-mix(in srgb, var(--nm-accent) 35%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--nm-menu-bg) 94%, transparent);
+  box-shadow: var(--nm-shadow);
+  overflow: hidden;
+}
+
+.nm-selection-pill button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  height: 100%;
+  border: none;
+  background: transparent;
+  color: var(--nm-text);
+  font-size: 0.72rem;
+}
+
+.nm-selection-pill__open {
+  padding: 0 0.4rem 0 0.65rem;
+}
+
+.nm-selection-pill__clear {
+  padding: 0 0.5rem 0 0.3rem;
+  color: var(--nm-text-muted) !important;
+}
+
+.nm-selection-pill button:hover {
+  background: color-mix(in srgb, var(--nm-accent) 8%, transparent);
+}

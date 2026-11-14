@@ -1,0 +1,110 @@
+.nm-popover {
+  position: fixed;
+  z-index: 20050;
+  max-height: min(70vh, 520px);
+  overflow: auto;
+  border: 1px solid var(--nm-border-strong);
+  background: var(--nm-menu-bg);
+  box-shadow: var(--nm-shadow);
+  color: var(--nm-text);
+  font-size: 0.78rem;
+  line-height: 1.35;
+}
+
+.nm-popover--panel {
+  padding: 0.75rem 0.8rem;
+  border-radius: 10px;
+}
+
+.nm-popover--menu {
+  padding: 4px;
+  border-radius: 8px;
+}
+
+.nm-menu-title {
+  margin: 0;
+  padding: 0.3rem 0.45rem 0.25rem;
+  color: var(--nm-text-muted);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.nm-menu-row {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  width: 100%;
+  min-height: 26px;
+  padding: 0 0.45rem;
+  border: none;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--nm-text);
+  font-size: 0.74rem;
+  line-height: 1.2;
+  text-align: left;
+}
+
+.nm-menu-row:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--nm-accent) 8%, transparent);
+}
+
+.nm-menu-row.is-chosen {
+  background: color-mix(in srgb, var(--nm-accent) 14%, transparent);
+}
+
+.nm-menu-row:disabled {
+  opacity: 0.4;
+}
+
+.nm-menu-row > .nm-menu-row__label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nm-menu-row > .nm-menu-row__hint {
+  color: var(--nm-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.nm-menu-sep {
+  height: 1px;
+  margin: 4px 0;
+  background: var(--nm-border);
+}
+
+.nm-popover h3 {
+  margin: 0 0 0.3rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.nm-popover p {
+  margin: 0 0 0.55rem;
+  color: var(--nm-text-muted);
+  font-size: 0.72rem;
+}
+
+.nm-field {
+  width: 100%;
+  height: 28px;
+  padding: 0 0.5rem;
+  border: 1px solid var(--nm-border);
+  border-radius: var(--nm-radius-sm);
+  background: var(--nm-input-bg);
+  color: var(--nm-text);
+  font-size: 0.74rem;
+}
+
+.nm-field::placeholder {
+  color: var(--nm-placeholder);
+}
+
+.nm-field:focus {
+  border-color: var(--nm-accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--nm-accent) 10%, transparent);
+}
