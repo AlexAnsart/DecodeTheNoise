@@ -95,3 +95,14 @@ def test_items_are_unique_and_oldest_first() -> None:
     assert len(items) == 40
     stamps = [item.created_at for item in items]
     assert stamps == sorted(stamps)
+
+
+def test_subset_is_seeded_and_keeps_the_order() -> None:
+    from pipelines.ingest.__main__ import subset
+
+    items = list(range(100))
+    first = subset(items, 10, seed=42)  # type: ignore[arg-type]
+    assert first == subset(items, 10, seed=42)  # type: ignore[arg-type]
+    assert first == sorted(first)
+    assert len(set(first)) == 10
+    assert subset(items, 500, seed=42) == items  # type: ignore[arg-type]

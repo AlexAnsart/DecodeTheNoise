@@ -11,7 +11,7 @@ from collections.abc import Iterator
 from pathlib import Path
 
 from pipelines import runlog
-from pipelines.corpus import write_corpus
+from pipelines.corpus import read_corpus, write_corpus
 from pipelines.ingest.fetch import IRA_DIR
 from pipelines.ingest.ira import MIN_TEXT_CHARS, Item, is_long_enough, parse_row
 from pipelines.paths import CORPUS_FILE, work_dir
@@ -50,16 +50,24 @@ def to_items(rows: list[dict[str, str]]) -> list[Item]:
     return sorted(unique.values(), key=lambda it: (it.created_at or 0, it.item_id))
 
 
+def subset(items: list[Item], n: int, seed: int) -> list[Item]:
+    """A seeded sample of a corpus already built, in its order: every text is already embedded."""
+    if n >= len(items):
+        return items
+    kept = sorted(random.Random(seed).sample(range(len(items)), n))
+    return [items[i] for i in kept]
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--name", required=True)
     parser.add_argument("--items", type=int, required=True)
+    parser.add_argument("--subset-of", help="sample the corpus of this build, not the files")
     args = parser.parse_args()
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(name)s %(message)s")
     # Numeric order, so the sample does not depend on how the file system lists the files.
     paths = sorted(IRA_DIR.glob("IRAhandle_tweets_*.csv"), key=lambda p: int(p.stem.split("_")[-1]))
     with runlog.timed() as elapsed:
-        items = to_items(sample_rows(read_rows(paths), args.items, SEED))
         meta = {
             "dataset": "ira-tweets-fivethirtyeight",
             "files": ",".join(p.name for p in paths),
@@ -67,6 +75,11 @@ def main() -> None:
             "min_text_chars": str(MIN_TEXT_CHARS),
             "requested_items": str(args.items),
         }
+        if args.subset_of:
+            items = subset(read_corpus(work_dir(args.subset_of) / CORPUS_FILE), args.items, SEED)
+            meta["subset_of"] = args.subset_of
+        else:
+            items = to_items(sample_rows(read_rows(paths), args.items, SEED))
         write_corpus(work_dir(args.name) / CORPUS_FILE, items, meta)
     runlog.record("ingest", args.name, len(items), elapsed[0])
     log.info("wrote %d items in %.1fs", len(items), elapsed[0])

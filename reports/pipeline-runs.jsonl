@@ -5,3 +5,26 @@
 {"at": "2026-11-14T13:18:50+00:00", "step": "neighbours", "build": "ira-3k", "machine": "laptop Snapdragon X, CPU", "items": 3000, "seconds": 0.4}
 {"at": "2026-11-14T13:18:51+00:00", "step": "zones", "build": "ira-3k", "machine": "laptop Snapdragon X, CPU", "items": 3000, "seconds": 0.2}
 {"at": "2026-11-14T13:18:53+00:00", "step": "pack", "build": "ira-3k", "machine": "laptop Snapdragon X, CPU", "items": 3000, "seconds": 0.8}
+{"at": "2026-11-14T13:36:43+00:00", "step": "embed", "build": "ira-18k", "machine": "laptop Snapdragon X, CPU", "items": 17891, "seconds": 1282.1}
+{"at": "2026-11-14T13:39:46+00:00", "step": "layout", "build": "ira-18k", "machine": "laptop Snapdragon X, CPU", "items": 18000, "seconds": 155.3}
+{"at": "2026-11-14T13:39:52+00:00", "step": "neighbours", "build": "ira-18k", "machine": "laptop Snapdragon X, CPU", "items": 18000, "seconds": 4.4}
+{"at": "2026-11-14T13:39:54+00:00", "step": "zones", "build": "ira-18k", "machine": "laptop Snapdragon X, CPU", "items": 18000, "seconds": 1.1}
+{"at": "2026-11-14T13:40:05+00:00", "step": "pack", "build": "ira-18k", "machine": "laptop Snapdragon X, CPU", "items": 18000, "seconds": 1.3}
+{"at": "2026-11-14T13:56:26+00:00", "step": "embed-check", "build": "ira-3k", "machine": "Verda 1A100.22V, NVIDIA A100 80GB", "items": 100, "seconds": 89.2, "note": "cosine to the cached vectors: mean 0.99985, min 0.99972 (768 dims); mean 0.99988, min 0.99977 (256 dims served)"}
+{"at": "2026-11-14T14:13:35+00:00", "step": "zone-names", "build": "ira-3k", "machine": "laptop Snapdragon X, CPU", "items": 14, "seconds": 26.1}
+{"at": "2026-11-14T14:14:59+00:00", "step": "embed-check", "build": "ira-3k", "machine": "Hostinger VPS KVM 2, 2 vCPU, CPU", "items": 100, "seconds": 12.1, "note": "cosine to the cached vectors: mean 0.99985, min 0.99941 (768 dims); mean 0.99988, min 0.99955 (256 dims served)"}
+{"at": "2026-11-14T13:57:09+00:00", "step": "ingest", "build": "ira-probe", "machine": "Verda 1A100.22V, NVIDIA A100 80GB", "items": 12000, "seconds": 26.1}
+{"at": "2026-11-14T14:12:39+00:00", "step": "ingest", "build": "ira-140k", "machine": "Verda 1A100.22V, NVIDIA A100 80GB", "items": 139995, "seconds": 33.2}
+{"at": "2026-11-14T14:29:45+00:00", "step": "embed", "build": "ira-140k", "machine": "Verda 1A100.22V, NVIDIA A100 80GB", "items": 134200, "seconds": 1023.2}
+{"at": "2026-11-14T14:29:48+00:00", "step": "ingest", "build": "ira-120k", "machine": "Verda 1A100.22V, NVIDIA A100 80GB", "items": 120000, "seconds": 2.4}
+{"at": "2026-11-14T14:29:50+00:00", "step": "embed", "build": "ira-120k", "machine": "Verda 1A100.22V, NVIDIA A100 80GB", "items": 0, "seconds": 0.0}
+{"at": "2026-11-14T14:33:56+00:00", "step": "layout", "build": "ira-120k", "machine": "Verda 1A100.22V, NVIDIA A100 80GB", "items": 120000, "seconds": 208.6}
+{"at": "2026-11-14T14:35:12+00:00", "step": "neighbours", "build": "ira-120k", "machine": "Verda 1A100.22V, NVIDIA A100 80GB", "items": 120000, "seconds": 75.3}
+{"at": "2026-11-14T14:35:19+00:00", "step": "zones", "build": "ira-120k", "machine": "Verda 1A100.22V, NVIDIA A100 80GB", "items": 120000, "seconds": 5.0}
+{"at": "2026-11-14T14:35:23+00:00", "step": "pack", "build": "ira-120k", "machine": "Verda 1A100.22V, NVIDIA A100 80GB", "items": 120000, "seconds": 3.6}
+{"at": "2026-11-14T14:38:53+00:00", "step": "zone-names", "build": "ira-120k", "machine": "laptop Snapdragon X, CPU", "items": 48, "seconds": 97.6, "note": "gemini-3.8-flash through the AI Router, 48 zones named"}
+{"at": "2026-11-14T14:39:46+00:00", "step": "pack", "build": "ira-120k", "machine": "laptop Snapdragon X, CPU", "items": 120000, "seconds": 6.0}
+{"at": "2026-11-14T14:43:12+00:00", "step": "zone-names", "build": "ira-120k", "machine": "laptop Snapdragon X, CPU", "items": 48, "seconds": 0.2, "note": "gemini-3.8-flash through the AI Router, 48 zones named"}
+{"at": "2026-11-14T14:43:19+00:00", "step": "pack", "build": "ira-120k", "machine": "laptop Snapdragon X, CPU", "items": 120000, "seconds": 7.1}
+{"at": "2026-11-14T14:44:01+00:00", "step": "zone-names", "build": "ira-120k", "machine": "laptop Snapdragon X, CPU", "items": 48, "seconds": 0.2, "note": "gemini-3.8-flash through the AI Router, 48 zones named"}
+{"at": "2026-11-14T14:44:09+00:00", "step": "pack", "build": "ira-120k", "machine": "laptop Snapdragon X, CPU", "items": 120000, "seconds": 6.9}
