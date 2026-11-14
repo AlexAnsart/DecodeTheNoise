@@ -1,6 +1,6 @@
 # The API image: runtime dependencies only. The pipeline group (layout, clustering) stays out.
-# Official images come from the public ECR mirror: Docker Hub rate-limits the shared runners.
-FROM public.ecr.aws/docker/library/python:3.12-slim
+# Official images come from Google's mirror of Docker Hub, which rate-limits the shared runners.
+FROM mirror.gcr.io/library/python:3.12-slim
 
 COPY --from=ghcr.io/astral-sh/uv:0.11.28 /uv /bin/uv
 
