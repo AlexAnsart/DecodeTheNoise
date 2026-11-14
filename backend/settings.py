@@ -13,6 +13,8 @@ class Settings(BaseSettings):
 
     # The build the server loads at start-up (see backend/map/schema.py).
     data_build_dir: Path = Path("data/build/current")
+    # The committed evaluation reports: one `metrics.json` per detector.
+    reports_dir: Path = Path("reports")
 
     # Embedding role. Local mode: an Ollama endpoint we run. Hosted mode: the AI Router.
     embedding_api_base: str = "http://localhost:11434/v1"
