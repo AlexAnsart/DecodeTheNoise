@@ -1,8 +1,16 @@
 /* Every HTTP call to the backend goes through this module. */
 
 import type { z } from 'zod'
-import { analysisSchema, healthSchema, itemsResponseSchema, manifestSchema } from './schema'
-import type { Analysis, Health, Item, Manifest } from './schema'
+import {
+  analysisSchema,
+  healthSchema,
+  itemsResponseSchema,
+  manifestSchema,
+  metricsResponseSchema,
+  swarmLayerSchema,
+  swarmSchema,
+} from './schema'
+import type { Analysis, DetectorMetrics, Health, Item, Manifest, Swarm, SwarmLayer } from './schema'
 
 export class ApiError extends Error {
   readonly status: number
@@ -63,6 +71,27 @@ export async function fetchItems(indices: number[], signal?: AbortSignal): Promi
 export function analyze(input: { text: string } | { url: string }, signal?: AbortSignal): Promise<Analysis> {
   const body = 'url' in input ? { text: null, url: input.url } : { text: input.text, url: null }
   return getJson('/api/analyze', analysisSchema, postJson(body, signal))
+}
+
+/** The swarm layer of the map, or null when the map has none that was measured. */
+export async function fetchSwarmLayer(): Promise<SwarmLayer | null> {
+  try {
+    return await getJson('/api/swarms', swarmLayerSchema)
+  } catch (error) {
+    if (error instanceof ApiError && error.status === 404) return null
+    throw error
+  }
+}
+
+/** One swarm with its evidence. */
+export function fetchSwarm(id: number, signal?: AbortSignal): Promise<Swarm> {
+  return getJson(`/api/swarms/${id}`, swarmSchema, { signal })
+}
+
+/** The evaluation report of every detector the product shows. */
+export async function fetchMetrics(signal?: AbortSignal): Promise<DetectorMetrics[]> {
+  const body = await getJson('/api/metrics', metricsResponseSchema, { signal })
+  return body.detectors
 }
 
 /** One byte per point: 1 where the text holds every word of the query. */

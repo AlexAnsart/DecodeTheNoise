@@ -1,0 +1,68 @@
+.nm-verdict {
+  --level: var(--nm-warning);
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  margin-top: 0.5rem;
+  padding: 0.45rem 0.55rem 0.5rem;
+  border: 1px solid color-mix(in srgb, var(--level) 45%, transparent);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--level) 8%, transparent);
+  font-size: 0.72rem;
+  line-height: 1.4;
+}
+
+.nm-verdict--probable {
+  --level: var(--nm-danger);
+}
+
+.nm-verdict__head {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.nm-verdict__head strong {
+  flex: 1;
+  min-width: 0;
+  font-weight: 650;
+}
+
+.nm-verdict__level,
+.nm-level {
+  flex: none;
+  padding: 0.05rem 0.45rem;
+  border: 1px solid color-mix(in srgb, var(--level) 60%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--level) 16%, transparent);
+  font-size: 0.66rem;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.nm-level {
+  --level: var(--nm-warning);
+}
+
+.nm-level--probable {
+  --level: var(--nm-danger);
+}
+
+.nm-verdict p,
+.nm-verdict ul {
+  margin: 0;
+}
+
+.nm-verdict__measured {
+  padding: 0;
+  list-style: none;
+  color: var(--nm-text-muted);
+  font-size: 0.68rem;
+}
+
+.nm-verdict__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.15rem;
+}

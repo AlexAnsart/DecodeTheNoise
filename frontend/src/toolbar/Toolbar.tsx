@@ -1,4 +1,4 @@
-import { Blend, Box, Lasso, Square } from 'lucide-react'
+import { Blend, Box, Lasso, ShieldCheck, Square } from 'lucide-react'
 import type { ReactElement, ReactNode } from 'react'
 import type { Shape } from '../map/geometry'
 import { formatCount } from '../text/format'
@@ -14,6 +14,7 @@ interface ToolbarProps {
   onFlat(flat: boolean): void
   onLasso(on: boolean): void
   onCompose(open: boolean): void
+  onReliability(): void
   /** The menus, in the order they are drawn: colour, axes, then display. */
   colourMenu: ReactNode
   axesMenu: ReactNode
@@ -52,6 +53,15 @@ export function Toolbar(props: ToolbarProps): ReactElement {
         </button>
       </div>
       {props.displayMenu}
+      <button
+        type="button"
+        className="nm-tool nm-tool--icon"
+        title="Reliability: what each detector measured to be"
+        aria-label="Reliability"
+        onClick={props.onReliability}
+      >
+        <ShieldCheck size={15} aria-hidden />
+      </button>
       <button
         type="button"
         className={`nm-tool nm-tool--icon${lasso ? ' is-active' : ''}`}

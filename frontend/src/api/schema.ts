@@ -70,6 +70,81 @@ export const analysisSchema = z.object({
   verdicts: z.array(z.unknown()),
 })
 
+const rateSchema = z.number().nullable()
+
+/** One measured rate of a detector, with the data it was measured on. */
+export const measureSchema = z.object({
+  name: z.string(),
+  kind: z.string(),
+  set: z.string(),
+  n: z.number().int(),
+  value: z.number(),
+  low: rateSchema,
+  high: rateSchema,
+})
+
+/** The evaluation report of a detector, as its evaluation code wrote it. */
+export const detectorMetricsSchema = z.object({
+  detector: z.string(),
+  title: z.string(),
+  report: z.string(),
+  date: z.string(),
+  unit: z.string(),
+  decides: z.string(),
+  operating_point: z.record(z.string(), z.unknown()),
+  results: z.array(measureSchema),
+  precision_at_base_rates: z.array(
+    z.object({ prevalence: z.number(), precision: z.number(), low: rateSchema, high: rateSchema }),
+  ),
+  false_positive_modes: z.array(z.object({ mode: z.string(), example: z.string(), response: z.string() })),
+  untested: z.array(z.string()),
+})
+
+export const metricsResponseSchema = z.object({ detectors: z.array(detectorMetricsSchema) })
+
+const confidenceSchema = z.enum(['probable', 'possible'])
+
+const swarmSummaryShape = {
+  id: z.number().int(),
+  name: z.string(),
+  confidence: confidenceSchema,
+  n_actors: z.number().int(),
+  n_events: z.number().int(),
+  first_at: z.number(),
+  last_at: z.number(),
+}
+
+export const actorVerdictSchema = z.object({
+  swarm: z.number().int(),
+  confidence: confidenceSchema,
+  n_events: z.number().int(),
+  n_partners: z.number().int(),
+})
+
+export const swarmLayerSchema = z.object({
+  detector: z.string(),
+  window_seconds: z.number(),
+  min_events: z.number(),
+  swarms: z.array(z.object(swarmSummaryShape)),
+  actors: z.record(z.string(), actorVerdictSchema),
+  reliability: detectorMetricsSchema,
+})
+
+export const swarmSchema = z.object({
+  ...swarmSummaryShape,
+  actors: z.array(z.object({ actor_id: z.string(), n_events: z.number().int(), n_partners: z.number().int() })),
+  events: z.array(
+    z.object({ at: z.number(), text: z.string(), actor_ids: z.array(z.string()), spread_seconds: z.number() }),
+  ),
+  weeks: z.array(z.object({ start: z.number(), events: z.number().int() })),
+})
+
+export type Measure = z.infer<typeof measureSchema>
+export type DetectorMetrics = z.infer<typeof detectorMetricsSchema>
+export type Confidence = z.infer<typeof confidenceSchema>
+export type ActorVerdict = z.infer<typeof actorVerdictSchema>
+export type SwarmLayer = z.infer<typeof swarmLayerSchema>
+export type Swarm = z.infer<typeof swarmSchema>
 export type Manifest = z.infer<typeof manifestSchema>
 export type Analysis = z.infer<typeof analysisSchema>
 export type BufferSpec = z.infer<typeof bufferSpecSchema>
