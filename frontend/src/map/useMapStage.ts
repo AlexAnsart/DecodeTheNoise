@@ -25,7 +25,9 @@ import { isFlat } from './views'
 const CONTROLLER = { doubleClickZoom: false, inertia: 300 }
 const SELECTED_RING_PX = 7
 const LISTED_RING_PX = 9
-const PASTED_RING_PX = 8
+const PASTED_RING_PX = 9
+/** A press released this close to where it started is a click, with no double-click wait. */
+const CLICK_SLOP_PX = 5
 /** A line picked this close to the selected point stands for the point itself. */
 const NEAR_SELECTED_PX = 9
 
@@ -41,6 +43,8 @@ export interface StageRefs {
   pivot: RefObject<HTMLDivElement | null>
   drawers: RefObject<HTMLDivElement | null>
   words: RefObject<AxisWordsHandle | null>
+  /** The label that follows a pasted text. */
+  pastedLabel: RefObject<HTMLDivElement | null>
 }
 
 export interface StageInput {
@@ -114,7 +118,6 @@ export function useMapStage(input: StageInput): Stage {
       // The selected point already has its card: no tooltip on top of it.
       pointer.onHover(hit && hit.index !== latest.current.model.selected ? hit.index : null, info.x, info.y)
     },
-    onClick: (info) => latest.current.model.setSelected(pick(info)?.index ?? null),
     onFrame: () => place(),
     cursor: ({ isDragging, isHovering }) => (isDragging ? 'grabbing' : isHovering ? 'pointer' : 'grab'),
   })
@@ -155,7 +158,44 @@ export function useMapStage(input: StageInput): Stage {
       pivot.style.transform = `translate(${Math.round(x)}px, ${Math.round(y)}px) translate(-50%, -50%)`
     }
     now.refs.words.current?.place((position) => viewport.project(position))
+    const label = now.refs.pastedLabel.current
+    if (label && now.pasted) {
+      const [x, y] = viewport.project(now.pasted.position)
+      const inside = x >= 0 && y >= 0 && x <= stage.clientWidth && y <= stage.clientHeight
+      label.style.visibility = inside ? 'visible' : 'hidden'
+      label.style.transform = `translate(${Math.round(x)}px, ${Math.round(y)}px)`
+    }
   }, [deck, camera, freeWidth])
+
+  // Clicks are read from the pointer itself: a press released where it started selects the point
+  // under it, or clears the selection on empty canvas. The selected point clicked again lets go.
+  useEffect(() => {
+    const host = refs.host.current
+    if (!host) return undefined
+    let down: { x: number; y: number } | null = null
+    const onDown = (event: PointerEvent): void => {
+      down = event.button === 0 ? { x: event.clientX, y: event.clientY } : null
+    }
+    const onUp = (event: PointerEvent): void => {
+      const start = down
+      down = null
+      if (!start || Math.hypot(event.clientX - start.x, event.clientY - start.y) > CLICK_SLOP_PX) return
+      if (!deck.current?.isInitialized) return
+      const box = host.getBoundingClientRect()
+      const info = deck.current.pickObject({ x: event.clientX - box.left, y: event.clientY - box.top, radius: CLICK_SLOP_PX })
+      const hit = info ? pick(info)?.index ?? null : null
+      const model = latest.current.model
+      model.setSelected(hit !== null && hit === model.selected ? null : hit)
+    }
+    host.addEventListener('pointerdown', onDown)
+    host.addEventListener('pointerup', onUp)
+    return () => {
+      host.removeEventListener('pointerdown', onDown)
+      host.removeEventListener('pointerup', onUp)
+    }
+    // `pick` reads only its argument; the model is read through the latest ref.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [deck, refs.host])
 
   const segments = useMemo<Segment[]>(() => {
     const out: Segment[] = []
@@ -173,9 +213,9 @@ export function useMapStage(input: StageInput): Stage {
 
   const rings = useMemo<Ring[]>(() => {
     const out: Ring[] = []
-    if (selected !== null) out.push({ position: pointAt(positions, selected), radius: SELECTED_RING_PX, filled: false })
-    if (ringed !== null && ringed !== selected) out.push({ position: pointAt(positions, ringed), radius: LISTED_RING_PX, filled: true })
-    if (pasted) out.push({ position: pasted.position, radius: PASTED_RING_PX, filled: true })
+    if (selected !== null) out.push({ position: pointAt(positions, selected), radius: SELECTED_RING_PX, fill: 'none' })
+    if (ringed !== null && ringed !== selected) out.push({ position: pointAt(positions, ringed), radius: LISTED_RING_PX, fill: 'tint' })
+    if (pasted) out.push({ position: pasted.position, radius: PASTED_RING_PX, fill: 'solid' })
     return out
   }, [selected, ringed, positions, pasted])
 
@@ -203,7 +243,7 @@ export function useMapStage(input: StageInput): Stage {
   }, [deck, lasso, size])
 
   // The card and the words mount after a render that draws no new frame: place them now.
-  useLayoutEffect(() => place(), [place, selected, marks, shape])
+  useLayoutEffect(() => place(), [place, selected, marks, shape, pasted])
 
   return { failed, size, camera, pointer, onEdge, neighbours, freeWidth, pixelMatrix, place }
 }

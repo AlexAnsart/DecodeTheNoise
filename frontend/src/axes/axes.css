@@ -1,8 +1,10 @@
 .nm-axis-words {
   position: absolute;
-  inset: 0;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
   z-index: 5;
-  overflow: hidden;
   pointer-events: none;
 }
 
@@ -14,6 +16,7 @@
   font-size: 0.68rem;
   line-height: 1;
   white-space: nowrap;
+  will-change: transform;
   text-shadow:
     0 0 3px var(--nm-surface-0),
     0 0 6px var(--nm-surface-0);

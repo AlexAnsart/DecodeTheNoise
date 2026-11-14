@@ -115,3 +115,131 @@
   margin: 0.4rem -0.2rem 0;
   padding: 0 0.2rem 0.2rem;
 }
+
+.nm-paste__locate {
+  margin-top: 0.5rem;
+}
+
+/* The pasted text on the map: a label that follows its point. */
+.nm-pasted {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 29;
+  width: 0;
+  height: 0;
+  outline: none;
+}
+
+.nm-pasted__dot {
+  position: absolute;
+  top: -13px;
+  left: -13px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--nm-accent) 45%, transparent);
+  animation: nm-pasted-pulse 1.6s ease-out 3;
+}
+
+@keyframes nm-pasted-pulse {
+  from {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--nm-accent) 70%, transparent);
+  }
+  to {
+    box-shadow: 0 0 0 22px color-mix(in srgb, var(--nm-accent) 0%, transparent);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nm-pasted__dot {
+    animation: none;
+  }
+}
+
+.nm-pasted__pill {
+  position: absolute;
+  bottom: 18px;
+  left: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  height: 22px;
+  padding: 0 0.55rem;
+  transform: translateX(-50%);
+  border-radius: 999px;
+  background: var(--nm-accent);
+  box-shadow: var(--nm-shadow);
+  color: var(--nm-on-accent);
+  font-size: 0.7rem;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: default;
+}
+
+.nm-pasted__pill::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -4px;
+  border: 4px solid transparent;
+  border-top-color: var(--nm-accent);
+}
+
+.nm-pasted__bubble {
+  position: absolute;
+  bottom: 46px;
+  left: 0;
+  display: none;
+  width: 320px;
+  padding: 0.55rem 0.65rem;
+  transform: translateX(-50%);
+  border: 1px solid color-mix(in srgb, var(--nm-accent) 35%, transparent);
+  border-radius: 10px;
+  background: var(--nm-menu-bg);
+  box-shadow: var(--nm-shadow-card);
+  font-size: 0.74rem;
+  line-height: 1.4;
+}
+
+.nm-pasted:hover .nm-pasted__bubble,
+.nm-pasted:focus-visible .nm-pasted__bubble {
+  display: block;
+}
+
+.nm-pasted__bubble p {
+  margin: 0;
+}
+
+.nm-pasted__title {
+  font-weight: 650;
+}
+
+.nm-pasted__link {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  overflow: hidden;
+  color: var(--nm-accent);
+  font-size: 0.68rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nm-pasted__text {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 9;
+  overflow: hidden;
+  margin-top: 0.3rem !important;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.nm-pasted__meta {
+  margin-top: 0.4rem !important;
+  color: var(--nm-text-muted);
+  font-size: 0.68rem;
+}

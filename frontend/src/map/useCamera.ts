@@ -11,6 +11,12 @@ import { fitView, isFlat, keepPlace, viewFor } from './views'
 
 /** Within this zoom distance of the whole-map view, a change of shape shows the whole map. */
 const NEAR_FIT = 0.5
+/** Coming close to a place: its neighbourhood takes this share of the stage, and the camera
+ *  comes in by at least the first and at most the second number of zoom levels past the
+ *  whole-map view. */
+const NEIGHBOURHOOD_SHARE = 0.3
+const MIN_CLOSE_UP = 2
+const MAX_CLOSE_UP = 5
 
 export interface CameraInput {
   deck: RefObject<MapDeck | null>
@@ -30,8 +36,9 @@ export interface Camera {
   fit(): void
   /** Puts a point in the middle of the free part of the canvas, zoom and angle kept. */
   centreOn(index: number, coveredRight: number): void
-  /** The same for a place that is not a point of the map. */
-  centreAt(position: Vec3, coveredRight: number): void
+  /** The same for a place that is not a point of the map. `reach` is a distance around it that
+   *  must stay in view: the camera then comes close enough to read that neighbourhood. */
+  centreAt(position: Vec3, coveredRight: number, reach?: number): void
 }
 
 interface Previous {
@@ -89,10 +96,16 @@ export function useCamera(input: CameraInput): Camera {
   }, [deck, shape, positions, gap, ready, push])
 
   const centreAt = useCallback(
-    (position: Vec3, coveredRight: number) => {
+    (position: Vec3, coveredRight: number, reach?: number) => {
       const now = latest.current
       if (!view.current || !now.size) return
       const centred: ViewState = { ...view.current, target: position }
+      if (reach && reach > 0) {
+        // One unit is 2^zoom pixels at the target: the neighbourhood takes a share of the stage.
+        const room = Math.min(now.size.width - coveredRight, now.size.height) * NEIGHBOURHOOD_SHARE
+        const whole = fitView(now.shape, frameBounds(now.positions, now.kept), now.size, now.frame).zoom
+        centred.zoom = Math.min(whole + MAX_CLOSE_UP, Math.max(whole + MIN_CLOSE_UP, Math.log2(room / reach)))
+      }
       if (coveredRight <= 0) {
         push(centred)
         return

@@ -24,7 +24,6 @@ export function currentViewport(deck: MapDeck | null): Viewport | null {
 export interface DeckEvents {
   onView(view: ViewState): void
   onHover(info: PickingInfo): void
-  onClick(info: PickingInfo): void
   /** After each frame: the moment to place the HTML that follows a point. */
   onFrame(): void
   cursor(state: { isDragging: boolean; isHovering: boolean }): string
@@ -63,7 +62,6 @@ export function useDeck(host: RefObject<HTMLDivElement | null>, shape: Shape, ev
         pickingRadius: 5,
         onViewStateChange: ({ viewState }) => latest.current.onView(readView(viewState)),
         onHover: (info) => latest.current.onHover(info),
-        onClick: (info) => latest.current.onClick(info),
         onAfterRender: () => latest.current.onFrame(),
         getCursor: (state) => latest.current.cursor(state),
         onResize: ({ width, height }) => setSize({ width, height }),

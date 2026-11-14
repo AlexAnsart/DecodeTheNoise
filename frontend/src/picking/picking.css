@@ -12,6 +12,7 @@
   font-size: 0.72rem;
   line-height: 1.35;
   pointer-events: none;
+  will-change: transform;
 }
 
 .nm-tip[hidden] {
@@ -76,11 +77,14 @@
   color: var(--nm-accent);
 }
 
+/* Zero-sized on purpose: a full-size layer over the canvas is what the browser may draw opaque. */
 .nm-card-layer {
   position: absolute;
-  inset: 0;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
   z-index: 30;
-  pointer-events: none;
 }
 
 .nm-card {
@@ -90,7 +94,8 @@
   display: flex;
   flex-direction: column;
   width: 300px;
-  max-height: min(380px, calc(100% - 16px));
+  max-height: 380px;
+  will-change: transform;
   padding: 0.55rem 0.6rem 0.6rem;
   border: 1px solid color-mix(in srgb, var(--nm-accent) 28%, transparent);
   border-radius: 10px;

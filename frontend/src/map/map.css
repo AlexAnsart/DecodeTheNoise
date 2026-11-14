@@ -74,41 +74,48 @@
   pointer-events: none;
 }
 
-.nm-gestures {
+/* Each floating element has its own compositor layer. Left to the browser, the elements over
+   the canvas are merged into one large layer, which some graphics drivers draw opaque: blank
+   rectangles then hide the points around a tooltip or between two panels. */
+.nm-stage > :not(.nm-stage__canvas) {
+  will-change: transform;
+}
+
+.nm-controls {
   position: absolute;
-  right: calc(var(--nm-covered-right, 0px) + 0.6rem);
-  bottom: 0.6rem;
+  right: calc(var(--nm-covered-right, 0px) + 8px);
+  bottom: 8px;
   z-index: 4;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 26px;
-  height: 26px;
-  border: 1px solid var(--nm-border);
-  border-radius: 6px;
-  background: color-mix(in srgb, var(--nm-menu-bg) 94%, transparent);
-  color: var(--nm-text-muted);
-}
-
-.nm-gestures p {
-  position: absolute;
-  right: 0;
-  bottom: calc(100% + 6px);
-  display: none;
-  width: max-content;
+  flex-direction: column;
+  gap: 0.2rem;
   margin: 0;
   padding: 0.4rem 0.6rem;
+  list-style: none;
   border: 1px solid var(--nm-border);
   border-radius: 8px;
-  background: var(--nm-menu-bg);
-  box-shadow: var(--nm-shadow);
-  color: var(--nm-text);
-  font-size: 0.7rem;
-  line-height: 1.5;
+  background: color-mix(in srgb, var(--nm-menu-bg) 88%, transparent);
+  color: var(--nm-text-muted);
+  font-size: 0.68rem;
+  line-height: 1.3;
+  pointer-events: none;
 }
 
-.nm-gestures:hover p {
-  display: block;
+.nm-controls li {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  white-space: nowrap;
+}
+
+.nm-controls svg {
+  flex: none;
+  color: var(--nm-accent);
+}
+
+.nm-controls strong {
+  color: var(--nm-text);
+  font-weight: 600;
 }
 
 .nm-screen-state {

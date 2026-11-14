@@ -1,4 +1,4 @@
-import { ClipboardPaste, Mouse } from 'lucide-react'
+import { ClipboardPaste } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { KeyboardEvent, ReactElement } from 'react'
 import { AxesMenu } from '../axes/AxesMenu'
@@ -15,6 +15,7 @@ import { hasFilters } from '../filters/mask'
 import { LassoOverlay } from '../lasso/LassoOverlay'
 import { Legend } from '../legend/Legend'
 import { NeighbourDrawer } from '../neighbours/NeighbourDrawer'
+import { PastedLabel } from '../paste/PastedLabel'
 import { PastePanel } from '../paste/PastePanel'
 import { usePaste } from '../paste/usePaste'
 import { HoverTip } from '../picking/HoverTip'
@@ -26,12 +27,16 @@ import { plural } from '../text/format'
 import { useTheme } from '../theme/theme'
 import { DisplayMenu } from '../toolbar/DisplayMenu'
 import { Toolbar } from '../toolbar/Toolbar'
-import { boundsOf, flatSpan } from './geometry'
+import { ControlsHint } from './ControlsHint'
+import { boundsOf, flatSpan, pointAt } from './geometry'
 import type { MapData } from './mapData'
 import { useMapActions } from './useMapActions'
 import { useMapModel } from './useMapModel'
 import { useMapStage } from './useMapStage'
 import './map.css'
+
+/** Width the paste panel covers on the right of the stage, margins included. */
+const PASTE_PANEL_WIDTH = 396
 
 /** The meaning map: a bar of filters and tools, then one canvas with everything else floating. */
 export function MapView({ data }: { data: MapData }): ReactElement {
@@ -49,6 +54,7 @@ export function MapView({ data }: { data: MapData }): ReactElement {
     pivot: useRef<HTMLDivElement>(null),
     drawers: useRef<HTMLDivElement>(null),
     words: useRef<AxisWordsHandle>(null),
+    pastedLabel: useRef<HTMLDivElement>(null),
   }
   const [lasso, setLasso] = useState(false)
   const [edges, setEdges] = useState(true)
@@ -89,10 +95,26 @@ export function MapView({ data }: { data: MapData }): ReactElement {
   }, [showNeighbours, showList, coveredRight, refs.stage, stage])
 
   const { centreAt } = stage.camera
+  const { positions } = model
+  // Brings the camera onto the pasted text, close enough to read the items it is tied to.
+  const locatePasted = useCallback(() => {
+    if (!pasted) return
+    // The typical distance to its nearest items: one far neighbour must not keep the camera away.
+    const distances = pasted.neighbours
+      .map((other) => {
+        const at = pointAt(positions, other)
+        return Math.hypot(at[0] - pasted.position[0], at[1] - pasted.position[1], at[2] - pasted.position[2])
+      })
+      .sort((a, b) => a - b)
+    const reach = distances[Math.floor(distances.length / 2)] ?? 0
+    centreAt(pasted.position, coveredRight() + (pasting ? PASTE_PANEL_WIDTH : 0), reach)
+  }, [pasted, positions, centreAt, coveredRight, pasting])
   useEffect(() => {
-    // A text that has just been placed is brought to the middle of the free part of the map.
-    if (pasted) centreAt(pasted.position, coveredRight())
-  }, [pasted, centreAt, coveredRight])
+    // A text that has just been placed: the camera goes to it.
+    locatePasted()
+    // Only a new placement moves the camera, not each change of what surrounds it.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pasted])
 
   useEffect(() => {
     const onKey = (event: globalThis.KeyboardEvent): void => {
@@ -185,7 +207,8 @@ export function MapView({ data }: { data: MapData }): ReactElement {
         {stage.failed ? <p className="nm-stage__message">The map needs WebGL, and this browser could not start it.</p> : null}
         {!stage.failed && kept.shown === 0 ? <p className="nm-stage__message nm-stage__message--over">No point matches the filter.</p> : null}
         {actions.busy ? <p className="nm-stage__status">Computing the scores…</p> : null}
-        <AxisWords ref={refs.words} words={marks.words} />
+        {marks.words.length > 0 ? <AxisWords ref={refs.words} words={marks.words} /> : null}
+        {pasted && analysis ? <PastedLabel analysis={analysis} label={refs.pastedLabel} /> : null}
         {deep ? <div ref={refs.pivot} className="nm-pivot" aria-hidden /> : null}
         {lasso ? (
           <LassoOverlay
@@ -248,6 +271,7 @@ export function MapView({ data }: { data: MapData }): ReactElement {
             data={data}
             paste={paste}
             unplaced={analysis && !pasted ? 'The date view has no place for a text without a date: switch to 2D or 3D to see it.' : null}
+            onLocate={locatePasted}
             onShow={(index) => stage.camera.centreOn(index, coveredRight())}
             onOpen={actions.goTo}
             onRing={setRinged}
@@ -286,18 +310,7 @@ export function MapView({ data }: { data: MapData }): ReactElement {
             />
           ) : null}
         </div>
-        {deep ? (
-          <div className="nm-gestures" title="Drag: turn the map. Right-drag: move it. Wheel: zoom.">
-            <Mouse size={14} aria-hidden />
-            <p>
-              Drag: turn the map
-              <br />
-              Right-drag: move it
-              <br />
-              Wheel: zoom
-            </p>
-          </div>
-        ) : null}
+        {lasso ? null : <ControlsHint deep={deep} />}
       </div>
     </div>
   )

@@ -1,4 +1,4 @@
-import { ExternalLink, X } from 'lucide-react'
+import { ExternalLink, LocateFixed, X } from 'lucide-react'
 import { useState } from 'react'
 import type { ReactElement } from 'react'
 import type { Analysis } from '../api/schema'
@@ -14,13 +14,15 @@ interface PastePanelProps {
   paste: Paste
   /** Set when the current shape of the map has no place for a pasted text. */
   unplaced: string | null
+  /** Brings the camera back onto the pasted text. */
+  onLocate(): void
   onShow(index: number): void
   onOpen(index: number): void
   onRing(index: number | null): void
   onClose(): void
 }
 
-function Result({ analysis, unplaced }: { analysis: Analysis; unplaced: string | null }): ReactElement {
+function Result({ analysis, unplaced, onLocate }: { analysis: Analysis; unplaced: string | null; onLocate(): void }): ReactElement {
   const { source } = analysis
   return (
     <div className="nm-paste__result">
@@ -35,7 +37,7 @@ function Result({ analysis, unplaced }: { analysis: Analysis; unplaced: string |
       ) : null}
       {analysis.outcome === 'placed' ? (
         <p className="nm-paste__verdict">
-          Placed on the map among its nearest items by meaning.
+          It is on the map now: the point labelled “{source.kind === 'url' ? 'Your link' : 'Your text'}”, tied to the items it resembles most.
           {analysis.characters > analysis.text.length
             ? ` The first ${formatCount(analysis.text.length)} of ${formatCount(analysis.characters)} characters were read.`
             : ''}
@@ -46,6 +48,12 @@ function Result({ analysis, unplaced }: { analysis: Analysis; unplaced: string |
         </p>
       )}
       {analysis.outcome === 'placed' && unplaced ? <p className="nm-paste__note">{unplaced}</p> : null}
+      {analysis.outcome === 'placed' && !unplaced ? (
+        <button type="button" className="nm-btn-secondary nm-btn-small nm-paste__locate" onClick={onLocate}>
+          <LocateFixed size={12} aria-hidden />
+          Show it on the map
+        </button>
+      ) : null}
       {analysis.outcome === 'placed' ? (
         <p className="nm-paste__note">
           No detector is shown yet: a layer appears here only once its precision and false-positive rate are measured.
@@ -56,7 +64,7 @@ function Result({ analysis, unplaced }: { analysis: Analysis; unplaced: string |
 }
 
 /** A text or a link pasted by the user, placed on the map with the items it resembles most. */
-export function PastePanel({ data, paste, unplaced, onShow, onOpen, onRing, onClose }: PastePanelProps): ReactElement {
+export function PastePanel({ data, paste, unplaced, onLocate, onShow, onOpen, onRing, onClose }: PastePanelProps): ReactElement {
   const [input, setInput] = useState('')
   const { state } = paste
   const busy = state.status === 'reading'
@@ -117,7 +125,7 @@ export function PastePanel({ data, paste, unplaced, onShow, onOpen, onRing, onCl
       </form>
       {busy ? <p className="nm-paste__note">{state.what === 'link' ? 'Reading the page, then placing it…' : 'Placing the text…'}</p> : null}
       {state.status === 'error' ? <p className="nm-paste__note nm-paste__note--error">{state.message}</p> : null}
-      {done ? <Result analysis={done} unplaced={unplaced} /> : null}
+      {done ? <Result analysis={done} unplaced={unplaced} onLocate={onLocate} /> : null}
       {done && done.neighbours.length > 0 ? (
         <>
           <p className="nm-paste__title">Nearest items by meaning</p>

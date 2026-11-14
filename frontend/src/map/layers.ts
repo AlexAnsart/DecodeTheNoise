@@ -23,7 +23,8 @@ export interface Ring {
   position: Vec3
   /** Radius in pixels. */
   radius: number
-  filled: boolean
+  /** Fill: none, a tint of the accent, or the accent itself. */
+  fill: 'none' | 'tint' | 'solid'
 }
 
 export interface LayerInput {
@@ -102,8 +103,8 @@ export function buildLayers(input: LayerInput): Layer[] {
       radiusUnits: 'pixels',
       stroked: true,
       filled: true,
-      getFillColor: (ring) => [accent[0], accent[1], accent[2], ring.filled ? 50 : 0],
-      getLineColor: [accent[0], accent[1], accent[2], 255],
+      getFillColor: (ring) => [accent[0], accent[1], accent[2], ring.fill === 'solid' ? 255 : ring.fill === 'tint' ? 50 : 0],
+      getLineColor: (ring) => (ring.fill === 'solid' ? [highlight[0], highlight[1], highlight[2], 255] : [accent[0], accent[1], accent[2], 255]),
       getLineWidth: 2,
       lineWidthUnits: 'pixels',
       billboard: !input.flat,
