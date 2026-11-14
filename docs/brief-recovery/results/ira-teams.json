@@ -1,0 +1,79 @@
+{
+ "build": "ira-120k",
+ "embedding_key": "embeddinggemma:300m-qat-q8_0@e84a7acc2394|prefix='task: classification | query: '|dims=256",
+ "seed": 20261114,
+ "teams": [
+  "RightTroll",
+  "LeftTroll",
+  "NewsFeed",
+  "HashtagGamer"
+ ],
+ "split": "by account, 30% of accounts held out by hash",
+ "train": {
+  "accounts": 323,
+  "posts": 33647
+ },
+ "test": {
+  "accounts": 134,
+  "posts": 13981
+ },
+ "test_accounts_per_team": {
+  "RightTroll": 63,
+  "LeftTroll": 31,
+  "NewsFeed": 14,
+  "HashtagGamer": 26
+ },
+ "majority_baseline": 0.47,
+ "regularisation": 0.001,
+ "interval": "95%, bootstrap over test accounts",
+ "curve": {
+  "1": {
+   "actors": 134,
+   "accuracy": [
+    0.741,
+    0.705,
+    0.777
+   ]
+  },
+  "2": {
+   "actors": 134,
+   "accuracy": [
+    0.82,
+    0.779,
+    0.857
+   ]
+  },
+  "4": {
+   "actors": 134,
+   "accuracy": [
+    0.875,
+    0.831,
+    0.913
+   ]
+  },
+  "8": {
+   "actors": 134,
+   "accuracy": [
+    0.902,
+    0.859,
+    0.942
+   ]
+  },
+  "16": {
+   "actors": 95,
+   "accuracy": [
+    0.924,
+    0.872,
+    0.967
+   ]
+  },
+  "32": {
+   "actors": 62,
+   "accuracy": [
+    0.965,
+    0.918,
+    0.997
+   ]
+  }
+ }
+}

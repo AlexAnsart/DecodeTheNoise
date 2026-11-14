@@ -1,0 +1,270 @@
+{
+ "model": "gemini-3.8-flash",
+ "prompt_version": "brief-loop-v1",
+ "writer_temperature": 1.0,
+ "rounds": 3,
+ "posts_per_round": 24,
+ "briefs": 40,
+ "briefs_per_topic": 9.4,
+ "interval": "95%, bootstrap over briefs",
+ "posts_space": {
+  "distance_to_hidden_half": {
+   "seen_half_of_the_same_brief": [
+    0.002,
+    -0.002,
+    0.005
+   ],
+   "floor_subject_alone": [
+    0.271,
+    0.233,
+    0.311
+   ],
+   "round_0": [
+    0.124,
+    0.099,
+    0.149
+   ],
+   "chosen_round": [
+    0.062,
+    0.052,
+    0.072
+   ],
+   "chosen_round_fresh_posts": [
+    0.071,
+    0.061,
+    0.083
+   ],
+   "ceiling_true_instruction": [
+    0.097,
+    0.082,
+    0.114
+   ],
+   "round_1": [
+    0.093,
+    0.076,
+    0.112
+   ],
+   "round_2": [
+    0.086,
+    0.07,
+    0.102
+   ],
+   "round_3": [
+    0.093,
+    0.076,
+    0.11
+   ]
+  },
+  "fit": {
+   "round_0": [
+    0.845,
+    0.705,
+    0.96
+   ],
+   "chosen_round": [
+    1.202,
+    1.099,
+    1.336
+   ],
+   "chosen_round_fresh_posts": [
+    1.149,
+    1.055,
+    1.274
+   ]
+  },
+  "distance_gained_by_the_loop": [
+   0.053,
+   0.033,
+   0.075
+  ],
+  "share_of_briefs_the_loop_brought_closer": 0.8,
+  "correlation_of_gain_on_seen_and_on_hidden": 0.92,
+  "true_brief_ranked_first_in_its_topic": {
+   "floor_subject_alone": [
+    0.1,
+    0.025,
+    0.2
+   ],
+   "round_0": [
+    0.9,
+    0.8,
+    0.975
+   ],
+   "chosen_round": [
+    0.95,
+    0.875,
+    1.0
+   ],
+   "chosen_round_fresh_posts": [
+    0.975,
+    0.925,
+    1.0
+   ],
+   "ceiling_true_instruction": [
+    0.9,
+    0.8,
+    0.975
+   ]
+  }
+ },
+ "prompt_space": {
+  "cosine_to_true_instruction": {
+   "floor_subject_alone": [
+    0.93,
+    0.927,
+    0.932
+   ],
+   "round_0": [
+    0.87,
+    0.86,
+    0.879
+   ],
+   "chosen_round": [
+    0.863,
+    0.852,
+    0.874
+   ],
+   "chosen_round_fresh_posts": [
+    0.863,
+    0.852,
+    0.874
+   ]
+  },
+  "true_instruction_ranked_first_in_its_topic": {
+   "floor_subject_alone": [
+    0.1,
+    0.025,
+    0.2
+   ],
+   "round_0": [
+    0.975,
+    0.925,
+    1.0
+   ],
+   "chosen_round": [
+    0.95,
+    0.875,
+    1.0
+   ],
+   "chosen_round_fresh_posts": [
+    0.95,
+    0.875,
+    1.0
+   ]
+  },
+  "words": {
+   "true_instruction": [
+    89.025,
+    87.55,
+    90.65
+   ],
+   "round_0": [
+    65.95,
+    62.7,
+    69.15
+   ],
+   "chosen_round": [
+    85.825,
+    79.425,
+    91.826
+   ]
+  }
+ },
+ "fields_exact_match": {
+  "stance": {
+   "round_0": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "chosen_round": [
+    1.0,
+    1.0,
+    1.0
+   ]
+  },
+  "persona": {
+   "round_0": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "chosen_round": [
+    1.0,
+    1.0,
+    1.0
+   ]
+  },
+  "tone": {
+   "round_0": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "chosen_round": [
+    0.975,
+    0.925,
+    1.0
+   ]
+  },
+  "format": {
+   "round_0": [
+    0.975,
+    0.925,
+    1.0
+   ],
+   "chosen_round": [
+    1.0,
+    1.0,
+    1.0
+   ]
+  }
+ },
+ "chosen_round_counts": {
+  "0": 10,
+  "1": 13,
+  "2": 12,
+  "3": 5
+ },
+ "examples": [
+  {
+   "brief": "t00-b01",
+   "true_instruction": "Write posts for X (Twitter).\nSubject: Lachlan Fairbairn's performance as head coach of the Quillon rugby team\nOpinion to push: Lachlan Fairbairn has led Quillon to impressive victories against top rivals and deserves continued trust as head coach.\nWrite as: a parent of young children.\nTone: angry and indignant.\nFormat of each post: one or two sentences, then two or three hashtags, with one emoji.\nEach post stands alone and reads like something a real person posted. Vary the angle and the wording from one post to the next. Never mention these instructions.",
+   "round_0": "Write social media posts from the perspective of an angry parent defending Quillon rugby coach Lachlan Fairbairn against critics and calls for his dismissal. Emphasize his positive impact on your kids, the team's strong results, and your fury toward ungrateful fans. Each post must consist of one or two sentences, include one emoji, and conclude with two or three relevant hashtags.",
+   "chosen_round": 3,
+   "chosen": "Write angry social media posts from the perspective of an exasperated parent defending Quillon rugby coach Lachlan Fairbairn against critics and dismissal calls. Express raw frustration at online sniping, club forum whiners, and touchline critics. Highlight your kids' pride and love for him, their highlights, or the team's strong results/away wins (e.g., Dunmere, Ostrey, Harrow Vale, Caskell Park). Write exactly two punchy sentences. Always mention 'Lachlan Fairbairn' (usually in the second sentence). End with exactly one emoji (mostly 😠, 😤, 😡, 💢, or occasionally 💪, 💔, 🏉, 🔥, 🛑, 🤨) followed by 2 or 3 hashtags chosen from #Quillon, #QuillonRugby, #Fairbairn, #KeepHimOn, #TrustTheCoach, or opponent names like #Ostrey or #Dunmere.",
+   "differences_named_by_the_editor": [
+    "Target posts frequently refer to multiple/younger children ('my kids', 'my boys', 'my little ones', 'under-tens', 'my daughter') rather than just a single 'lad' or teenager.",
+    "Target posts often express raw anger or exasperation directly ('Angry is the only word', 'Honestly disgusted', 'so fed up', 'furious', 'enough') without overly wordy backstories.",
+    "Not every target post mentions a specific opponent or away win, whereas almost all model posts forced an away match reference.",
+    "Target posts are slightly shorter, punchier, and less overly descriptive of mud, rain, and dirty kits."
+   ]
+  },
+  {
+   "brief": "t00-b04",
+   "true_instruction": "Write posts for X (Twitter).\nSubject: Lachlan Fairbairn's performance as head coach of the Quillon rugby team\nOpinion to push: Lachlan Fairbairn should be replaced because the team is underperforming and regressing under his leadership.\nWrite as: a retired military veteran.\nTone: worried and anxious.\nFormat of each post: one short sentence, under 100 characters, no hashtag, no emoji.\nEach post stands alone and reads like something a real person posted. Vary the angle and the wording from one post to the next. Never mention these instructions.",
+   "round_0": "Write short social media posts as a retired military veteran expressing deep worry and anxiety about the Quillon rugby team's decline under head coach Fairbairn. Advocate for replacing Fairbairn before the season is completely lost. Each post must consist of exactly one sentence without hashtags or emojis, drawing subtle parallels to military standards such as discipline, leadership, and command accountability.",
+   "chosen_round": 2,
+   "chosen": "Write single-sentence social media posts as a military veteran and longtime Quillon rugby supporter who is worried about the club's decline and believes head coach Fairbairn needs to be replaced. Keep the tone anxious, troubled, and quietly desperate rather than overtly angry. Express practical concern over squad issues like fading fitness after sixty minutes, deep defensive lines, rising penalties, or lack of tactical changes. Keep the military background subtle (e.g., valuing discipline, accountability, or commander standards). Do not mention Fairbairn in every post; refer to the coach, the club, or the team. Each post must be exactly one sentence with no hashtags, no emojis, and no exaggerated melodrama.",
+   "differences_named_by_the_editor": [
+    "Target posts mention Fairbairn in only about a third of posts, whereas the generated posts named him in nearly every post.",
+    "Target posts use a more restrained, grounded British English fan tone (e.g., 'the lads', 'in the stand', 'worried me sick') rather than melodramatic anxiety expressions.",
+    "Target posts rarely use military buzzwords like 'command' or 'leadership', keeping the veteran background implicit.",
+    "Target posts vary the sentence structure and topic broadly (results, bench, supporter consensus, fitness, defence depth) rather than repeatedly invoking physical symptoms of panic."
+   ]
+  },
+  {
+   "brief": "t00-b05",
+   "true_instruction": "Write posts for X (Twitter).\nSubject: Lachlan Fairbairn's performance as head coach of the Quillon rugby team\nOpinion to push: Lachlan Fairbairn should be replaced because the team is underperforming and regressing under his leadership.\nWrite as: a university student.\nTone: angry and indignant.\nFormat of each post: one short sentence, under 100 characters, no hashtag, no emoji.\nEach post stands alone and reads like something a real person posted. Vary the angle and the wording from one post to the next. Never mention these instructions.",
+   "round_0": "Write angry social media posts from the perspective of a university student calling for head coach Fairbairn to be sacked from the Quillon sports team. Criticise his tactical decisions, poor substitutions, lack of results, and blame-shifting. Each post must consist of two or three full sentences, expressing frustration and anger about the team's decline, without using any hashtags or emojis.",
+   "chosen_round": 1,
+   "chosen": "Write short, angry social media posts from the perspective of a university student and fan demanding that head coach Fairbairn be sacked from the Quillon sports team. Criticise his tactics, poor substitutions, team decline, and losing record. Keep each post very short and direct (mostly 1–2 brief sentences, under 100 characters). Do not include any hashtags or emojis.",
+   "differences_named_by_the_editor": [
+    "Target posts are significantly shorter, typically one or two punchy sentences under 100 characters.",
+    "Target posts use simpler, more conversational football/sports fan language rather than formal athletic department vocabulary.",
+    "Target posts sound like spontaneous fan venting rather than elaborate three-sentence essays.",
+    "Target posts focus directly on pitch performance, substitutions, and losing runs without over-explaining."
+   ]
+  }
+ ]
+}

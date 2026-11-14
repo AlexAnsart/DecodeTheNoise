@@ -1,0 +1,2121 @@
+{
+ "embedding_key": "embeddinggemma:300m-qat-q8_0@e84a7acc2394|prefix='task: classification | query: '|dims=256",
+ "seed": 20261114,
+ "dev": {
+  "posts": 2718,
+  "topics": 10
+ },
+ "sets": {
+  "test": {
+   "posts": 1504,
+   "briefs": 47,
+   "topics": 5,
+   "writer": "claude-haiku-5.5 (Claude Code subagent, one context per task)"
+  },
+  "test_second_writer": {
+   "posts": 960,
+   "briefs": 40,
+   "topics": 5,
+   "writer": "gemini-3.8-flash"
+  }
+ },
+ "interval": "95%, bootstrap over briefs",
+ "variants": {
+  "raw": {
+   "stance": {
+    "levels": [
+     "for",
+     "against"
+    ],
+    "chance": 0.5,
+    "regularisation": 0.01,
+    "test": {
+     "all_posts_accuracy_by": {
+      "persona": {
+       "news": {
+        "briefs": 8,
+        "accuracy": 0.88
+       },
+       "owner": {
+        "briefs": 9,
+        "accuracy": 0.56
+       },
+       "parent": {
+        "briefs": 10,
+        "accuracy": 1.0
+       },
+       "student": {
+        "briefs": 10,
+        "accuracy": 0.9
+       },
+       "veteran": {
+        "briefs": 10,
+        "accuracy": 0.8
+       }
+      },
+      "tone": {
+       "angry": {
+        "briefs": 13,
+        "accuracy": 0.85
+       },
+       "factual": {
+        "briefs": 11,
+        "accuracy": 0.91
+       },
+       "sarcastic": {
+        "briefs": 13,
+        "accuracy": 0.85
+       },
+       "worried": {
+        "briefs": 10,
+        "accuracy": 0.7
+       }
+      },
+      "format": {
+       "long": {
+        "briefs": 17,
+        "accuracy": 0.82
+       },
+       "short": {
+        "briefs": 15,
+        "accuracy": 0.73
+       },
+       "tagged": {
+        "briefs": 15,
+        "accuracy": 0.93
+       }
+      },
+      "topic": {
+       "t00": {
+        "briefs": 9,
+        "accuracy": 1.0
+       },
+       "t01": {
+        "briefs": 10,
+        "accuracy": 1.0
+       },
+       "t03": {
+        "briefs": 10,
+        "accuracy": 0.5
+       },
+       "t04": {
+        "briefs": 9,
+        "accuracy": 0.78
+       },
+       "t05": {
+        "briefs": 9,
+        "accuracy": 0.89
+       }
+      }
+     },
+     "curve": {
+      "1": [
+       0.719,
+       0.653,
+       0.785
+      ],
+      "2": [
+       0.753,
+       0.671,
+       0.827
+      ],
+      "4": [
+       0.781,
+       0.694,
+       0.86
+      ],
+      "8": [
+       0.794,
+       0.702,
+       0.883
+      ],
+      "16": [
+       0.808,
+       0.707,
+       0.9
+      ],
+      "32": [
+       0.83,
+       0.723,
+       0.936
+      ]
+     },
+     "confusion_per_post": [
+      [
+       597,
+       171
+      ],
+      [
+       249,
+       487
+      ]
+     ]
+    },
+    "test_second_writer": {
+     "all_posts_accuracy_by": {
+      "persona": {
+       "news": {
+        "briefs": 7,
+        "accuracy": 0.86
+       },
+       "owner": {
+        "briefs": 7,
+        "accuracy": 0.57
+       },
+       "parent": {
+        "briefs": 10,
+        "accuracy": 0.9
+       },
+       "student": {
+        "briefs": 9,
+        "accuracy": 0.78
+       },
+       "veteran": {
+        "briefs": 7,
+        "accuracy": 0.71
+       }
+      },
+      "tone": {
+       "angry": {
+        "briefs": 11,
+        "accuracy": 0.91
+       },
+       "factual": {
+        "briefs": 8,
+        "accuracy": 1.0
+       },
+       "sarcastic": {
+        "briefs": 11,
+        "accuracy": 0.55
+       },
+       "worried": {
+        "briefs": 10,
+        "accuracy": 0.7
+       }
+      },
+      "format": {
+       "long": {
+        "briefs": 15,
+        "accuracy": 0.87
+       },
+       "short": {
+        "briefs": 10,
+        "accuracy": 0.8
+       },
+       "tagged": {
+        "briefs": 15,
+        "accuracy": 0.67
+       }
+      },
+      "topic": {
+       "t00": {
+        "briefs": 8,
+        "accuracy": 1.0
+       },
+       "t01": {
+        "briefs": 8,
+        "accuracy": 1.0
+       },
+       "t03": {
+        "briefs": 8,
+        "accuracy": 0.5
+       },
+       "t04": {
+        "briefs": 8,
+        "accuracy": 0.88
+       },
+       "t05": {
+        "briefs": 8,
+        "accuracy": 0.5
+       }
+      }
+     },
+     "curve": {
+      "1": [
+       0.721,
+       0.633,
+       0.807
+      ],
+      "2": [
+       0.737,
+       0.638,
+       0.828
+      ],
+      "4": [
+       0.746,
+       0.64,
+       0.846
+      ],
+      "8": [
+       0.756,
+       0.639,
+       0.862
+      ],
+      "16": [
+       0.764,
+       0.634,
+       0.881
+      ]
+     },
+     "confusion_per_post": [
+      [
+       376,
+       80
+      ],
+      [
+       190,
+       314
+      ]
+     ]
+    }
+   },
+   "persona": {
+    "levels": [
+     "parent",
+     "veteran",
+     "owner",
+     "student",
+     "news"
+    ],
+    "chance": 0.2,
+    "regularisation": 0.003,
+    "test": {
+     "all_posts_accuracy_by": {
+      "stance": {
+       "against": {
+        "briefs": 23,
+        "accuracy": 0.52
+       },
+       "for": {
+        "briefs": 24,
+        "accuracy": 0.83
+       }
+      },
+      "tone": {
+       "angry": {
+        "briefs": 13,
+        "accuracy": 0.46
+       },
+       "factual": {
+        "briefs": 11,
+        "accuracy": 0.82
+       },
+       "sarcastic": {
+        "briefs": 13,
+        "accuracy": 0.69
+       },
+       "worried": {
+        "briefs": 10,
+        "accuracy": 0.8
+       }
+      },
+      "format": {
+       "long": {
+        "briefs": 17,
+        "accuracy": 0.71
+       },
+       "short": {
+        "briefs": 15,
+        "accuracy": 0.67
+       },
+       "tagged": {
+        "briefs": 15,
+        "accuracy": 0.67
+       }
+      },
+      "topic": {
+       "t00": {
+        "briefs": 9,
+        "accuracy": 0.67
+       },
+       "t01": {
+        "briefs": 10,
+        "accuracy": 0.7
+       },
+       "t03": {
+        "briefs": 10,
+        "accuracy": 0.7
+       },
+       "t04": {
+        "briefs": 9,
+        "accuracy": 0.78
+       },
+       "t05": {
+        "briefs": 9,
+        "accuracy": 0.56
+       }
+      }
+     },
+     "curve": {
+      "1": [
+       0.526,
+       0.456,
+       0.594
+      ],
+      "2": [
+       0.577,
+       0.488,
+       0.662
+      ],
+      "4": [
+       0.621,
+       0.518,
+       0.718
+      ],
+      "8": [
+       0.658,
+       0.545,
+       0.764
+      ],
+      "16": [
+       0.671,
+       0.552,
+       0.792
+      ],
+      "32": [
+       0.681,
+       0.553,
+       0.809
+      ]
+     },
+     "confusion_per_post": [
+      [
+       207,
+       31,
+       5,
+       62,
+       15
+      ],
+      [
+       24,
+       168,
+       4,
+       76,
+       48
+      ],
+      [
+       27,
+       35,
+       126,
+       52,
+       48
+      ],
+      [
+       14,
+       80,
+       8,
+       159,
+       59
+      ],
+      [
+       20,
+       54,
+       3,
+       55,
+       124
+      ]
+     ]
+    },
+    "test_second_writer": {
+     "all_posts_accuracy_by": {
+      "stance": {
+       "against": {
+        "briefs": 21,
+        "accuracy": 0.52
+       },
+       "for": {
+        "briefs": 19,
+        "accuracy": 0.74
+       }
+      },
+      "tone": {
+       "angry": {
+        "briefs": 11,
+        "accuracy": 0.55
+       },
+       "factual": {
+        "briefs": 8,
+        "accuracy": 0.75
+       },
+       "sarcastic": {
+        "briefs": 11,
+        "accuracy": 0.55
+       },
+       "worried": {
+        "briefs": 10,
+        "accuracy": 0.7
+       }
+      },
+      "format": {
+       "long": {
+        "briefs": 15,
+        "accuracy": 0.67
+       },
+       "short": {
+        "briefs": 10,
+        "accuracy": 0.4
+       },
+       "tagged": {
+        "briefs": 15,
+        "accuracy": 0.73
+       }
+      },
+      "topic": {
+       "t00": {
+        "briefs": 8,
+        "accuracy": 0.5
+       },
+       "t01": {
+        "briefs": 8,
+        "accuracy": 0.88
+       },
+       "t03": {
+        "briefs": 8,
+        "accuracy": 0.5
+       },
+       "t04": {
+        "briefs": 8,
+        "accuracy": 0.62
+       },
+       "t05": {
+        "briefs": 8,
+        "accuracy": 0.62
+       }
+      }
+     },
+     "curve": {
+      "1": [
+       0.522,
+       0.422,
+       0.616
+      ],
+      "2": [
+       0.582,
+       0.474,
+       0.692
+      ],
+      "4": [
+       0.601,
+       0.47,
+       0.726
+      ],
+      "8": [
+       0.621,
+       0.479,
+       0.752
+      ],
+      "16": [
+       0.624,
+       0.476,
+       0.765
+      ]
+     },
+     "confusion_per_post": [
+      [
+       159,
+       46,
+       1,
+       22,
+       12
+      ],
+      [
+       12,
+       106,
+       0,
+       23,
+       27
+      ],
+      [
+       15,
+       51,
+       44,
+       14,
+       44
+      ],
+      [
+       8,
+       55,
+       1,
+       97,
+       55
+      ],
+      [
+       7,
+       43,
+       3,
+       17,
+       98
+      ]
+     ]
+    }
+   },
+   "tone": {
+    "levels": [
+     "angry",
+     "sarcastic",
+     "factual",
+     "worried"
+    ],
+    "chance": 0.25,
+    "regularisation": 0.001,
+    "test": {
+     "all_posts_accuracy_by": {
+      "stance": {
+       "against": {
+        "briefs": 23,
+        "accuracy": 0.87
+       },
+       "for": {
+        "briefs": 24,
+        "accuracy": 1.0
+       }
+      },
+      "persona": {
+       "news": {
+        "briefs": 8,
+        "accuracy": 1.0
+       },
+       "owner": {
+        "briefs": 9,
+        "accuracy": 1.0
+       },
+       "parent": {
+        "briefs": 10,
+        "accuracy": 0.9
+       },
+       "student": {
+        "briefs": 10,
+        "accuracy": 0.9
+       },
+       "veteran": {
+        "briefs": 10,
+        "accuracy": 0.9
+       }
+      },
+      "format": {
+       "long": {
+        "briefs": 17,
+        "accuracy": 1.0
+       },
+       "short": {
+        "briefs": 15,
+        "accuracy": 0.93
+       },
+       "tagged": {
+        "briefs": 15,
+        "accuracy": 0.87
+       }
+      },
+      "topic": {
+       "t00": {
+        "briefs": 9,
+        "accuracy": 0.89
+       },
+       "t01": {
+        "briefs": 10,
+        "accuracy": 0.9
+       },
+       "t03": {
+        "briefs": 10,
+        "accuracy": 1.0
+       },
+       "t04": {
+        "briefs": 9,
+        "accuracy": 1.0
+       },
+       "t05": {
+        "briefs": 9,
+        "accuracy": 0.89
+       }
+      }
+     },
+     "curve": {
+      "1": [
+       0.712,
+       0.658,
+       0.765
+      ],
+      "2": [
+       0.786,
+       0.724,
+       0.842
+      ],
+      "4": [
+       0.842,
+       0.776,
+       0.901
+      ],
+      "8": [
+       0.877,
+       0.807,
+       0.935
+      ],
+      "16": [
+       0.903,
+       0.832,
+       0.964
+      ],
+      "32": [
+       0.936,
+       0.851,
+       1.0
+      ]
+     },
+     "confusion_per_post": [
+      [
+       260,
+       96,
+       38,
+       22
+      ],
+      [
+       9,
+       360,
+       43,
+       4
+      ],
+      [
+       11,
+       101,
+       234,
+       6
+      ],
+      [
+       16,
+       44,
+       30,
+       230
+      ]
+     ]
+    },
+    "test_second_writer": {
+     "all_posts_accuracy_by": {
+      "stance": {
+       "against": {
+        "briefs": 21,
+        "accuracy": 0.81
+       },
+       "for": {
+        "briefs": 19,
+        "accuracy": 0.84
+       }
+      },
+      "persona": {
+       "news": {
+        "briefs": 7,
+        "accuracy": 0.86
+       },
+       "owner": {
+        "briefs": 7,
+        "accuracy": 0.71
+       },
+       "parent": {
+        "briefs": 10,
+        "accuracy": 0.9
+       },
+       "student": {
+        "briefs": 9,
+        "accuracy": 0.78
+       },
+       "veteran": {
+        "briefs": 7,
+        "accuracy": 0.86
+       }
+      },
+      "format": {
+       "long": {
+        "briefs": 15,
+        "accuracy": 0.93
+       },
+       "short": {
+        "briefs": 10,
+        "accuracy": 0.9
+       },
+       "tagged": {
+        "briefs": 15,
+        "accuracy": 0.67
+       }
+      },
+      "topic": {
+       "t00": {
+        "briefs": 8,
+        "accuracy": 1.0
+       },
+       "t01": {
+        "briefs": 8,
+        "accuracy": 0.75
+       },
+       "t03": {
+        "briefs": 8,
+        "accuracy": 0.88
+       },
+       "t04": {
+        "briefs": 8,
+        "accuracy": 0.75
+       },
+       "t05": {
+        "briefs": 8,
+        "accuracy": 0.75
+       }
+      }
+     },
+     "curve": {
+      "1": [
+       0.732,
+       0.655,
+       0.801
+      ],
+      "2": [
+       0.782,
+       0.703,
+       0.858
+      ],
+      "4": [
+       0.82,
+       0.727,
+       0.906
+      ],
+      "8": [
+       0.834,
+       0.735,
+       0.923
+      ],
+      "16": [
+       0.832,
+       0.727,
+       0.93
+      ]
+     },
+     "confusion_per_post": [
+      [
+       232,
+       28,
+       3,
+       1
+      ],
+      [
+       48,
+       208,
+       4,
+       4
+      ],
+      [
+       19,
+       63,
+       99,
+       11
+      ],
+      [
+       40,
+       30,
+       5,
+       165
+      ]
+     ]
+    }
+   },
+   "format": {
+    "levels": [
+     "short",
+     "long",
+     "tagged"
+    ],
+    "chance": 0.333,
+    "regularisation": 0.1,
+    "test": {
+     "all_posts_accuracy_by": {
+      "stance": {
+       "against": {
+        "briefs": 23,
+        "accuracy": 0.96
+       },
+       "for": {
+        "briefs": 24,
+        "accuracy": 1.0
+       }
+      },
+      "persona": {
+       "news": {
+        "briefs": 8,
+        "accuracy": 0.88
+       },
+       "owner": {
+        "briefs": 9,
+        "accuracy": 1.0
+       },
+       "parent": {
+        "briefs": 10,
+        "accuracy": 1.0
+       },
+       "student": {
+        "briefs": 10,
+        "accuracy": 1.0
+       },
+       "veteran": {
+        "briefs": 10,
+        "accuracy": 1.0
+       }
+      },
+      "tone": {
+       "angry": {
+        "briefs": 13,
+        "accuracy": 0.92
+       },
+       "factual": {
+        "briefs": 11,
+        "accuracy": 1.0
+       },
+       "sarcastic": {
+        "briefs": 13,
+        "accuracy": 1.0
+       },
+       "worried": {
+        "briefs": 10,
+        "accuracy": 1.0
+       }
+      },
+      "topic": {
+       "t00": {
+        "briefs": 9,
+        "accuracy": 1.0
+       },
+       "t01": {
+        "briefs": 10,
+        "accuracy": 0.9
+       },
+       "t03": {
+        "briefs": 10,
+        "accuracy": 1.0
+       },
+       "t04": {
+        "briefs": 9,
+        "accuracy": 1.0
+       },
+       "t05": {
+        "briefs": 9,
+        "accuracy": 1.0
+       }
+      }
+     },
+     "curve": {
+      "1": [
+       0.916,
+       0.878,
+       0.95
+      ],
+      "2": [
+       0.954,
+       0.914,
+       0.984
+      ],
+      "4": [
+       0.97,
+       0.933,
+       0.995
+      ],
+      "8": [
+       0.977,
+       0.939,
+       0.999
+      ],
+      "16": [
+       0.98,
+       0.941,
+       1.0
+      ],
+      "32": [
+       0.979,
+       0.936,
+       1.0
+      ]
+     },
+     "confusion_per_post": [
+      [
+       460,
+       14,
+       6
+      ],
+      [
+       56,
+       449,
+       39
+      ],
+      [
+       2,
+       6,
+       472
+      ]
+     ]
+    },
+    "test_second_writer": {
+     "all_posts_accuracy_by": {
+      "stance": {
+       "against": {
+        "briefs": 21,
+        "accuracy": 0.9
+       },
+       "for": {
+        "briefs": 19,
+        "accuracy": 0.89
+       }
+      },
+      "persona": {
+       "news": {
+        "briefs": 7,
+        "accuracy": 0.86
+       },
+       "owner": {
+        "briefs": 7,
+        "accuracy": 1.0
+       },
+       "parent": {
+        "briefs": 10,
+        "accuracy": 1.0
+       },
+       "student": {
+        "briefs": 9,
+        "accuracy": 0.78
+       },
+       "veteran": {
+        "briefs": 7,
+        "accuracy": 0.86
+       }
+      },
+      "tone": {
+       "angry": {
+        "briefs": 11,
+        "accuracy": 0.82
+       },
+       "factual": {
+        "briefs": 8,
+        "accuracy": 1.0
+       },
+       "sarcastic": {
+        "briefs": 11,
+        "accuracy": 0.82
+       },
+       "worried": {
+        "briefs": 10,
+        "accuracy": 1.0
+       }
+      },
+      "topic": {
+       "t00": {
+        "briefs": 8,
+        "accuracy": 0.88
+       },
+       "t01": {
+        "briefs": 8,
+        "accuracy": 0.62
+       },
+       "t03": {
+        "briefs": 8,
+        "accuracy": 1.0
+       },
+       "t04": {
+        "briefs": 8,
+        "accuracy": 1.0
+       },
+       "t05": {
+        "briefs": 8,
+        "accuracy": 1.0
+       }
+      }
+     },
+     "curve": {
+      "1": [
+       0.873,
+       0.797,
+       0.94
+      ],
+      "2": [
+       0.887,
+       0.809,
+       0.96
+      ],
+      "4": [
+       0.898,
+       0.809,
+       0.973
+      ],
+      "8": [
+       0.902,
+       0.812,
+       0.975
+      ],
+      "16": [
+       0.9,
+       0.802,
+       0.975
+      ]
+     },
+     "confusion_per_post": [
+      [
+       234,
+       4,
+       2
+      ],
+      [
+       74,
+       244,
+       42
+      ],
+      [
+       0,
+       1,
+       359
+      ]
+     ]
+    }
+   }
+  },
+  "topic_centred": {
+   "stance": {
+    "levels": [
+     "for",
+     "against"
+    ],
+    "chance": 0.5,
+    "regularisation": 0.001,
+    "test": {
+     "all_posts_accuracy_by": {
+      "persona": {
+       "news": {
+        "briefs": 8,
+        "accuracy": 0.88
+       },
+       "owner": {
+        "briefs": 9,
+        "accuracy": 0.78
+       },
+       "parent": {
+        "briefs": 10,
+        "accuracy": 0.9
+       },
+       "student": {
+        "briefs": 10,
+        "accuracy": 1.0
+       },
+       "veteran": {
+        "briefs": 10,
+        "accuracy": 1.0
+       }
+      },
+      "tone": {
+       "angry": {
+        "briefs": 13,
+        "accuracy": 0.92
+       },
+       "factual": {
+        "briefs": 11,
+        "accuracy": 1.0
+       },
+       "sarcastic": {
+        "briefs": 13,
+        "accuracy": 0.92
+       },
+       "worried": {
+        "briefs": 10,
+        "accuracy": 0.8
+       }
+      },
+      "format": {
+       "long": {
+        "briefs": 17,
+        "accuracy": 0.94
+       },
+       "short": {
+        "briefs": 15,
+        "accuracy": 0.87
+       },
+       "tagged": {
+        "briefs": 15,
+        "accuracy": 0.93
+       }
+      },
+      "topic": {
+       "t00": {
+        "briefs": 9,
+        "accuracy": 1.0
+       },
+       "t01": {
+        "briefs": 10,
+        "accuracy": 1.0
+       },
+       "t03": {
+        "briefs": 10,
+        "accuracy": 0.8
+       },
+       "t04": {
+        "briefs": 9,
+        "accuracy": 0.89
+       },
+       "t05": {
+        "briefs": 9,
+        "accuracy": 0.89
+       }
+      }
+     },
+     "curve": {
+      "1": [
+       0.771,
+       0.717,
+       0.823
+      ],
+      "2": [
+       0.811,
+       0.749,
+       0.869
+      ],
+      "4": [
+       0.852,
+       0.787,
+       0.909
+      ],
+      "8": [
+       0.879,
+       0.811,
+       0.94
+      ],
+      "16": [
+       0.898,
+       0.82,
+       0.96
+      ],
+      "32": [
+       0.915,
+       0.83,
+       0.979
+      ]
+     },
+     "confusion_per_post": [
+      [
+       573,
+       195
+      ],
+      [
+       149,
+       587
+      ]
+     ]
+    },
+    "test_second_writer": {
+     "all_posts_accuracy_by": {
+      "persona": {
+       "news": {
+        "briefs": 7,
+        "accuracy": 0.71
+       },
+       "owner": {
+        "briefs": 7,
+        "accuracy": 0.86
+       },
+       "parent": {
+        "briefs": 10,
+        "accuracy": 0.7
+       },
+       "student": {
+        "briefs": 9,
+        "accuracy": 1.0
+       },
+       "veteran": {
+        "briefs": 7,
+        "accuracy": 1.0
+       }
+      },
+      "tone": {
+       "angry": {
+        "briefs": 11,
+        "accuracy": 0.91
+       },
+       "factual": {
+        "briefs": 8,
+        "accuracy": 1.0
+       },
+       "sarcastic": {
+        "briefs": 11,
+        "accuracy": 0.64
+       },
+       "worried": {
+        "briefs": 10,
+        "accuracy": 0.9
+       }
+      },
+      "format": {
+       "long": {
+        "briefs": 15,
+        "accuracy": 1.0
+       },
+       "short": {
+        "briefs": 10,
+        "accuracy": 0.8
+       },
+       "tagged": {
+        "briefs": 15,
+        "accuracy": 0.73
+       }
+      },
+      "topic": {
+       "t00": {
+        "briefs": 8,
+        "accuracy": 0.88
+       },
+       "t01": {
+        "briefs": 8,
+        "accuracy": 1.0
+       },
+       "t03": {
+        "briefs": 8,
+        "accuracy": 1.0
+       },
+       "t04": {
+        "briefs": 8,
+        "accuracy": 0.88
+       },
+       "t05": {
+        "briefs": 8,
+        "accuracy": 0.5
+       }
+      }
+     },
+     "curve": {
+      "1": [
+       0.771,
+       0.688,
+       0.845
+      ],
+      "2": [
+       0.789,
+       0.703,
+       0.864
+      ],
+      "4": [
+       0.802,
+       0.712,
+       0.885
+      ],
+      "8": [
+       0.819,
+       0.719,
+       0.906
+      ],
+      "16": [
+       0.83,
+       0.721,
+       0.926
+      ]
+     },
+     "confusion_per_post": [
+      [
+       336,
+       120
+      ],
+      [
+       102,
+       402
+      ]
+     ]
+    }
+   },
+   "persona": {
+    "levels": [
+     "parent",
+     "veteran",
+     "owner",
+     "student",
+     "news"
+    ],
+    "chance": 0.2,
+    "regularisation": 0.003,
+    "test": {
+     "all_posts_accuracy_by": {
+      "stance": {
+       "against": {
+        "briefs": 23,
+        "accuracy": 0.83
+       },
+       "for": {
+        "briefs": 24,
+        "accuracy": 0.83
+       }
+      },
+      "tone": {
+       "angry": {
+        "briefs": 13,
+        "accuracy": 0.54
+       },
+       "factual": {
+        "briefs": 11,
+        "accuracy": 1.0
+       },
+       "sarcastic": {
+        "briefs": 13,
+        "accuracy": 0.92
+       },
+       "worried": {
+        "briefs": 10,
+        "accuracy": 0.9
+       }
+      },
+      "format": {
+       "long": {
+        "briefs": 17,
+        "accuracy": 0.88
+       },
+       "short": {
+        "briefs": 15,
+        "accuracy": 0.67
+       },
+       "tagged": {
+        "briefs": 15,
+        "accuracy": 0.93
+       }
+      },
+      "topic": {
+       "t00": {
+        "briefs": 9,
+        "accuracy": 0.67
+       },
+       "t01": {
+        "briefs": 10,
+        "accuracy": 1.0
+       },
+       "t03": {
+        "briefs": 10,
+        "accuracy": 0.8
+       },
+       "t04": {
+        "briefs": 9,
+        "accuracy": 0.78
+       },
+       "t05": {
+        "briefs": 9,
+        "accuracy": 0.89
+       }
+      }
+     },
+     "curve": {
+      "1": [
+       0.541,
+       0.484,
+       0.596
+      ],
+      "2": [
+       0.648,
+       0.582,
+       0.714
+      ],
+      "4": [
+       0.721,
+       0.64,
+       0.796
+      ],
+      "8": [
+       0.776,
+       0.691,
+       0.86
+      ],
+      "16": [
+       0.8,
+       0.695,
+       0.893
+      ],
+      "32": [
+       0.83,
+       0.723,
+       0.936
+      ]
+     },
+     "confusion_per_post": [
+      [
+       200,
+       25,
+       27,
+       53,
+       15
+      ],
+      [
+       17,
+       164,
+       23,
+       63,
+       53
+      ],
+      [
+       15,
+       41,
+       171,
+       25,
+       36
+      ],
+      [
+       9,
+       55,
+       31,
+       153,
+       72
+      ],
+      [
+       11,
+       54,
+       26,
+       33,
+       132
+      ]
+     ]
+    },
+    "test_second_writer": {
+     "all_posts_accuracy_by": {
+      "stance": {
+       "against": {
+        "briefs": 21,
+        "accuracy": 0.81
+       },
+       "for": {
+        "briefs": 19,
+        "accuracy": 0.79
+       }
+      },
+      "tone": {
+       "angry": {
+        "briefs": 11,
+        "accuracy": 0.73
+       },
+       "factual": {
+        "briefs": 8,
+        "accuracy": 0.88
+       },
+       "sarcastic": {
+        "briefs": 11,
+        "accuracy": 0.73
+       },
+       "worried": {
+        "briefs": 10,
+        "accuracy": 0.9
+       }
+      },
+      "format": {
+       "long": {
+        "briefs": 15,
+        "accuracy": 0.87
+       },
+       "short": {
+        "briefs": 10,
+        "accuracy": 0.7
+       },
+       "tagged": {
+        "briefs": 15,
+        "accuracy": 0.8
+       }
+      },
+      "topic": {
+       "t00": {
+        "briefs": 8,
+        "accuracy": 0.75
+       },
+       "t01": {
+        "briefs": 8,
+        "accuracy": 0.88
+       },
+       "t03": {
+        "briefs": 8,
+        "accuracy": 0.88
+       },
+       "t04": {
+        "briefs": 8,
+        "accuracy": 0.75
+       },
+       "t05": {
+        "briefs": 8,
+        "accuracy": 0.75
+       }
+      }
+     },
+     "curve": {
+      "1": [
+       0.574,
+       0.502,
+       0.646
+      ],
+      "2": [
+       0.65,
+       0.572,
+       0.729
+      ],
+      "4": [
+       0.718,
+       0.623,
+       0.807
+      ],
+      "8": [
+       0.76,
+       0.658,
+       0.853
+      ],
+      "16": [
+       0.799,
+       0.689,
+       0.899
+      ]
+     },
+     "confusion_per_post": [
+      [
+       150,
+       26,
+       25,
+       25,
+       14
+      ],
+      [
+       13,
+       90,
+       16,
+       17,
+       32
+      ],
+      [
+       7,
+       39,
+       99,
+       11,
+       12
+      ],
+      [
+       5,
+       42,
+       17,
+       107,
+       45
+      ],
+      [
+       4,
+       15,
+       20,
+       28,
+       101
+      ]
+     ]
+    }
+   },
+   "tone": {
+    "levels": [
+     "angry",
+     "sarcastic",
+     "factual",
+     "worried"
+    ],
+    "chance": 0.25,
+    "regularisation": 0.003,
+    "test": {
+     "all_posts_accuracy_by": {
+      "stance": {
+       "against": {
+        "briefs": 23,
+        "accuracy": 1.0
+       },
+       "for": {
+        "briefs": 24,
+        "accuracy": 1.0
+       }
+      },
+      "persona": {
+       "news": {
+        "briefs": 8,
+        "accuracy": 1.0
+       },
+       "owner": {
+        "briefs": 9,
+        "accuracy": 1.0
+       },
+       "parent": {
+        "briefs": 10,
+        "accuracy": 1.0
+       },
+       "student": {
+        "briefs": 10,
+        "accuracy": 1.0
+       },
+       "veteran": {
+        "briefs": 10,
+        "accuracy": 1.0
+       }
+      },
+      "format": {
+       "long": {
+        "briefs": 17,
+        "accuracy": 1.0
+       },
+       "short": {
+        "briefs": 15,
+        "accuracy": 1.0
+       },
+       "tagged": {
+        "briefs": 15,
+        "accuracy": 1.0
+       }
+      },
+      "topic": {
+       "t00": {
+        "briefs": 9,
+        "accuracy": 1.0
+       },
+       "t01": {
+        "briefs": 10,
+        "accuracy": 1.0
+       },
+       "t03": {
+        "briefs": 10,
+        "accuracy": 1.0
+       },
+       "t04": {
+        "briefs": 9,
+        "accuracy": 1.0
+       },
+       "t05": {
+        "briefs": 9,
+        "accuracy": 1.0
+       }
+      }
+     },
+     "curve": {
+      "1": [
+       0.731,
+       0.681,
+       0.775
+      ],
+      "2": [
+       0.834,
+       0.79,
+       0.879
+      ],
+      "4": [
+       0.906,
+       0.867,
+       0.943
+      ],
+      "8": [
+       0.954,
+       0.924,
+       0.978
+      ],
+      "16": [
+       0.98,
+       0.959,
+       0.996
+      ],
+      "32": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     },
+     "confusion_per_post": [
+      [
+       301,
+       37,
+       45,
+       33
+      ],
+      [
+       43,
+       290,
+       67,
+       16
+      ],
+      [
+       26,
+       42,
+       256,
+       28
+      ],
+      [
+       27,
+       15,
+       25,
+       253
+      ]
+     ]
+    },
+    "test_second_writer": {
+     "all_posts_accuracy_by": {
+      "stance": {
+       "against": {
+        "briefs": 21,
+        "accuracy": 1.0
+       },
+       "for": {
+        "briefs": 19,
+        "accuracy": 0.95
+       }
+      },
+      "persona": {
+       "news": {
+        "briefs": 7,
+        "accuracy": 1.0
+       },
+       "owner": {
+        "briefs": 7,
+        "accuracy": 0.86
+       },
+       "parent": {
+        "briefs": 10,
+        "accuracy": 1.0
+       },
+       "student": {
+        "briefs": 9,
+        "accuracy": 1.0
+       },
+       "veteran": {
+        "briefs": 7,
+        "accuracy": 1.0
+       }
+      },
+      "format": {
+       "long": {
+        "briefs": 15,
+        "accuracy": 1.0
+       },
+       "short": {
+        "briefs": 10,
+        "accuracy": 0.9
+       },
+       "tagged": {
+        "briefs": 15,
+        "accuracy": 1.0
+       }
+      },
+      "topic": {
+       "t00": {
+        "briefs": 8,
+        "accuracy": 1.0
+       },
+       "t01": {
+        "briefs": 8,
+        "accuracy": 1.0
+       },
+       "t03": {
+        "briefs": 8,
+        "accuracy": 1.0
+       },
+       "t04": {
+        "briefs": 8,
+        "accuracy": 0.88
+       },
+       "t05": {
+        "briefs": 8,
+        "accuracy": 1.0
+       }
+      }
+     },
+     "curve": {
+      "1": [
+       0.788,
+       0.734,
+       0.842
+      ],
+      "2": [
+       0.879,
+       0.829,
+       0.924
+      ],
+      "4": [
+       0.933,
+       0.893,
+       0.967
+      ],
+      "8": [
+       0.961,
+       0.922,
+       0.988
+      ],
+      "16": [
+       0.975,
+       0.924,
+       1.0
+      ]
+     },
+     "confusion_per_post": [
+      [
+       222,
+       13,
+       22,
+       7
+      ],
+      [
+       45,
+       184,
+       25,
+       10
+      ],
+      [
+       4,
+       2,
+       170,
+       16
+      ],
+      [
+       24,
+       17,
+       18,
+       181
+      ]
+     ]
+    }
+   },
+   "format": {
+    "levels": [
+     "short",
+     "long",
+     "tagged"
+    ],
+    "chance": 0.333,
+    "regularisation": 0.1,
+    "test": {
+     "all_posts_accuracy_by": {
+      "stance": {
+       "against": {
+        "briefs": 23,
+        "accuracy": 1.0
+       },
+       "for": {
+        "briefs": 24,
+        "accuracy": 1.0
+       }
+      },
+      "persona": {
+       "news": {
+        "briefs": 8,
+        "accuracy": 1.0
+       },
+       "owner": {
+        "briefs": 9,
+        "accuracy": 1.0
+       },
+       "parent": {
+        "briefs": 10,
+        "accuracy": 1.0
+       },
+       "student": {
+        "briefs": 10,
+        "accuracy": 1.0
+       },
+       "veteran": {
+        "briefs": 10,
+        "accuracy": 1.0
+       }
+      },
+      "tone": {
+       "angry": {
+        "briefs": 13,
+        "accuracy": 1.0
+       },
+       "factual": {
+        "briefs": 11,
+        "accuracy": 1.0
+       },
+       "sarcastic": {
+        "briefs": 13,
+        "accuracy": 1.0
+       },
+       "worried": {
+        "briefs": 10,
+        "accuracy": 1.0
+       }
+      },
+      "topic": {
+       "t00": {
+        "briefs": 9,
+        "accuracy": 1.0
+       },
+       "t01": {
+        "briefs": 10,
+        "accuracy": 1.0
+       },
+       "t03": {
+        "briefs": 10,
+        "accuracy": 1.0
+       },
+       "t04": {
+        "briefs": 9,
+        "accuracy": 1.0
+       },
+       "t05": {
+        "briefs": 9,
+        "accuracy": 1.0
+       }
+      }
+     },
+     "curve": {
+      "1": [
+       0.948,
+       0.925,
+       0.968
+      ],
+      "2": [
+       0.979,
+       0.958,
+       0.994
+      ],
+      "4": [
+       0.988,
+       0.97,
+       1.0
+      ],
+      "8": [
+       0.995,
+       0.986,
+       1.0
+      ],
+      "16": [
+       0.998,
+       0.995,
+       1.0
+      ],
+      "32": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     },
+     "confusion_per_post": [
+      [
+       448,
+       29,
+       3
+      ],
+      [
+       33,
+       506,
+       5
+      ],
+      [
+       3,
+       4,
+       473
+      ]
+     ]
+    },
+    "test_second_writer": {
+     "all_posts_accuracy_by": {
+      "stance": {
+       "against": {
+        "briefs": 21,
+        "accuracy": 1.0
+       },
+       "for": {
+        "briefs": 19,
+        "accuracy": 1.0
+       }
+      },
+      "persona": {
+       "news": {
+        "briefs": 7,
+        "accuracy": 1.0
+       },
+       "owner": {
+        "briefs": 7,
+        "accuracy": 1.0
+       },
+       "parent": {
+        "briefs": 10,
+        "accuracy": 1.0
+       },
+       "student": {
+        "briefs": 9,
+        "accuracy": 1.0
+       },
+       "veteran": {
+        "briefs": 7,
+        "accuracy": 1.0
+       }
+      },
+      "tone": {
+       "angry": {
+        "briefs": 11,
+        "accuracy": 1.0
+       },
+       "factual": {
+        "briefs": 8,
+        "accuracy": 1.0
+       },
+       "sarcastic": {
+        "briefs": 11,
+        "accuracy": 1.0
+       },
+       "worried": {
+        "briefs": 10,
+        "accuracy": 1.0
+       }
+      },
+      "topic": {
+       "t00": {
+        "briefs": 8,
+        "accuracy": 1.0
+       },
+       "t01": {
+        "briefs": 8,
+        "accuracy": 1.0
+       },
+       "t03": {
+        "briefs": 8,
+        "accuracy": 1.0
+       },
+       "t04": {
+        "briefs": 8,
+        "accuracy": 1.0
+       },
+       "t05": {
+        "briefs": 8,
+        "accuracy": 1.0
+       }
+      }
+     },
+     "curve": {
+      "1": [
+       0.943,
+       0.911,
+       0.971
+      ],
+      "2": [
+       0.976,
+       0.958,
+       0.991
+      ],
+      "4": [
+       0.989,
+       0.976,
+       0.998
+      ],
+      "8": [
+       0.998,
+       0.993,
+       1.0
+      ],
+      "16": [
+       1.0,
+       1.0,
+       1.0
+      ]
+     },
+     "confusion_per_post": [
+      [
+       230,
+       10,
+       0
+      ],
+      [
+       42,
+       317,
+       1
+      ],
+      [
+       2,
+       2,
+       356
+      ]
+     ]
+    }
+   }
+  }
+ }
+}
