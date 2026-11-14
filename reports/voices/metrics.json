@@ -1,0 +1,235 @@
+{
+ "title": "One voice or several",
+ "evaluated": "2026-11-14",
+ "embedding_key": "embeddinggemma:300m-qat-q8_0@e84a7acc2394|prefix='task: classification | query: '|dims=256",
+ "unit": "a group of actors with several posts each",
+ "positive": "the actors are interchangeable: any post could have come from any of them",
+ "score": "gap between posts of one actor and posts of different actors, in standard deviations of 999 shuffles of who wrote what, averaged over 20 draws",
+ "rule": "flag under the value 5% of the most alike real groups fall under, on the calibration half of the real pools",
+ "seed": 20261114,
+ "sizes": [
+  {
+   "actors": 6,
+   "posts_each": 6,
+   "draws": 20,
+   "threshold": 3.09,
+   "calibration_groups": 94,
+   "reference": {
+    "independent": [
+     9.51,
+     19.08
+    ],
+    "independent_alike": [
+     3.6,
+     18.45
+    ],
+    "one_brief": [
+     -1.9,
+     3.01
+    ]
+   },
+   "real": {
+    "groups": 73,
+    "flagged": 0,
+    "rate": 0.0,
+    "low": 0.0,
+    "high": 0.05
+   },
+   "real_alike": {
+    "groups": 73,
+    "flagged": 1,
+    "rate": 0.014,
+    "low": 0.002,
+    "high": 0.074
+   },
+   "one_brief": {
+    "groups": 53,
+    "flagged": 50,
+    "rate": 0.943,
+    "low": 0.846,
+    "high": 0.981,
+    "by_mode": {
+     "shared": {
+      "groups": 21,
+      "flagged": 21,
+      "rate": 1.0,
+      "low": 0.845,
+      "high": 1.0
+     },
+     "solo": {
+      "groups": 18,
+      "flagged": 18,
+      "rate": 1.0,
+      "low": 0.824,
+      "high": 1.0
+     },
+     "persona": {
+      "groups": 14,
+      "flagged": 11,
+      "rate": 0.786,
+      "low": 0.524,
+      "high": 0.924
+     }
+    }
+   },
+   "ira": {
+    "ira-NewsFeed": {
+     "groups": 69,
+     "flagged": 9,
+     "rate": 0.13,
+     "low": 0.07,
+     "high": 0.23
+    },
+    "ira-RightTroll": {
+     "groups": 17,
+     "flagged": 9,
+     "rate": 0.529,
+     "low": 0.31,
+     "high": 0.738
+    }
+   },
+   "precision_at_base_rate": {
+    "0.01": {
+     "measured": 0.405,
+     "worst_case": 0.104
+    },
+    "0.05": {
+     "measured": 0.78,
+     "worst_case": 0.376
+    },
+    "0.2": {
+     "measured": 0.944,
+     "worst_case": 0.741
+    }
+   },
+   "flagged_real_groups": [
+    "unneeded-2026-04"
+   ]
+  },
+  {
+   "actors": 4,
+   "posts_each": 4,
+   "draws": 20,
+   "threshold": 1.67,
+   "calibration_groups": 98,
+   "reference": {
+    "independent": [
+     4.56,
+     8.62
+    ],
+    "independent_alike": [
+     1.78,
+     8.36
+    ],
+    "one_brief": [
+     -0.95,
+     1.7
+    ]
+   },
+   "real": {
+    "groups": 83,
+    "flagged": 0,
+    "rate": 0.0,
+    "low": 0.0,
+    "high": 0.044
+   },
+   "real_alike": {
+    "groups": 83,
+    "flagged": 2,
+    "rate": 0.024,
+    "low": 0.007,
+    "high": 0.084
+   },
+   "one_brief": {
+    "groups": 65,
+    "flagged": 60,
+    "rate": 0.923,
+    "low": 0.832,
+    "high": 0.967,
+    "by_mode": {
+     "shared": {
+      "groups": 21,
+      "flagged": 21,
+      "rate": 1.0,
+      "low": 0.845,
+      "high": 1.0
+     },
+     "solo": {
+      "groups": 23,
+      "flagged": 23,
+      "rate": 1.0,
+      "low": 0.857,
+      "high": 1.0
+     },
+     "persona": {
+      "groups": 21,
+      "flagged": 16,
+      "rate": 0.762,
+      "low": 0.549,
+      "high": 0.894
+     }
+    }
+   },
+   "ira": {
+    "ira-NewsFeed": {
+     "groups": 69,
+     "flagged": 10,
+     "rate": 0.145,
+     "low": 0.081,
+     "high": 0.247
+    },
+    "ira-RightTroll": {
+     "groups": 17,
+     "flagged": 9,
+     "rate": 0.529,
+     "low": 0.31,
+     "high": 0.738
+    }
+   },
+   "precision_at_base_rate": {
+    "0.01": {
+     "measured": 0.28,
+     "worst_case": 0.091
+    },
+    "0.05": {
+     "measured": 0.669,
+     "worst_case": 0.343
+    },
+    "0.2": {
+     "measured": 0.906,
+     "worst_case": 0.712
+    }
+   },
+   "flagged_real_groups": [
+    "fremantle-2026-04",
+    "unneeded-2026-04"
+   ]
+  }
+ ],
+ "baseline": {
+  "rule": "two actors posted texts sharing 50% of their character 5-grams",
+  "real": {
+   "groups": 88,
+   "flagged": 13,
+   "rate": 0.148,
+   "low": 0.088,
+   "high": 0.237
+  },
+  "one_brief": {
+   "groups": 67,
+   "flagged": 1,
+   "rate": 0.015,
+   "low": 0.003,
+   "high": 0.08
+  }
+ },
+ "limits": [
+  "The real groups are actors who posted on one word in one month: looser than many people reacting to one event in one hour. Not tested on such groups.",
+  "The groups written from one brief are synthetic: one writer model, fictional subjects.",
+  "An operator who gives each actor its own subject passes the check.",
+  "A fan campaign, a news feed or a posting tool is one voice too: the check says that actors are interchangeable, not why.",
+  "Measured on English posts and on one embedding model.",
+  "The real actors are not labelled: some may be scripted, so false alarms are an upper bound."
+ ],
+ "report": "2026-11-14-benchmark.md"
+}
