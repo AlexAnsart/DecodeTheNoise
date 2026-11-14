@@ -1,0 +1,869 @@
+{
+ "call_amplify": {
+  "yes": [
+   16,
+   16
+  ],
+  "no": [
+   0,
+   69
+  ],
+  "yes_confirmed": 1.0,
+  "yes_confirmed_interval": [
+   0.8063865817272802,
+   1.0
+  ],
+  "no_overturned": 0.0,
+  "agreement": 1.0
+ },
+ "call_pressure": {
+  "yes": [
+   1,
+   3
+  ],
+  "no": [
+   2,
+   82
+  ],
+  "yes_confirmed": 0.3333333333333333,
+  "yes_confirmed_interval": [
+   0.0614903152761605,
+   0.7923450448735121
+  ],
+  "no_overturned": 0.024390243902439025,
+  "agreement": 0.9529411764705882
+ },
+ "call_protest": {
+  "yes": [
+   0,
+   0
+  ],
+  "no": [
+   0,
+   85
+  ],
+  "yes_confirmed": null,
+  "yes_confirmed_interval": [
+   0.0,
+   1.0
+  ],
+  "no_overturned": 0.0,
+  "agreement": 1.0
+ },
+ "call_boycott": {
+  "yes": [
+   15,
+   15
+  ],
+  "no": [
+   3,
+   70
+  ],
+  "yes_confirmed": 1.0,
+  "yes_confirmed_interval": [
+   0.7961107336956521,
+   1.0
+  ],
+  "no_overturned": 0.04285714285714286,
+  "agreement": 0.9647058823529412
+ },
+ "call_vote": {
+  "yes": [
+   15,
+   15
+  ],
+  "no": [
+   0,
+   70
+  ],
+  "yes_confirmed": 1.0,
+  "yes_confirmed_interval": [
+   0.7961107336956521,
+   1.0
+  ],
+  "no_overturned": 0.0,
+  "agreement": 1.0
+ },
+ "call_join": {
+  "yes": [
+   0,
+   0
+  ],
+  "no": [
+   0,
+   85
+  ],
+  "yes_confirmed": null,
+  "yes_confirmed_interval": [
+   0.0,
+   1.0
+  ],
+  "no_overturned": 0.0,
+  "agreement": 1.0
+ },
+ "call_overthrow": {
+  "yes": [
+   0,
+   0
+  ],
+  "no": [
+   0,
+   85
+  ],
+  "yes_confirmed": null,
+  "yes_confirmed_interval": [
+   0.0,
+   1.0
+  ],
+  "no_overturned": 0.0,
+  "agreement": 1.0
+ },
+ "call_violence": {
+  "yes": [
+   0,
+   0
+  ],
+  "no": [
+   0,
+   85
+  ],
+  "yes_confirmed": null,
+  "yes_confirmed_interval": [
+   0.0,
+   1.0
+  ],
+  "no_overturned": 0.0,
+  "agreement": 1.0
+ },
+ "attack_addressee": {
+  "yes": [
+   35,
+   39
+  ],
+  "no": [
+   3,
+   133
+  ],
+  "yes_confirmed": 0.8974358974358975,
+  "yes_confirmed_interval": [
+   0.7642084129775517,
+   0.9593873444171301
+  ],
+  "no_overturned": 0.022556390977443608,
+  "agreement": 0.9593023255813954
+ },
+ "attack_person": {
+  "yes": [
+   22,
+   23
+  ],
+  "no": [
+   4,
+   148
+  ],
+  "yes_confirmed": 0.9565217391304348,
+  "yes_confirmed_interval": [
+   0.7900841350594088,
+   0.9922835330378734
+  ],
+  "no_overturned": 0.02702702702702703,
+  "agreement": 0.9707602339181286
+ },
+ "attack_identity_group": {
+  "yes": [
+   27,
+   31
+  ],
+  "no": [
+   6,
+   135
+  ],
+  "yes_confirmed": 0.8709677419354839,
+  "yes_confirmed_interval": [
+   0.7114724304561464,
+   0.9486579883535524
+  ],
+  "no_overturned": 0.044444444444444446,
+  "agreement": 0.9397590361445783
+ },
+ "attack_political_group": {
+  "yes": [
+   23,
+   28
+  ],
+  "no": [
+   5,
+   141
+  ],
+  "yes_confirmed": 0.8214285714285714,
+  "yes_confirmed_interval": [
+   0.644082084514089,
+   0.9212161417056989
+  ],
+  "no_overturned": 0.03546099290780142,
+  "agreement": 0.9408284023668639
+ },
+ "dehumanisation": {
+  "yes": [
+   10,
+   27
+  ],
+  "no": [
+   0,
+   141
+  ],
+  "yes_confirmed": 0.37037037037037035,
+  "yes_confirmed_interval": [
+   0.21532287067936856,
+   0.5577109537655369
+  ],
+  "no_overturned": 0.0,
+  "agreement": 0.8988095238095238
+ },
+ "threat": {
+  "yes": [
+   2,
+   2
+  ],
+  "no": [
+   1,
+   170
+  ],
+  "yes_confirmed": 1.0,
+  "yes_confirmed_interval": [
+   0.34237195288961925,
+   1.0
+  ],
+  "no_overturned": 0.0058823529411764705,
+  "agreement": 0.9941860465116279
+ },
+ "violence_endorsement": {
+  "yes": [
+   2,
+   2
+  ],
+  "no": [
+   0,
+   169
+  ],
+  "yes_confirmed": 1.0,
+  "yes_confirmed_interval": [
+   0.34237195288961925,
+   1.0
+  ],
+  "no_overturned": 0.0,
+  "agreement": 1.0
+ },
+ "doxxing": {
+  "yes": [
+   0,
+   0
+  ],
+  "no": [
+   0,
+   172
+  ],
+  "yes_confirmed": null,
+  "yes_confirmed_interval": [
+   0.0,
+   1.0
+  ],
+  "no_overturned": 0.0,
+  "agreement": 1.0
+ },
+ "profanity": {
+  "yes": [
+   72,
+   73
+  ],
+  "no": [
+   10,
+   98
+  ],
+  "yes_confirmed": 0.9863013698630136,
+  "yes_confirmed_interval": [
+   0.9264008673087267,
+   0.9975778109072393
+  ],
+  "no_overturned": 0.10204081632653061,
+  "agreement": 0.935672514619883
+ },
+ "loaded_language": {
+  "yes": [
+   59,
+   75
+  ],
+  "no": [
+   6,
+   45
+  ],
+  "yes_confirmed": 0.7866666666666666,
+  "yes_confirmed_interval": [
+   0.6811982171013853,
+   0.86419913657992
+  ],
+  "no_overturned": 0.13333333333333333,
+  "agreement": 0.8166666666666667
+ },
+ "exaggeration": {
+  "yes": [
+   51,
+   70
+  ],
+  "no": [
+   5,
+   50
+  ],
+  "yes_confirmed": 0.7285714285714285,
+  "yes_confirmed_interval": [
+   0.614554665291375,
+   0.8188053919121524
+  ],
+  "no_overturned": 0.1,
+  "agreement": 0.8
+ },
+ "fear_appeal": {
+  "yes": [
+   22,
+   31
+  ],
+  "no": [
+   4,
+   89
+  ],
+  "yes_confirmed": 0.7096774193548387,
+  "yes_confirmed_interval": [
+   0.5340734004245933,
+   0.8390437928156713
+  ],
+  "no_overturned": 0.0449438202247191,
+  "agreement": 0.8916666666666667
+ },
+ "doubt": {
+  "yes": [
+   1,
+   3
+  ],
+  "no": [
+   2,
+   117
+  ],
+  "yes_confirmed": 0.3333333333333333,
+  "yes_confirmed_interval": [
+   0.0614903152761605,
+   0.7923450448735121
+  ],
+  "no_overturned": 0.017094017094017096,
+  "agreement": 0.9666666666666667
+ },
+ "identity_appeal": {
+  "yes": [
+   5,
+   8
+  ],
+  "no": [
+   1,
+   112
+  ],
+  "yes_confirmed": 0.625,
+  "yes_confirmed_interval": [
+   0.30573785458380187,
+   0.863158240538479
+  ],
+  "no_overturned": 0.008928571428571428,
+  "agreement": 0.9666666666666667
+ },
+ "us_vs_them": {
+  "yes": [
+   22,
+   29
+  ],
+  "no": [
+   1,
+   89
+  ],
+  "yes_confirmed": 0.7586206896551724,
+  "yes_confirmed_interval": [
+   0.578920477816713,
+   0.8778173181493787
+  ],
+  "no_overturned": 0.011235955056179775,
+  "agreement": 0.9322033898305084
+ },
+ "slogan": {
+  "yes": [
+   3,
+   5
+  ],
+  "no": [
+   3,
+   115
+  ],
+  "yes_confirmed": 0.6,
+  "yes_confirmed_interval": [
+   0.23071993220883708,
+   0.8823817688407467
+  ],
+  "no_overturned": 0.02608695652173913,
+  "agreement": 0.9583333333333334
+ },
+ "commercial_promo": {
+  "yes": [
+   27,
+   28
+  ],
+  "no": [
+   2,
+   61
+  ],
+  "yes_confirmed": 0.9642857142857143,
+  "yes_confirmed_interval": [
+   0.8228742388150135,
+   0.9936676435024582
+  ],
+  "no_overturned": 0.03278688524590164,
+  "agreement": 0.9662921348314607
+ },
+ "money_request": {
+  "yes": [
+   16,
+   16
+  ],
+  "no": [
+   1,
+   74
+  ],
+  "yes_confirmed": 1.0,
+  "yes_confirmed_interval": [
+   0.8063865817272802,
+   1.0
+  ],
+  "no_overturned": 0.013513513513513514,
+  "agreement": 0.9888888888888889
+ },
+ "gain_promise": {
+  "yes": [
+   4,
+   5
+  ],
+  "no": [
+   0,
+   85
+  ],
+  "yes_confirmed": 0.8,
+  "yes_confirmed_interval": [
+   0.3755282641185388,
+   0.9637768390302125
+  ],
+  "no_overturned": 0.0,
+  "agreement": 0.9888888888888889
+ },
+ "engagement_bait": {
+  "yes": [
+   1,
+   1
+  ],
+  "no": [
+   1,
+   89
+  ],
+  "yes_confirmed": 1.0,
+  "yes_confirmed_interval": [
+   0.20654329147389294,
+   1.0
+  ],
+  "no_overturned": 0.011235955056179775,
+  "agreement": 0.9888888888888889
+ },
+ "off_platform_redirect": {
+  "yes": [
+   15,
+   17
+  ],
+  "no": [
+   0,
+   73
+  ],
+  "yes_confirmed": 0.8823529411764706,
+  "yes_confirmed_interval": [
+   0.6566315750229009,
+   0.967120919987079
+  ],
+  "no_overturned": 0.0,
+  "agreement": 0.9777777777777777
+ },
+ "adult_promo": {
+  "yes": [
+   1,
+   1
+  ],
+  "no": [
+   1,
+   89
+  ],
+  "yes_confirmed": 1.0,
+  "yes_confirmed_interval": [
+   0.20654329147389294,
+   1.0
+  ],
+  "no_overturned": 0.011235955056179775,
+  "agreement": 0.9888888888888889
+ },
+ "testimonial": {
+  "yes": [
+   0,
+   0
+  ],
+  "no": [
+   0,
+   90
+  ],
+  "yes_confirmed": null,
+  "yes_confirmed_interval": [
+   0.0,
+   1.0
+  ],
+  "no_overturned": 0.0,
+  "agreement": 1.0
+ },
+ "news_headline": {
+  "yes": [
+   14,
+   24
+  ],
+  "no": [
+   3,
+   92
+  ],
+  "yes_confirmed": 0.5833333333333334,
+  "yes_confirmed_interval": [
+   0.3883433764938864,
+   0.7553265275346177
+  ],
+  "no_overturned": 0.03260869565217391,
+  "agreement": 0.8879310344827587
+ },
+ "automated_alert": {
+  "yes": [
+   14,
+   15
+  ],
+  "no": [
+   5,
+   101
+  ],
+  "yes_confirmed": 0.9333333333333333,
+  "yes_confirmed_interval": [
+   0.7018292244757601,
+   0.9881334113938051
+  ],
+  "no_overturned": 0.04950495049504951,
+  "agreement": 0.9482758620689655
+ },
+ "templated_post": {
+  "yes": [
+   13,
+   15
+  ],
+  "no": [
+   1,
+   101
+  ],
+  "yes_confirmed": 0.8666666666666667,
+  "yes_confirmed_interval": [
+   0.6211750079348376,
+   0.9626395301086407
+  ],
+  "no_overturned": 0.009900990099009901,
+  "agreement": 0.9741379310344828
+ },
+ "quote_post": {
+  "yes": [
+   15,
+   15
+  ],
+  "no": [
+   1,
+   101
+  ],
+  "yes_confirmed": 1.0,
+  "yes_confirmed_interval": [
+   0.7961107336956521,
+   1.0
+  ],
+  "no_overturned": 0.009900990099009901,
+  "agreement": 0.9913793103448276
+ },
+ "reported_speech": {
+  "yes": [
+   29,
+   29
+  ],
+  "no": [
+   5,
+   87
+  ],
+  "yes_confirmed": 1.0,
+  "yes_confirmed_interval": [
+   0.8830264055344442,
+   1.0
+  ],
+  "no_overturned": 0.05747126436781609,
+  "agreement": 0.9568965517241379
+ },
+ "irony": {
+  "yes": [
+   0,
+   0
+  ],
+  "no": [
+   0,
+   116
+  ],
+  "yes_confirmed": null,
+  "yes_confirmed_interval": [
+   0.0,
+   1.0
+  ],
+  "no_overturned": 0.0,
+  "agreement": 1.0
+ },
+ "not_enough_text": {
+  "yes": [
+   1,
+   1
+  ],
+  "no": [
+   2,
+   115
+  ],
+  "yes_confirmed": 1.0,
+  "yes_confirmed_interval": [
+   0.20654329147389294,
+   1.0
+  ],
+  "no_overturned": 0.017391304347826087,
+  "agreement": 0.9827586206896551
+ },
+ "political": {
+  "yes": [
+   42,
+   44
+  ],
+  "no": [
+   6,
+   44
+  ],
+  "yes_confirmed": 0.9545454545454546,
+  "yes_confirmed_interval": [
+   0.8486472847469684,
+   0.9874451536330189
+  ],
+  "no_overturned": 0.13636363636363635,
+  "agreement": 0.9090909090909091
+ },
+ "anti_pluralism": {
+  "yes": [
+   0,
+   0
+  ],
+  "no": [
+   0,
+   90
+  ],
+  "yes_confirmed": null,
+  "yes_confirmed_interval": [
+   0.0,
+   1.0
+  ],
+  "no_overturned": 0.0,
+  "agreement": 1.0
+ },
+ "institution_distrust": {
+  "yes": [
+   5,
+   7
+  ],
+  "no": [
+   2,
+   83
+  ],
+  "yes_confirmed": 0.7142857142857143,
+  "yes_confirmed_interval": [
+   0.35892909014821267,
+   0.9177828342909844
+  ],
+  "no_overturned": 0.024096385542168676,
+  "agreement": 0.9555555555555556
+ },
+ "conspiracy_narrative": {
+  "yes": [
+   14,
+   16
+  ],
+  "no": [
+   3,
+   71
+  ],
+  "yes_confirmed": 0.875,
+  "yes_confirmed_interval": [
+   0.6397666856325173,
+   0.9650232506629428
+  ],
+  "no_overturned": 0.04225352112676056,
+  "agreement": 0.9425287356321839
+ },
+ "endorsement": {
+  "yes": [
+   16,
+   17
+  ],
+  "no": [
+   3,
+   73
+  ],
+  "yes_confirmed": 0.9411764705882353,
+  "yes_confirmed_interval": [
+   0.730174547964372,
+   0.9895398693548358
+  ],
+  "no_overturned": 0.0410958904109589,
+  "agreement": 0.9555555555555556
+ },
+ "checkable_claim": {
+  "yes": [
+   58,
+   65
+  ],
+  "no": [
+   0,
+   25
+  ],
+  "yes_confirmed": 0.8923076923076924,
+  "yes_confirmed_interval": [
+   0.7939846696853139,
+   0.9468464556807439
+  ],
+  "no_overturned": 0.0,
+  "agreement": 0.9222222222222223
+ },
+ "unsourced_statistic": {
+  "yes": [
+   20,
+   23
+  ],
+  "no": [
+   0,
+   67
+  ],
+  "yes_confirmed": 0.8695652173913043,
+  "yes_confirmed_interval": [
+   0.678721020269818,
+   0.954624234856553
+  ],
+  "no_overturned": 0.0,
+  "agreement": 0.9666666666666667
+ },
+ "hearsay": {
+  "yes": [
+   2,
+   4
+  ],
+  "no": [
+   0,
+   86
+  ],
+  "yes_confirmed": 0.5,
+  "yes_confirmed_interval": [
+   0.15003570882017148,
+   0.8499642911798285
+  ],
+  "no_overturned": 0.0,
+  "agreement": 0.9777777777777777
+ },
+ "urgency_framing": {
+  "yes": [
+   18,
+   19
+  ],
+  "no": [
+   1,
+   71
+  ],
+  "yes_confirmed": 0.9473684210526315,
+  "yes_confirmed_interval": [
+   0.7536078466345479,
+   0.99064824750947
+  ],
+  "no_overturned": 0.014084507042253521,
+  "agreement": 0.9777777777777777
+ },
+ "anger": {
+  "yes": [
+   26,
+   30
+  ],
+  "no": [
+   11,
+   90
+  ],
+  "yes_confirmed": 0.8666666666666667,
+  "yes_confirmed_interval": [
+   0.7031831605558306,
+   0.9469043057578189
+  ],
+  "no_overturned": 0.12222222222222222,
+  "agreement": 0.875
+ },
+ "fear": {
+  "yes": [
+   18,
+   18
+  ],
+  "no": [
+   1,
+   102
+  ],
+  "yes_confirmed": 1.0,
+  "yes_confirmed_interval": [
+   0.8241154494176252,
+   1.0
+  ],
+  "no_overturned": 0.00980392156862745,
+  "agreement": 0.9916666666666667
+ },
+ "contempt": {
+  "yes": [
+   38,
+   43
+  ],
+  "no": [
+   5,
+   77
+  ],
+  "yes_confirmed": 0.8837209302325582,
+  "yes_confirmed_interval": [
+   0.755205511093586,
+   0.9492964700513791
+  ],
+  "no_overturned": 0.06493506493506493,
+  "agreement": 0.9166666666666666
+ },
+ "enthusiasm": {
+  "yes": [
+   17,
+   17
+  ],
+  "no": [
+   10,
+   103
+  ],
+  "yes_confirmed": 1.0,
+  "yes_confirmed_interval": [
+   0.8156763396284354,
+   1.0
+  ],
+  "no_overturned": 0.0970873786407767,
+  "agreement": 0.9166666666666666
+ }
+}
