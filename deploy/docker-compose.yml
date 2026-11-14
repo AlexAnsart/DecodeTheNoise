@@ -1,0 +1,71 @@
+# The stack on the Hostinger VPS. Run from the repository root:
+#   docker compose --project-directory . -f deploy/docker-compose.yml up -d
+# Traefik already runs on the server (ports 80 and 443, Let's Encrypt): the labels below
+# publish this stack through it. Values come from the server's .env (see .env.example).
+name: noisemap
+
+services:
+  api:
+    image: noisemap-api:${NOISEMAP_TAG:-local}
+    build:
+      context: .
+      dockerfile: deploy/api.Dockerfile
+    restart: unless-stopped
+    environment:
+      DATA_BUILD_DIR: /data/build/current
+      EMBEDDING_API_BASE: http://ollama:11434/v1
+      EMBEDDING_API_KEY: ollama
+      EMBEDDING_MODEL: ${EMBEDDING_MODEL}
+      EMBEDDING_REVISION: ${EMBEDDING_REVISION}
+      LLM_API_BASE: ${HOSTINGER_ROUTER_API_BASE:-https://router.hostinger.com/v1}
+      LLM_API_KEY: ${HOSTINGER_ROUTER_API_KEY_PROD:-}
+      LLM_MODEL: ${LLM_MODEL:-}
+      GIT_COMMIT: ${NOISEMAP_TAG:-local}
+    volumes:
+      # Map builds are made offline and copied here; they never go through git.
+      - ./data/build:/data/build:ro
+    depends_on:
+      - ollama
+    mem_limit: 1500m
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/health', timeout=3)"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.noisemap-api.rule=Host(`${NOISEMAP_HOST}`) && PathPrefix(`/api`)
+      - traefik.http.routers.noisemap-api.entrypoints=websecure
+      - traefik.http.routers.noisemap-api.tls.certresolver=letsencrypt
+      - traefik.http.services.noisemap-api.loadbalancer.server.port=8000
+
+  web:
+    image: noisemap-web:${NOISEMAP_TAG:-local}
+    build:
+      context: .
+      dockerfile: deploy/web.Dockerfile
+    restart: unless-stopped
+    mem_limit: 128m
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.noisemap-web.rule=Host(`${NOISEMAP_HOST}`)
+      - traefik.http.routers.noisemap-web.entrypoints=websecure
+      - traefik.http.routers.noisemap-web.tls.certresolver=letsencrypt
+      - traefik.http.services.noisemap-web.loadbalancer.server.port=80
+
+  # The embedding model, local mode: the same open weights that embedded the corpus offline.
+  # Not published: only the API reaches it.
+  ollama:
+    image: ollama/ollama:0.40.16
+    restart: unless-stopped
+    environment:
+      OLLAMA_KEEP_ALIVE: 24h
+      OLLAMA_MAX_LOADED_MODELS: "1"
+      OLLAMA_NUM_PARALLEL: "1"
+    volumes:
+      - ollama:/root/.ollama
+    mem_limit: 2500m
+
+volumes:
+  ollama:

@@ -1,0 +1,94 @@
+name: CI
+
+# Every job runs on CRACI runners (GitHub Actions compatible). A push to main that passes the
+# checks is built into images here, so the 2 vCPU server that serves the demo never builds.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  backend:
+    name: Backend and pipelines
+    runs-on: craci
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: "0.11.28"
+          enable-cache: true
+      - run: uv sync --locked --all-groups
+      - run: uv run ruff check .
+      - run: uv run ruff format --check .
+      - run: uv run pytest
+
+  frontend:
+    name: Front end
+    runs-on: craci
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm ci
+      - run: npx tsc -b
+      - run: npm run build
+
+  deploy:
+    name: Build images and deploy
+    needs: [backend, frontend]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: craci
+    concurrency:
+      group: deploy
+      cancel-in-progress: false
+    env:
+      TAG: ${{ github.sha }}
+    steps:
+      - uses: cracicorp/setup@v1
+        with:
+          # The full image: Docker and an SSH client are needed to ship the images.
+          image: ubuntu-24.04
+      - uses: actions/checkout@v4
+      - name: Build the images
+        run: |
+          docker build -f deploy/api.Dockerfile -t "noisemap-api:${TAG}" .
+          docker build -f deploy/web.Dockerfile -t "noisemap-web:${TAG}" .
+      - name: Ship the images to the server
+        env:
+          DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          DEPLOY_KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "${DEPLOY_SSH_KEY}" > ~/.ssh/deploy
+          chmod 600 ~/.ssh/deploy
+          printf '%s\n' "${DEPLOY_KNOWN_HOSTS}" > ~/.ssh/known_hosts
+          docker save "noisemap-api:${TAG}" "noisemap-web:${TAG}" | gzip \
+            | ssh -i ~/.ssh/deploy "root@${DEPLOY_HOST}" 'gunzip | docker load'
+          ssh -i ~/.ssh/deploy "root@${DEPLOY_HOST}" \
+            "cd /docker/noisemap && git fetch --quiet origin && git checkout --quiet --detach ${TAG} && sh deploy/up.sh ${TAG}"
+      - name: Check the live site from outside
+        env:
+          PUBLIC_URL: ${{ vars.PUBLIC_URL }}
+        run: |
+          for attempt in $(seq 1 20); do
+            if curl --fail --silent --show-error "${PUBLIC_URL}/api/health" | grep -q "${TAG}"; then
+              echo "live on ${TAG}"
+              curl --fail --silent --output /dev/null "${PUBLIC_URL}/"
+              exit 0
+            fi
+            sleep 5
+          done
+          echo "the live site does not report commit ${TAG}" >&2
+          exit 1
