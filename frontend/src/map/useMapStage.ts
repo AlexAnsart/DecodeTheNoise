@@ -11,7 +11,7 @@ import { placeCard } from '../picking/placement'
 import type { Pointer } from '../picking/usePointer'
 import { usePointer } from '../picking/usePointer'
 import { pointAt } from './geometry'
-import type { Ring, Segment, Vec3 } from './layers'
+import type { ExtraPoint, Ring, Segment, Vec3 } from './layers'
 import { EDGES_LAYER, POINTS_LAYER, buildLayers } from './layers'
 import type { MapData } from './mapData'
 import { neighboursOf } from './mapData'
@@ -34,6 +34,8 @@ const NEAR_SELECTED_PX = 9
 export interface Pasted {
   position: Vec3
   neighbours: number[]
+  /** Labelled and tied to its neighbours; otherwise drawn like any other point. */
+  highlighted: boolean
 }
 
 export interface StageRefs {
@@ -60,6 +62,8 @@ export interface StageInput {
   marks: AxisMarks
   /** A pasted text placed on the map: where it sits and the points it resembles most. */
   pasted: Pasted | null
+  /** Called on every click on the canvas, on a point or not. */
+  onCanvasClick(): void
 }
 
 export interface Stage {
@@ -175,7 +179,10 @@ export function useMapStage(input: StageInput): Stage {
     let down: { x: number; y: number } | null = null
     const onDown = (event: PointerEvent): void => {
       down = event.button === 0 ? { x: event.clientX, y: event.clientY } : null
+      // While a button is held the map is being turned or moved: the pivot mark shows plainly.
+      latest.current.refs.stage.current?.classList.add('is-turning')
     }
+    const onRelease = (): void => latest.current.refs.stage.current?.classList.remove('is-turning')
     const onUp = (event: PointerEvent): void => {
       const start = down
       down = null
@@ -186,12 +193,20 @@ export function useMapStage(input: StageInput): Stage {
       const hit = info ? pick(info)?.index ?? null : null
       const model = latest.current.model
       model.setSelected(hit !== null && hit === model.selected ? null : hit)
+      latest.current.onCanvasClick()
     }
     host.addEventListener('pointerdown', onDown)
     host.addEventListener('pointerup', onUp)
+    // In the capture phase: the canvas keeps some of these events for itself.
+    window.addEventListener('pointerup', onRelease, true)
+    window.addEventListener('pointercancel', onRelease, true)
+    window.addEventListener('blur', onRelease)
     return () => {
       host.removeEventListener('pointerdown', onDown)
       host.removeEventListener('pointerup', onUp)
+      window.removeEventListener('pointerup', onRelease, true)
+      window.removeEventListener('pointercancel', onRelease, true)
+      window.removeEventListener('blur', onRelease)
     }
     // `pick` reads only its argument; the model is read through the latest ref.
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -203,7 +218,7 @@ export function useMapStage(input: StageInput): Stage {
       const from = pointAt(positions, selected)
       for (const other of neighbours) out.push({ from, to: pointAt(positions, other), index: other })
     }
-    if (pasted) {
+    if (pasted?.highlighted) {
       for (const other of pasted.neighbours) {
         if (kept.values[other] >= 0.5) out.push({ from: pasted.position, to: pointAt(positions, other), index: other })
       }
@@ -215,9 +230,20 @@ export function useMapStage(input: StageInput): Stage {
     const out: Ring[] = []
     if (selected !== null) out.push({ position: pointAt(positions, selected), radius: SELECTED_RING_PX, fill: 'none' })
     if (ringed !== null && ringed !== selected) out.push({ position: pointAt(positions, ringed), radius: LISTED_RING_PX, fill: 'tint' })
-    if (pasted) out.push({ position: pasted.position, radius: PASTED_RING_PX, fill: 'solid' })
+    if (pasted?.highlighted) out.push({ position: pasted.position, radius: PASTED_RING_PX, fill: 'solid' })
     return out
   }, [selected, ringed, positions, pasted])
+
+  // The pasted text as a point: it takes the colour its nearest item has right now, so it
+  // follows the colouring and the dimming like the points around it.
+  const extra = useMemo<ExtraPoint | null>(() => {
+    if (!pasted || pasted.neighbours.length === 0) return null
+    const nearest = pasted.neighbours[0] * 4
+    return {
+      position: pasted.position,
+      colour: [colours[nearest], colours[nearest + 1], colours[nearest + 2], colours[nearest + 3]],
+    }
+  }, [pasted, colours])
 
   useEffect(() => {
     deck.current?.setProps({
@@ -230,13 +256,14 @@ export function useMapStage(input: StageInput): Stage {
         flat: isFlat(shape),
         segments,
         rings,
+        extra,
         axes: marks.lines,
         accent: palette.accent,
         muted: palette.muted,
         highlight: palette.highlight,
       }),
     })
-  }, [deck, data, positions, colours, kept, gap, shape, segments, rings, marks, palette, size])
+  }, [deck, data, positions, colours, kept, gap, shape, segments, rings, extra, marks, palette, size])
 
   useEffect(() => {
     deck.current?.setProps({ controller: lasso ? false : CONTROLLER })

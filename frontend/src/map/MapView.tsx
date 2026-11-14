@@ -28,6 +28,7 @@ import { useTheme } from '../theme/theme'
 import { DisplayMenu } from '../toolbar/DisplayMenu'
 import { Toolbar } from '../toolbar/Toolbar'
 import { ControlsHint } from './ControlsHint'
+import { PivotMark } from './PivotMark'
 import { boundsOf, flatSpan, pointAt } from './geometry'
 import type { MapData } from './mapData'
 import { useMapActions } from './useMapActions'
@@ -64,6 +65,8 @@ export function MapView({ data }: { data: MapData }): ReactElement {
   const [drafts, setDrafts] = useState<Draft[] | null>(null)
   const [neighboursClosedFor, setNeighboursClosedFor] = useState<number | null>(null)
   const [pasting, setPasting] = useState(false)
+  // The pasted text wears its label until the next click on the map, then is a point like the others.
+  const [pastedLit, setPastedLit] = useState(true)
   const paste = usePaste()
   const analysis = paste.state.status === 'done' && paste.state.analysis.outcome === 'placed' ? paste.state.analysis : null
 
@@ -72,8 +75,8 @@ export function MapView({ data }: { data: MapData }): ReactElement {
     if (!analysis?.position3 || !analysis.position2 || shape === 'time') return null
     const [x, y] = analysis.position2
     const position: [number, number, number] = shape === '3d' ? analysis.position3 : shape === '2d' ? [x, y, 0] : [x, -y, 0]
-    return { position, neighbours: analysis.neighbours.map((neighbour) => neighbour.index) }
-  }, [analysis, shape])
+    return { position, neighbours: analysis.neighbours.map((neighbour) => neighbour.index), highlighted: pastedLit }
+  }, [analysis, shape, pastedLit])
 
   const marks = useMemo(() => {
     if (shape === 'time' && range) return timeMarks(range, flatSpan(data), boundsOf(model.positions))
@@ -81,7 +84,7 @@ export function MapView({ data }: { data: MapData }): ReactElement {
     return NO_MARKS
   }, [shape, range, relief, data, model.positions])
 
-  const stage = useMapStage({ data, model, palette, refs, lasso, edges, ringed, marks, pasted })
+  const stage = useMapStage({ data, model, palette, refs, lasso, edges, ringed, marks, pasted, onCanvasClick: () => setPastedLit(false) })
   const coveredRight = useCallback(() => refs.drawers.current?.offsetWidth ?? 0, [refs.drawers])
   const actions = useMapActions(model, stage, coveredRight)
 
@@ -110,11 +113,13 @@ export function MapView({ data }: { data: MapData }): ReactElement {
     centreAt(pasted.position, coveredRight() + (pasting ? PASTE_PANEL_WIDTH : 0), reach)
   }, [pasted, positions, centreAt, coveredRight, pasting])
   useEffect(() => {
-    // A text that has just been placed: the camera goes to it.
+    // A text that has just been placed: it wears its label and the camera goes to it.
+    if (!analysis) return
+    setPastedLit(true)
     locatePasted()
-    // Only a new placement moves the camera, not each change of what surrounds it.
+    // Only a new placement moves the camera and brings the label back, not a change of shape.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pasted])
+  }, [analysis])
 
   useEffect(() => {
     const onKey = (event: globalThis.KeyboardEvent): void => {
@@ -128,7 +133,9 @@ export function MapView({ data }: { data: MapData }): ReactElement {
 
   const onStageKey = (event: KeyboardEvent<HTMLDivElement>): void => {
     if (event.key.toLowerCase() !== 'l' || event.ctrlKey || event.metaKey || event.altKey || event.repeat) return
-    if (event.target instanceof HTMLInputElement) return
+    // Typing an "l" in a field of a floating panel is not the shortcut.
+    const target = event.target
+    if (target instanceof HTMLElement && (target.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(target.tagName))) return
     setLasso((value) => !value)
   }
 
@@ -208,8 +215,10 @@ export function MapView({ data }: { data: MapData }): ReactElement {
         {!stage.failed && kept.shown === 0 ? <p className="nm-stage__message nm-stage__message--over">No point matches the filter.</p> : null}
         {actions.busy ? <p className="nm-stage__status">Computing the scores…</p> : null}
         {marks.words.length > 0 ? <AxisWords ref={refs.words} words={marks.words} /> : null}
-        {pasted && analysis ? <PastedLabel analysis={analysis} label={refs.pastedLabel} /> : null}
-        {deep ? <div ref={refs.pivot} className="nm-pivot" aria-hidden /> : null}
+        {pasted && analysis ? (
+          <PastedLabel analysis={analysis} label={refs.pastedLabel} highlighted={pastedLit} onHighlight={() => setPastedLit(true)} />
+        ) : null}
+        {deep ? <PivotMark mark={refs.pivot} /> : null}
         {lasso ? (
           <LassoOverlay
             deep={deep}
@@ -271,7 +280,10 @@ export function MapView({ data }: { data: MapData }): ReactElement {
             data={data}
             paste={paste}
             unplaced={analysis && !pasted ? 'The date view has no place for a text without a date: switch to 2D or 3D to see it.' : null}
-            onLocate={locatePasted}
+            onLocate={() => {
+              setPastedLit(true)
+              locatePasted()
+            }}
             onShow={(index) => stage.camera.centreOn(index, coveredRight())}
             onOpen={actions.goTo}
             onRing={setRinged}

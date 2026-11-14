@@ -131,13 +131,26 @@
   outline: none;
 }
 
+/* The place where the point is: it takes the pointer, so the point answers to hover and click
+   like the others even though it is not part of the map data. */
 .nm-pasted__dot {
   position: absolute;
+  top: -10px;
+  left: -10px;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+}
+
+.nm-pasted.is-lit .nm-pasted__dot {
   top: -13px;
   left: -13px;
   width: 26px;
   height: 26px;
-  border-radius: 50%;
   box-shadow: 0 0 0 2px color-mix(in srgb, var(--nm-accent) 45%, transparent);
   animation: nm-pasted-pulse 1.6s ease-out 3;
 }
@@ -204,8 +217,12 @@
   line-height: 1.4;
 }
 
+.nm-pasted:not(.is-lit) .nm-pasted__bubble {
+  bottom: 16px;
+}
+
 .nm-pasted:hover .nm-pasted__bubble,
-.nm-pasted:focus-visible .nm-pasted__bubble {
+.nm-pasted:focus-within .nm-pasted__bubble {
   display: block;
 }
 

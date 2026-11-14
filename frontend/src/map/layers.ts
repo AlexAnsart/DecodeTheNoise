@@ -27,6 +27,11 @@ export interface Ring {
   fill: 'none' | 'tint' | 'solid'
 }
 
+export interface ExtraPoint {
+  position: Vec3
+  colour: [number, number, number, number]
+}
+
 export interface LayerInput {
   n: number
   positions: Float32Array
@@ -37,6 +42,8 @@ export interface LayerInput {
   flat: boolean
   segments: Segment[]
   rings: Ring[]
+  /** A point that is not part of the map data, drawn with the same size rule as the others. */
+  extra: ExtraPoint | null
   axes: AxisLine[]
   accent: Rgb
   muted: Rgb
@@ -94,6 +101,18 @@ export function buildLayers(input: LayerInput): Layer[] {
       // A filtered point is neither drawn nor pickable, and no buffer is rebuilt for it.
       extensions: [new DataFilterExtension({ filterSize: 1 })],
       filterRange: [0.5, 1],
+    }),
+    new ScatterplotLayer<ExtraPoint>({
+      id: 'extra',
+      data: input.extra ? [input.extra] : [],
+      getPosition: (point) => point.position,
+      getFillColor: (point) => point.colour,
+      getRadius: 1,
+      radiusUnits: 'common',
+      radiusScale: input.gap * RADIUS_SHARE,
+      radiusMinPixels: RADIUS_MIN_PX,
+      radiusMaxPixels: RADIUS_MAX_PX,
+      billboard: !input.flat,
     }),
     new ScatterplotLayer<Ring>({
       id: 'rings',
