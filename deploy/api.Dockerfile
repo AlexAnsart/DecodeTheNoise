@@ -1,4 +1,5 @@
-# The API image: runtime dependencies only. The pipeline group (layout, clustering) stays out.
+# The API image: runtime dependencies only. The pipeline group (datasets, training) stays out;
+# the layout library is a runtime dependency, since a workspace is laid out on the server.
 # Official images come from Google's mirror of Docker Hub, which rate-limits the shared runners.
 FROM mirror.gcr.io/library/python:3.12-slim
 
@@ -11,6 +12,11 @@ COPY pyproject.toml uv.lock ./
 RUN uv sync --locked --no-dev
 
 COPY backend ./backend
+# Shared with the offline jobs: clustering, zone words and names, the buffer packing.
+COPY pipelines ./pipelines
+# The probe pack and the evaluation reports behind it: weights and measures, no text.
+COPY probes ./probes
+COPY reports ./reports
 
 ENV PATH="/app/.venv/bin:$PATH"
 EXPOSE 8000

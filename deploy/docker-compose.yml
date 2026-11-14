@@ -13,6 +13,12 @@ services:
     restart: unless-stopped
     environment:
       DATA_BUILD_DIR: /data/build/current
+      WORKSPACES_DIR: /data/workspaces
+      # Compiled layout code is kept between restarts: the first refresh does not recompile.
+      NUMBA_CACHE_DIR: /data/workspaces/.numba
+      # A layout runs in a process of its own, on one of the two cores at most: the other
+      # stays for the embedding model.
+      NUMBA_NUM_THREADS: "1"
       EMBEDDING_API_BASE: http://ollama:11434/v1
       EMBEDDING_API_KEY: ollama
       EMBEDDING_MODEL: ${EMBEDDING_MODEL}
@@ -26,9 +32,11 @@ services:
     volumes:
       # Map builds are made offline and copied here; they never go through git.
       - ./data/build:/data/build:ro
+      # Written by the server: the workspaces of the users, their keys, the embedding cache.
+      - ./data/workspaces:/data/workspaces
     depends_on:
       - ollama
-    mem_limit: 1500m
+    mem_limit: 3000m
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/health', timeout=3)"]
       interval: 30s
@@ -68,6 +76,10 @@ services:
     volumes:
       - ollama:/root/.ollama
     mem_limit: 2500m
+    # The model needs both cores to itself: measured here, posts were embedded at 1 a second
+    # instead of 8, and a search took 7 seconds, while a layout was compiling in the API
+    # container. With eight times the weight of the others, it kept 6 to 7 a second.
+    cpu_shares: 8192
 
 volumes:
   ollama:
