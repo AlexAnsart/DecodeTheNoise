@@ -71,6 +71,8 @@ What was measured:
 | Neighbours, exact, 10 per point | 75 s |
 | Zones | 5 s |
 
+A second layout of the same vectors, on their three axes of largest variance (PCA), was made on the laptop in 5 s and is the one served since 14 Nov evening, as a test: those three axes keep 16.7% of the variance (`reports/pipeline-runs.jsonl`). The UMAP build stays on the server; switching is one link and a restart ([`hostinger.md`](hostinger.md)).
+
 The limit on throughput was the CPU side of the Ollama server, not the GPU (45 to 47% busy): six servers on the one GPU gave 131 texts per second where one gave 94 to 98. The vector check against the laptop passed (table in section 2).
 
 **Why a GPU instance and not their hosted API.** The build key requires these exact weights; a hosted model that is not the same tag would break the match with the live server.
