@@ -4,7 +4,7 @@ Every post becomes a point on a 3D meaning map. Switch on layers to see what is 
 
 **Live:** <https://noisemap.srv2160938.hstgr.cloud> (Hostinger VPS).
 
-**Status:** the map is up on sample data (a sample of the IRA tweets published by FiveThirtyEight, embedded with EmbeddingGemma). No detector is shown yet: a layer appears in the product only once its evaluation report exists.
+**Status:** the map is up on 120,000 posts, a sample of the IRA tweets published by FiveThirtyEight, embedded with EmbeddingGemma on a Verda GPU, with zones named by Gemini through the Hostinger AI Router. A pasted text or link is placed on the map live. No detector is shown yet: a layer appears in the product only once its evaluation report exists. How each partner technology is used: [`docs/tech-challenge-status.md`](docs/tech-challenge-status.md).
 
 ## What is here
 
@@ -15,7 +15,7 @@ Every post becomes a point on a 3D meaning map. Switch on layers to see what is 
 | [`pipelines/`](pipelines/) | Offline steps that make a map build: ingest, embed, layout, neighbours, zones, pack |
 | [`deploy/`](deploy/) | Images and the Compose stack of the server |
 | [`.github/workflows/ci.yml`](.github/workflows/ci.yml) | Checks, image build and deploy, on CRACI runners |
-| [`reports/`](reports/) | Run log of the pipeline; evaluation reports to come |
+| [`reports/`](reports/) | Run log of the pipeline, the account of the Verda run; evaluation reports to come |
 | [`docs/`](docs/) | The brief, the specification ([`docs/spec.md`](docs/spec.md)), research, Hostinger notes, tech challenges |
 
 ## Run it locally

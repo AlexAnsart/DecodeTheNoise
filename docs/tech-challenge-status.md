@@ -9,8 +9,8 @@ Live product: <https://noisemap.srv2160938.hstgr.cloud>, served from the Hosting
 | Challenge | In the product today | Still to do |
 | --- | --- | --- |
 | Gemma | Every point of the map is an EmbeddingGemma vector. The same weights answer live on the 2 vCPU server: search by meaning, reliefs, the paste box | Probes on those vectors (no detector yet). The comparison with other embedding models on a labelled sample. Gemma as a local LLM: not started |
-| Verda | A GPU instance embeds a larger sample of the corpus with the same weights and runs the rest of the pipeline; the build ships to the VPS as files | Running at the time of writing: the result and the run log lines land in `reports/`. The summary to post in Verda's Discord |
-| Gemini API | Zone names: one call per zone through the Hostinger AI Router, typed output, cached | Naming applied to the deployed build (same run as Verda). The main use, the technique pass on flagged items, needs the probes first |
+| Verda | A GPU instance embedded 134,200 posts with the same weights, 131 per second against 14 to 21 on the laptop, and ran the layout, the neighbours and the zones. The 120,000-point build shipped to the VPS as files and is the one live | The summary link in Verda's Discord. The embedding model comparison as a second use |
+| Gemini API | The 48 zones of the live map are named by `gemini-3.8-flash` through the Hostinger AI Router: one call per zone, typed output, cached | The main use, the technique pass on flagged items, needs the probes first |
 | Context.dev | A pasted link is read through their scrape endpoint and placed on the map like a pasted text | Verdicts on the page once detectors exist. Reading the links a swarm shares most (stretch) |
 | CRACI | The whole CI/CD runs on their runners: checks, image builds, deploy to the VPS | Using the build data itself (SBOM of the deployed commit shown in the product): not started, needs `CRACI_API_TOKEN` |
 
@@ -20,7 +20,7 @@ This is the answer to "is it a hosted API or does it run locally?".
 
 | Work | Model | Mode | Where it runs today |
 | --- | --- | --- | --- |
-| Embedding the corpus (offline) | EmbeddingGemma, tag `embeddinggemma:300m-qat-q8_0` | Local: open weights behind an Ollama endpoint we start | The laptop for the first builds (3,000 and 18,000 posts); a Verda A100 instance for the larger one |
+| Embedding the corpus (offline) | EmbeddingGemma, tag `embeddinggemma:300m-qat-q8_0` | Local: open weights behind an Ollama endpoint we start | A Verda A100 instance for the live build (120,000 posts); the laptop for the two first builds (3,000 and 18,000 posts) |
 | Embedding a query live (search by meaning, relief by concept, paste box) | The same weights, same tag | Local | An Ollama container beside the API on the Hostinger VPS, CPU only, not published |
 | Naming the zones (offline) | `gemini-3.8-flash` | Hosted | The Hostinger AI Router (`https://router.hostinger.com/v1`) |
 | Reading the page behind a pasted link (live) | none | Hosted service | Context.dev |
@@ -62,7 +62,16 @@ What was measured:
 
 **How it is done.** The pipeline is the same code on any machine: clone the repository on a GPU instance, run Ollama there with the same tag, check the digest, run `ingest`, `embed`, `layout`, `neighbours`, `zones`, `pack`, bring the build folder back and copy it to the VPS. Instances are created and deleted through Verda's API with the team's credentials. One line per step goes to `reports/pipeline-runs.jsonl` with the machine named.
 
-**State.** An instance of type `1A100.22V` (one A100, 80 GB) in Finland is running this for a sample larger than the laptop could embed in the evening. The vector check against the laptop passed (table above). Throughput, item count, cost and the deletion of the instance are written to `reports/verda.md` when the run ends.
+**What ran.** One instance of type `1A100.22V` (one A100, 80 GB) in Finland, up 50 minutes, 1.83 EUR of credits, deleted afterwards. Full account: [`reports/verda.md`](../reports/verda.md).
+
+| Step, on the Verda instance | Measured |
+| --- | --- |
+| Embed | 134,200 texts in 1,023 s: 131 per second. The laptop does 14 to 21 per second, so 14,300 to 21,400 texts in the same time |
+| Layout (UMAP in 3D and in 2D), 120,000 points | 209 s |
+| Neighbours, exact, 10 per point | 75 s |
+| Zones | 5 s |
+
+The limit on throughput was the CPU side of the Ollama server, not the GPU (45 to 47% busy): six servers on the one GPU gave 131 texts per second where one gave 94 to 98. The vector check against the laptop passed (table in section 2).
 
 **Why a GPU instance and not their hosted API.** The build key requires these exact weights; a hosted model that is not the same tag would break the match with the live server.
 
@@ -70,11 +79,11 @@ What was measured:
 
 ### 3.3 Gemini API
 
-**How it is done.** `pipelines/zones/naming.py`: for each zone, the model gets the zone's distinctive words and sample posts, and returns a short plain name as JSON parsed into a typed model. Temperature 0; the model id and the prompt version (`zone-name-v1`) are stored with each answer; answers are cached on a content hash; a malformed answer keeps the word name and `named: false`. The call goes through the Hostinger AI Router, so the same call counts for the Hostinger criterion. A first run named the 14 zones of the small build in 26 s (`reports/pipeline-runs.jsonl`).
+**How it is done.** `pipelines/zones/naming.py`: for each zone, the model gets the zone's distinctive words and sample posts, and returns a short plain name as JSON parsed into a typed model. Temperature 0; the model id and the prompt version (`zone-name-v1`) are stored with each answer; answers are cached on a content hash; a malformed answer keeps the word name and `named: false`. The call goes through the Hostinger AI Router, so the same call counts for the Hostinger criterion. The 48 zones of the live build were named in 98 s, all 48 answers valid (`reports/pipeline-runs.jsonl`); two zones that received the same name are told apart by a distinctive word. The names are what the legend, the tooltips and the search show, for example "Local Crime and Police Reports" or "Criticism of Democrats and Media".
 
 **Model ids.** The Router's model list holds several Gemini ids (among them `gemini-3.5-flash`, `gemini-3.8-flash`, regional variants) and `gemma-4-31b`. A key from Google AI Studio is also in `.env` in case Google wants direct calls.
 
-**Not done yet.** The names on the deployed build. The technique pass (name, plain explanation, quoted span checked against the text) and its evaluation against one other Router model: the main use, after the first probe. Whether a call routed through Hostinger counts for Google's challenge is still to ask at their booth.
+**Not done yet.** The technique pass (name, plain explanation, quoted span checked against the text) and its evaluation against one other Router model: the main use, after the first probe. Whether a call routed through Hostinger counts for Google's challenge is still to ask at their booth.
 
 ### 3.4 Context.dev
 
@@ -102,6 +111,6 @@ What was measured:
 | 4 | Hostinger booth: offline compute on Verda and a hosted scrape API are fine? | Still to ask |
 | 5 | EmbeddingGemma on the VPS: latency and memory | Done (table in section 2) |
 | 6 | Same texts on Verda and on the VPS give the same vectors | Done (table in section 2) |
-| 7 | Verda: credits, which instance, does its hosted API serve Gemma | Credits and instance done. Hosted API not checked |
+| 7 | Verda: credits, which instance, does its hosted API serve Gemma | Credits and instance done (`reports/verda.md`). Hosted API not checked |
 | 8 | Context.dev: code, one scrape call | Call done. Credits to check |
 | 9 | CRACI: invite code, GitHub App | Done |
