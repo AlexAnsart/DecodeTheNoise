@@ -242,3 +242,9 @@ The first evaluation ran with every test reading settled. Three things were wron
 - Three commits on `main`: the code of the campaign with its tests, this documentation, and the measures under `reports/probes/`. The committed tree was checked alone before the push, as the CI does: lint, format, 180 tests.
 - The pack the server loads (`probes/`) and `pipelines/probes/export.py` are committed by the session that owns the server code, with that code: the pack has the format of its loader, and pushing one without the other would break the build.
 - That session added a review cut to the pack for probes that are not shown: a score above which a post is sent to the LLM review pass. It applies three conditions asked from this side: only labels whose use is `probe`, at most 1% of the calibration posts flagged, and no reliability shown for a trigger that has no measured level.
+
+### 00:40. The probes on the demo build
+
+- The site now serves `tweets-2026-500k`: 500,000 posts by 188,492 actors, all of the test split. The server scores it from the pack when it starts; nothing is precomputed post by post.
+- `pipelines/probes/demo.py` does the same sum offline from the run's weights and the levels kept by the evaluation: 42 probes with a level, the share of the build flagged at each level, the zones where each probe fires most, and a picture of the map (`figures/demo-v1.png`). Result in `reports/probes/demo.json` and in §9.9 of the report.
+- The shares match those measured on test for every probe. Zones read as expected: `attack_addressee` fires on 9.8% of the zone of hostile arguments against 0.68% of the build; `political` on more than 90% of the zone of German politics.

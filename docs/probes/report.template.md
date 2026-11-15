@@ -276,6 +276,16 @@ Every number above is measured against the answers of the Haiku annotators. To s
 - Where it confirms fewer, the Haiku annotators say yes more readily than a stricter reader, and the measured precision is an upper reading. `dehumanisation` and `news_headline` are under 70% and are not shown. `fear_appeal`, `exaggeration`, `us_vs_them` and `loaded_language` are between 70% and 80%: their precision against a strict reader is lower than the table says.
 - Neither reader is the truth. A person reading the same sheets settles it (§11).
 
+### 9.9 On the build the site shows
+
+The demo build is {{note:demo}}, all written by actors of the test split: no probe was trained or calibrated on a post it holds. The server scores it from the exported pack when it starts. The same sum was done offline, to check that each probe flags there the share it flagged on test.
+
+![Where eight probes fire on the map](figures/demo-{{run}}.png)
+
+{{table:demo}}
+
+The shares match the test for every probe. The largest gaps are on rare labels, where a share is a few dozen posts. A probe that flagged several times its test share would point at a shift between the test sample and the build: none does.
+
 ## 10. Errors read
 
 For each shown probe, up to 30 of its false positives on test were read: posts it flagged and the annotators settled as no. They were read and sorted by a second model (Claude Opus 5.5), not by a person. Examples are paraphrased: no post of the corpus is quoted.

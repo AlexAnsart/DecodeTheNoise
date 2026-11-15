@@ -1,0 +1,1387 @@
+{
+ "run": "v1",
+ "build": "tweets-2026-500k",
+ "posts": 500000,
+ "probes": {
+  "call_amplify": {
+   "state": "shown",
+   "possible": {
+    "flagged": 146,
+    "share": 0.000292,
+    "share_on_test": 0.00023214167274656763,
+    "top_zones": [
+     {
+      "zone": "Accusations of Child Endangerment",
+      "share": 0.0038212503980469166
+     },
+     {
+      "zone": "Diplomatic Initiatives and Cooperation",
+      "share": 0.0034315465625369777
+     },
+     {
+      "zone": "German and International Politics",
+      "share": 0.0008915635796277722
+     }
+    ]
+   }
+  },
+  "call_boycott": {
+   "state": "shown",
+   "probable": {
+    "flagged": 54,
+    "share": 0.000108,
+    "share_on_test": 0.00023435254582034444,
+    "top_zones": [
+     {
+      "zone": "Accusations of Child Endangerment",
+      "share": 0.0032905211760959558
+     },
+     {
+      "zone": "Expressions of Love and Gratitude",
+      "share": 0.0004065040650406504
+     },
+     {
+      "zone": "Debates on Middle East Conflicts",
+      "share": 0.00038084356850423686
+     }
+    ]
+   },
+   "possible": {
+    "flagged": 54,
+    "share": 0.000108,
+    "share_on_test": 0.00023435254582034444,
+    "top_zones": [
+     {
+      "zone": "Accusations of Child Endangerment",
+      "share": 0.0032905211760959558
+     },
+     {
+      "zone": "Expressions of Love and Gratitude",
+      "share": 0.0004065040650406504
+     },
+     {
+      "zone": "Debates on Middle East Conflicts",
+      "share": 0.00038084356850423686
+     }
+    ]
+   }
+  },
+  "call_vote": {
+   "state": "shown",
+   "possible": {
+    "flagged": 112,
+    "share": 0.000224,
+    "share_on_test": 0.00022771992659901394,
+    "top_zones": [
+     {
+      "zone": "Criticism of Government and Trump",
+      "share": 0.0020758288051773615
+     },
+     {
+      "zone": "French Political Commentary",
+      "share": 0.0017991678848532553
+     },
+     {
+      "zone": "Diplomatic Initiatives and Cooperation",
+      "share": 0.0016566086853626789
+     }
+    ]
+   }
+  },
+  "attack_addressee": {
+   "state": "shown",
+   "probable": {
+    "flagged": 3410,
+    "share": 0.00682,
+    "share_on_test": 0.006824965178749088,
+    "top_zones": [
+     {
+      "zone": "Hostile Arguments and Insults",
+      "share": 0.09812963058908865
+     },
+     {
+      "zone": "German Political Arguments",
+      "share": 0.04317539593875271
+     },
+     {
+      "zone": "Middle East Political Conflicts",
+      "share": 0.012144549763033176
+     }
+    ]
+   },
+   "possible": {
+    "flagged": 3410,
+    "share": 0.00682,
+    "share_on_test": 0.006824965178749088,
+    "top_zones": [
+     {
+      "zone": "Hostile Arguments and Insults",
+      "share": 0.09812963058908865
+     },
+     {
+      "zone": "German Political Arguments",
+      "share": 0.04317539593875271
+     },
+     {
+      "zone": "Middle East Political Conflicts",
+      "share": 0.012144549763033176
+     }
+    ]
+   }
+  },
+  "attack_person": {
+   "state": "shown",
+   "probable": {
+    "flagged": 139,
+    "share": 0.000278,
+    "share_on_test": 0.000280780880369658,
+    "top_zones": [
+     {
+      "zone": "Criticism of Government and Trump",
+      "share": 0.00445692655229257
+     },
+     {
+      "zone": "Hostile Arguments and Insults",
+      "share": 0.0022796746282576033
+     },
+     {
+      "zone": "US Politics and Foreign Affairs",
+      "share": 0.0006715014773032501
+     }
+    ]
+   },
+   "possible": {
+    "flagged": 1131,
+    "share": 0.002262,
+    "share_on_test": 0.002217505692998165,
+    "top_zones": [
+     {
+      "zone": "Criticism of Government and Trump",
+      "share": 0.03119848586604799
+     },
+     {
+      "zone": "Hostile Arguments and Insults",
+      "share": 0.01797834309103155
+     },
+     {
+      "zone": "US Politics and Foreign Affairs",
+      "share": 0.006580714477571851
+     }
+    ]
+   }
+  },
+  "attack_identity_group": {
+   "state": "shown",
+   "probable": {
+    "flagged": 301,
+    "share": 0.000602,
+    "share_on_test": 0.0006654727952068272,
+    "top_zones": [
+     {
+      "zone": "Hostile Arguments and Insults",
+      "share": 0.00818610434692503
+     },
+     {
+      "zone": "Middle East Political Conflicts",
+      "share": 0.006368483412322275
+     },
+     {
+      "zone": "Humorous Reactions and Commentary",
+      "share": 0.00238782210725301
+     }
+    ]
+   },
+   "possible": {
+    "flagged": 301,
+    "share": 0.000602,
+    "share_on_test": 0.0006654727952068272,
+    "top_zones": [
+     {
+      "zone": "Hostile Arguments and Insults",
+      "share": 0.00818610434692503
+     },
+     {
+      "zone": "Middle East Political Conflicts",
+      "share": 0.006368483412322275
+     },
+     {
+      "zone": "Humorous Reactions and Commentary",
+      "share": 0.00238782210725301
+     }
+    ]
+   }
+  },
+  "attack_political_group": {
+   "state": "shown",
+   "probable": {
+    "flagged": 100,
+    "share": 0.0002,
+    "share_on_test": 0.00019455683049236143,
+    "top_zones": [
+     {
+      "zone": "German Politics and AfD Debates",
+      "share": 0.003745318352059925
+     },
+     {
+      "zone": "German Political Arguments",
+      "share": 0.002628639022146284
+     },
+     {
+      "zone": "Criticism of Government and Trump",
+      "share": 0.0004273765187129861
+     }
+    ]
+   },
+   "possible": {
+    "flagged": 1037,
+    "share": 0.002074,
+    "share_on_test": 0.0022020295814817272,
+    "top_zones": [
+     {
+      "zone": "German Politics and AfD Debates",
+      "share": 0.026985498895611255
+     },
+     {
+      "zone": "German Political Arguments",
+      "share": 0.022672011566011698
+     },
+     {
+      "zone": "Criticism of Government and Trump",
+      "share": 0.009219122046522987
+     }
+    ]
+   }
+  },
+  "dehumanisation": {
+   "state": "review-only",
+   "possible": {
+    "flagged": 105,
+    "share": 0.00021,
+    "share_on_test": 0.0003139439764763105,
+    "top_zones": [
+     {
+      "zone": "Hostile Arguments and Insults",
+      "share": 0.0035231335163981143
+     },
+     {
+      "zone": "German Political Arguments",
+      "share": 0.001314319511073142
+     },
+     {
+      "zone": "Middle East Political Conflicts",
+      "share": 0.0002962085308056872
+     }
+    ]
+   }
+  },
+  "profanity": {
+   "state": "shown",
+   "probable": {
+    "flagged": 10654,
+    "share": 0.021308,
+    "share_on_test": 0.021903119541907098,
+    "top_zones": [
+     {
+      "zone": "Hostile Arguments and Insults",
+      "share": 0.34770219159629034
+     },
+     {
+      "zone": "German Political Arguments",
+      "share": 0.06643885128474732
+     },
+     {
+      "zone": "Reactions to Rude Behavior",
+      "share": 0.05387931034482758
+     }
+    ]
+   },
+   "possible": {
+    "flagged": 10654,
+    "share": 0.021308,
+    "share_on_test": 0.021903119541907098,
+    "top_zones": [
+     {
+      "zone": "Hostile Arguments and Insults",
+      "share": 0.34770219159629034
+     },
+     {
+      "zone": "German Political Arguments",
+      "share": 0.06643885128474732
+     },
+     {
+      "zone": "Reactions to Rude Behavior",
+      "share": 0.05387931034482758
+     }
+    ]
+   }
+  },
+  "loaded_language": {
+   "state": "shown",
+   "probable": {
+    "flagged": 3179,
+    "share": 0.006358,
+    "share_on_test": 0.00641153191395282,
+    "top_zones": [
+     {
+      "zone": "Criticism of Government and Trump",
+      "share": 0.0673423285914891
+     },
+     {
+      "zone": "Middle East Political Conflicts",
+      "share": 0.05020734597156398
+     },
+     {
+      "zone": "Debates on Middle East Conflicts",
+      "share": 0.02580215176616205
+     }
+    ]
+   },
+   "possible": {
+    "flagged": 30712,
+    "share": 0.061424,
+    "share_on_test": 0.06554354314518804,
+    "top_zones": [
+     {
+      "zone": "Criticism of Government and Trump",
+      "share": 0.4717626228707491
+     },
+     {
+      "zone": "Middle East Political Conflicts",
+      "share": 0.3627813981042654
+     },
+     {
+      "zone": "Debates on Middle East Conflicts",
+      "share": 0.28144339712463107
+     }
+    ]
+   }
+  },
+  "exaggeration": {
+   "state": "shown",
+   "probable": {
+    "flagged": 1039,
+    "share": 0.002078,
+    "share_on_test": 0.00228383188521147,
+    "top_zones": [
+     {
+      "zone": "Criticism of Government and Trump",
+      "share": 0.022528847915013125
+     },
+     {
+      "zone": "Criticism of German Government Spending",
+      "share": 0.021302619508714708
+     },
+     {
+      "zone": "German Political Arguments",
+      "share": 0.008477360846421766
+     }
+    ]
+   },
+   "possible": {
+    "flagged": 10199,
+    "share": 0.020398,
+    "share_on_test": 0.021887643430390662,
+    "top_zones": [
+     {
+      "zone": "Criticism of Government and Trump",
+      "share": 0.16795897185420355
+     },
+     {
+      "zone": "Criticism of German Government Spending",
+      "share": 0.149627968606666
+     },
+     {
+      "zone": "Middle East Political Conflicts",
+      "share": 0.08604857819905214
+     }
+    ]
+   }
+  },
+  "fear_appeal": {
+   "state": "shown",
+   "possible": {
+    "flagged": 128,
+    "share": 0.000256,
+    "share_on_test": 0.00023877429196789813,
+    "top_zones": [
+     {
+      "zone": "Middle East Political Conflicts",
+      "share": 0.002665876777251185
+     },
+     {
+      "zone": "Criticism of Government and Trump",
+      "share": 0.001892667440014653
+     },
+     {
+      "zone": "Debates on Middle East Conflicts",
+      "share": 0.001713796058269066
+     }
+    ]
+   }
+  },
+  "us_vs_them": {
+   "state": "shown",
+   "probable": {
+    "flagged": 361,
+    "share": 0.000722,
+    "share_on_test": 0.0007008467643872565,
+    "top_zones": [
+     {
+      "zone": "Criticism of Government and Trump",
+      "share": 0.010073875083948958
+     },
+     {
+      "zone": "Middle East Political Conflicts",
+      "share": 0.006516587677725118
+     },
+     {
+      "zone": "Criticism of German Government Spending",
+      "share": 0.003567424319641219
+     }
+    ]
+   },
+   "possible": {
+    "flagged": 1056,
+    "share": 0.002112,
+    "share_on_test": 0.0021025402931617696,
+    "top_zones": [
+     {
+      "zone": "Criticism of Government and Trump",
+      "share": 0.027474204774406253
+     },
+     {
+      "zone": "Middle East Political Conflicts",
+      "share": 0.01636552132701422
+     },
+     {
+      "zone": "Criticism of German Government Spending",
+      "share": 0.01172153705024972
+     }
+    ]
+   }
+  },
+  "commercial_promo": {
+   "state": "shown",
+   "probable": {
+    "flagged": 362,
+    "share": 0.000724,
+    "share_on_test": 0.0008909818487320643,
+    "top_zones": [
+     {
+      "zone": "Concerts, Music, and Fan Events",
+      "share": 0.019670159766363167
+     },
+     {
+      "zone": "AI Agents and Technology Development",
+      "share": 0.005972790620506581
+     },
+     {
+      "zone": "Diplomatic Initiatives and Cooperation",
+      "share": 0.0024849130280440185
+     }
+    ]
+   },
+   "possible": {
+    "flagged": 3765,
+    "share": 0.00753,
+    "share_on_test": 0.007149963520594283,
+    "top_zones": [
+     {
+      "zone": "Concerts, Music, and Fan Events",
+      "share": 0.1321078852430854
+     },
+     {
+      "zone": "AI Agents and Technology Development",
+      "share": 0.06614312576042473
+     },
+     {
+      "zone": "Crypto Technical Price Analysis",
+      "share": 0.03784228463979316
+     }
+    ]
+   }
+  },
+  "money_request": {
+   "state": "shown",
+   "possible": {
+    "flagged": 298,
+    "share": 0.000596,
+    "share_on_test": 0.00021445468815635294,
+    "top_zones": [
+     {
+      "zone": "Diplomatic Initiatives and Cooperation",
+      "share": 0.019997633416163767
+     },
+     {
+      "zone": "Expressions of Heartache and Sadness",
+      "share": 0.0033029612756264237
+     },
+     {
+      "zone": "Accusations of Child Endangerment",
+      "share": 0.0030782294873155716
+     }
+    ]
+   }
+  },
+  "gain_promise": {
+   "state": "review-only",
+   "possible": {
+    "flagged": 1432,
+    "share": 0.002864,
+    "share_on_test": 0.002113594658530654,
+    "top_zones": [
+     {
+      "zone": "Crypto Technical Price Analysis",
+      "share": 0.10048184275473028
+     },
+     {
+      "zone": "AI Agents and Technology Development",
+      "share": 0.0233381263134609
+     },
+     {
+      "zone": "Concerts, Music, and Fan Events",
+      "share": 0.010479299089503522
+     }
+    ]
+   }
+  },
+  "off_platform_redirect": {
+   "state": "shown",
+   "probable": {
+    "flagged": 296,
+    "share": 0.000592,
+    "share_on_test": 0.0005770378722557538,
+    "top_zones": [
+     {
+      "zone": "Agreeable and Relatable Reactions",
+      "share": 0.007432066269257568
+     },
+     {
+      "zone": "AI Agents and Technology Development",
+      "share": 0.00342882424510563
+     },
+     {
+      "zone": "Concerts, Music, and Fan Events",
+      "share": 0.0032640439786978184
+     }
+    ]
+   },
+   "possible": {
+    "flagged": 902,
+    "share": 0.001804,
+    "share_on_test": 0.00171121575910327,
+    "top_zones": [
+     {
+      "zone": "Concerts, Music, and Fan Events",
+      "share": 0.01537536505755025
+     },
+     {
+      "zone": "Agreeable and Relatable Reactions",
+      "share": 0.014089958968800805
+     },
+     {
+      "zone": "Expressions of Heartache and Sadness",
+      "share": 0.010250569476082005
+     }
+    ]
+   }
+  },
+  "adult_promo": {
+   "state": "review-only",
+   "possible": {
+    "flagged": 139,
+    "share": 0.000278,
+    "share_on_test": 0.00021445468815635294,
+    "top_zones": [
+     {
+      "zone": "Concerts, Music, and Fan Events",
+      "share": 0.002834564507816526
+     },
+     {
+      "zone": "Agreeable and Relatable Reactions",
+      "share": 0.002090268638228691
+     },
+     {
+      "zone": "Casual German Conversational Comments",
+      "share": 0.0018196982333762983
+     }
+    ]
+   }
+  },
+  "news_headline": {
+   "state": "review-only",
+   "probable": {
+    "flagged": 1077,
+    "share": 0.002154,
+    "share_on_test": 0.002204240454555504,
+    "top_zones": [
+     {
+      "zone": "US-Iran Military Strikes",
+      "share": 0.050186280955511725
+     },
+     {
+      "zone": "U.S. Politics and Global News",
+      "share": 0.030966034406704895
+     },
+     {
+      "zone": "German and International Politics",
+      "share": 0.015602362643486014
+     }
+    ]
+   },
+   "possible": {
+    "flagged": 33282,
+    "share": 0.066564,
+    "share_on_test": 0.06471667661559549,
+    "top_zones": [
+     {
+      "zone": "U.S. Politics and Global News",
+      "share": 0.7475959417732686
+     },
+     {
+      "zone": "US-Iran Military Strikes",
+      "share": 0.6493534955073417
+     },
+     {
+      "zone": "German and International Politics",
+      "share": 0.5700434637245069
+     }
+    ]
+   }
+  },
+  "automated_alert": {
+   "state": "shown",
+   "probable": {
+    "flagged": 406,
+    "share": 0.000812,
+    "share_on_test": 0.000800336052707214,
+    "top_zones": [
+     {
+      "zone": "US-Iran Military Strikes",
+      "share": 0.03495507341661188
+     },
+     {
+      "zone": "Discussions on La Falange",
+      "share": 0.005865102639296188
+     },
+     {
+      "zone": "College Sports Previews and Updates",
+      "share": 0.0020336685120325385
+     }
+    ]
+   },
+   "possible": {
+    "flagged": 406,
+    "share": 0.000812,
+    "share_on_test": 0.000800336052707214,
+    "top_zones": [
+     {
+      "zone": "US-Iran Military Strikes",
+      "share": 0.03495507341661188
+     },
+     {
+      "zone": "Discussions on La Falange",
+      "share": 0.005865102639296188
+     },
+     {
+      "zone": "College Sports Previews and Updates",
+      "share": 0.0020336685120325385
+     }
+    ]
+   }
+  },
+  "templated_post": {
+   "state": "shown",
+   "possible": {
+    "flagged": 379,
+    "share": 0.000758,
+    "share_on_test": 0.0007406424797152396,
+    "top_zones": [
+     {
+      "zone": "Concerts, Music, and Fan Events",
+      "share": 0.01580484452843154
+     },
+     {
+      "zone": "Photography, Art, and Vintage Cars",
+      "share": 0.0029865125240847784
+     },
+     {
+      "zone": "U.S. Politics and Global News",
+      "share": 0.0022937803264225847
+     }
+    ]
+   }
+  },
+  "quote_post": {
+   "state": "shown",
+   "probable": {
+    "flagged": 188,
+    "share": 0.000376,
+    "share_on_test": 0.00025203953041055913,
+    "top_zones": [
+     {
+      "zone": "Christian Theology and Scripture",
+      "share": 0.01641337386018237
+     },
+     {
+      "zone": "Reflections on Life and Mindset",
+      "share": 0.0050076387710066205
+     },
+     {
+      "zone": "Historical and Philosophical References",
+      "share": 0.0009863554167351635
+     }
+    ]
+   },
+   "possible": {
+    "flagged": 1827,
+    "share": 0.003654,
+    "share_on_test": 0.0021843425968915125,
+    "top_zones": [
+     {
+      "zone": "Christian Theology and Scripture",
+      "share": 0.11185410334346504
+     },
+     {
+      "zone": "Reflections on Life and Mindset",
+      "share": 0.04167373960278391
+     },
+     {
+      "zone": "Turkish Social Commentary",
+      "share": 0.02003606491685033
+     }
+    ]
+   }
+  },
+  "lang:en": {
+   "state": "shown",
+   "probable": {
+    "flagged": 284890,
+    "share": 0.56978,
+    "share_on_test": 0.5650615728151047,
+    "top_zones": [
+     {
+      "zone": "Criticism of Government and Trump",
+      "share": 0.9680688686733012
+     },
+     {
+      "zone": "Economic Pressures and Business Costs",
+      "share": 0.9615482340984162
+     },
+     {
+      "zone": "Reflections on Life and Mindset",
+      "share": 0.9605330164657953
+     }
+    ]
+   },
+   "possible": {
+    "flagged": 284890,
+    "share": 0.56978,
+    "share_on_test": 0.5650615728151047,
+    "top_zones": [
+     {
+      "zone": "Criticism of Government and Trump",
+      "share": 0.9680688686733012
+     },
+     {
+      "zone": "Economic Pressures and Business Costs",
+      "share": 0.9615482340984162
+     },
+     {
+      "zone": "Reflections on Life and Mindset",
+      "share": 0.9605330164657953
+     }
+    ]
+   }
+  },
+  "lang:de": {
+   "state": "shown",
+   "probable": {
+    "flagged": 99162,
+    "share": 0.198324,
+    "share_on_test": 0.21598019057725895,
+    "top_zones": [
+     {
+      "zone": "German Politics and AfD Debates",
+      "share": 0.8632478632478633
+     },
+     {
+      "zone": "Criticism of German Government Spending",
+      "share": 0.8398736112526756
+     },
+     {
+      "zone": "Personal Opinions and Moral Judgments",
+      "share": 0.7922380568253115
+     }
+    ]
+   },
+   "possible": {
+    "flagged": 99162,
+    "share": 0.198324,
+    "share_on_test": 0.21598019057725895,
+    "top_zones": [
+     {
+      "zone": "German Politics and AfD Debates",
+      "share": 0.8632478632478633
+     },
+     {
+      "zone": "Criticism of German Government Spending",
+      "share": 0.8398736112526756
+     },
+     {
+      "zone": "Personal Opinions and Moral Judgments",
+      "share": 0.7922380568253115
+     }
+    ]
+   }
+  },
+  "political": {
+   "state": "shown",
+   "probable": {
+    "flagged": 103257,
+    "share": 0.206514,
+    "share_on_test": 0.21568172271229907,
+    "top_zones": [
+     {
+      "zone": "German Politics and AfD Debates",
+      "share": 0.93738595985787
+     },
+     {
+      "zone": "Debates on Middle East Conflicts",
+      "share": 0.8044368275730743
+     },
+     {
+      "zone": "Criticism of Government and Trump",
+      "share": 0.735820257646987
+     }
+    ]
+   },
+   "possible": {
+    "flagged": 212283,
+    "share": 0.424566,
+    "share_on_test": 0.4370873958126064,
+    "top_zones": [
+     {
+      "zone": "German Politics and AfD Debates",
+      "share": 0.9985594929415154
+     },
+     {
+      "zone": "Debates on Middle East Conflicts",
+      "share": 0.9893363800818814
+     },
+     {
+      "zone": "Criticism of Government and Trump",
+      "share": 0.9803406801392026
+     }
+    ]
+   }
+  },
+  "institution_distrust": {
+   "state": "review-only",
+   "possible": {
+    "flagged": 108,
+    "share": 0.000216,
+    "share_on_test": 0.00017686984590214677,
+    "top_zones": [
+     {
+      "zone": "Criticism of Government and Trump",
+      "share": 0.002442151535502778
+     },
+     {
+      "zone": "German Political and Legal Discourse",
+      "share": 0.0021101286173633442
+     },
+     {
+      "zone": "US Politics and Foreign Affairs",
+      "share": 0.001007252215954875
+     }
+    ]
+   }
+  },
+  "conspiracy_narrative": {
+   "state": "shown",
+   "probable": {
+    "flagged": 165,
+    "share": 0.00033,
+    "share_on_test": 0.00024761778426300545,
+    "top_zones": [
+     {
+      "zone": "US Politics and Foreign Affairs",
+      "share": 0.0032903572387859253
+     },
+     {
+      "zone": "Middle East Political Conflicts",
+      "share": 0.003258293838862559
+     },
+     {
+      "zone": "Criticism of Government and Trump",
+      "share": 0.0016484522864643751
+     }
+    ]
+   }
+  },
+  "endorsement": {
+   "state": "shown",
+   "possible": {
+    "flagged": 3565,
+    "share": 0.00713,
+    "share_on_test": 0.007081426455307201,
+    "top_zones": [
+     {
+      "zone": "Congratulations and Supportive Messages",
+      "share": 0.17149958574979288
+     },
+     {
+      "zone": "Expressions of Love and Gratitude",
+      "share": 0.046239837398373985
+     },
+     {
+      "zone": "Crypto Technical Price Analysis",
+      "share": 0.01939123281231637
+     }
+    ]
+   }
+  },
+  "theme:war_geopolitics": {
+   "state": "shown",
+   "possible": {
+    "flagged": 32734,
+    "share": 0.065468,
+    "share_on_test": 0.06467688090026752,
+    "top_zones": [
+     {
+      "zone": "Debates on Middle East Conflicts",
+      "share": 0.6027801580500809
+     },
+     {
+      "zone": "Middle East Political Conflicts",
+      "share": 0.32886552132701424
+     },
+     {
+      "zone": "US-Iran Military Strikes",
+      "share": 0.314376506684199
+     }
+    ]
+   }
+  },
+  "theme:crime_justice": {
+   "state": "review-only",
+   "possible": {
+    "flagged": 9765,
+    "share": 0.01953,
+    "share_on_test": 0.021544958103955254,
+    "top_zones": [
+     {
+      "zone": "US-Iran Military Strikes",
+      "share": 0.16655708963401272
+     },
+     {
+      "zone": "Accusations of Child Endangerment",
+      "share": 0.12790574249018152
+     },
+     {
+      "zone": "German Political and Legal Discourse",
+      "share": 0.11877009646302251
+     }
+    ]
+   }
+  },
+  "theme:economy_work": {
+   "state": "shown",
+   "possible": {
+    "flagged": 67253,
+    "share": 0.134506,
+    "share_on_test": 0.13456700050850082,
+    "top_zones": [
+     {
+      "zone": "Crypto Technical Price Analysis",
+      "share": 0.9694441179927136
+     },
+     {
+      "zone": "Public Spending and Taxpayer Costs",
+      "share": 0.7208057916273214
+     },
+     {
+      "zone": "Economic Pressures and Business Costs",
+      "share": 0.5844837808079952
+     }
+    ]
+   }
+  },
+  "theme:politics_government": {
+   "state": "shown",
+   "possible": {
+    "flagged": 61839,
+    "share": 0.123678,
+    "share_on_test": 0.1300546085649223,
+    "top_zones": [
+     {
+      "zone": "German Politics and AfD Debates",
+      "share": 0.9219245174301354
+     },
+     {
+      "zone": "Criticism of Government and Trump",
+      "share": 0.6069357103608279
+     },
+     {
+      "zone": "US Politics and Foreign Affairs",
+      "share": 0.42687348912167605
+     }
+    ]
+   }
+  },
+  "theme:sport": {
+   "state": "shown",
+   "probable": {
+    "flagged": 30476,
+    "share": 0.060952,
+    "share_on_test": 0.06838893679113882,
+    "top_zones": [
+     {
+      "zone": "German Football Match Updates",
+      "share": 0.9461103867883529
+     },
+     {
+      "zone": "College Sports Previews and Updates",
+      "share": 0.9151508304146424
+     },
+     {
+      "zone": "Sports Team and Player Debates",
+      "share": 0.8370110330992979
+     }
+    ]
+   },
+   "possible": {
+    "flagged": 30476,
+    "share": 0.060952,
+    "share_on_test": 0.06838893679113882,
+    "top_zones": [
+     {
+      "zone": "German Football Match Updates",
+      "share": 0.9461103867883529
+     },
+     {
+      "zone": "College Sports Previews and Updates",
+      "share": 0.9151508304146424
+     },
+     {
+      "zone": "Sports Team and Player Debates",
+      "share": 0.8370110330992979
+     }
+    ]
+   }
+  },
+  "theme:entertainment_culture": {
+   "state": "shown",
+   "probable": {
+    "flagged": 36278,
+    "share": 0.072556,
+    "share_on_test": 0.06845305211027834,
+    "top_zones": [
+     {
+      "zone": "Concerts, Music, and Fan Events",
+      "share": 0.610376224016492
+     },
+     {
+      "zone": "Video Game Lore and Characters",
+      "share": 0.555794964844636
+     },
+     {
+      "zone": "Expressions of Love and Gratitude",
+      "share": 0.3339430894308943
+     }
+    ]
+   }
+  },
+  "political_side:none": {
+   "state": "shown",
+   "probable": {
+    "flagged": 396757,
+    "share": 0.793514,
+    "share_on_test": 0.7842541619685613,
+    "top_zones": [
+     {
+      "zone": "Food Recipes and Meals",
+      "share": 0.9992714910150559
+     },
+     {
+      "zone": "Video Game Lore and Characters",
+      "share": 0.9982989339986391
+     },
+     {
+      "zone": "College Sports Previews and Updates",
+      "share": 0.9979663314879674
+     }
+    ]
+   },
+   "possible": {
+    "flagged": 396757,
+    "share": 0.793514,
+    "share_on_test": 0.7842541619685613,
+    "top_zones": [
+     {
+      "zone": "Food Recipes and Meals",
+      "share": 0.9992714910150559
+     },
+     {
+      "zone": "Video Game Lore and Characters",
+      "share": 0.9982989339986391
+     },
+     {
+      "zone": "College Sports Previews and Updates",
+      "share": 0.9979663314879674
+     }
+    ]
+   }
+  },
+  "checkable_claim": {
+   "state": "shown",
+   "probable": {
+    "flagged": 68655,
+    "share": 0.13731,
+    "share_on_test": 0.13124848002476178,
+    "top_zones": [
+     {
+      "zone": "US-Iran Military Strikes",
+      "share": 0.8262108262108262
+     },
+     {
+      "zone": "U.S. Politics and Global News",
+      "share": 0.7329510366122629
+     },
+     {
+      "zone": "German and International Politics",
+      "share": 0.6766967569374791
+     }
+    ]
+   },
+   "possible": {
+    "flagged": 167929,
+    "share": 0.335858,
+    "share_on_test": 0.33120647343636,
+    "top_zones": [
+     {
+      "zone": "US-Iran Military Strikes",
+      "share": 0.9722770107385492
+     },
+     {
+      "zone": "U.S. Politics and Global News",
+      "share": 0.9497132774591972
+     },
+     {
+      "zone": "German and International Politics",
+      "share": 0.9220996322300234
+     }
+    ]
+   }
+  },
+  "unsourced_statistic": {
+   "state": "shown",
+   "possible": {
+    "flagged": 160,
+    "share": 0.00032,
+    "share_on_test": 0.00018792421127103093,
+    "top_zones": [
+     {
+      "zone": "Crypto Technical Price Analysis",
+      "share": 0.007286402632506758
+     },
+     {
+      "zone": "German and International Politics",
+      "share": 0.0031204725286972028
+     },
+     {
+      "zone": "Public Spending and Taxpayer Costs",
+      "share": 0.001154128632882174
+     }
+    ]
+   }
+  },
+  "urgency_framing": {
+   "state": "shown",
+   "probable": {
+    "flagged": 1131,
+    "share": 0.002262,
+    "share_on_test": 0.002040635847096018,
+    "top_zones": [
+     {
+      "zone": "US-Iran Military Strikes",
+      "share": 0.0658557966250274
+     },
+     {
+      "zone": "German Football Match Updates",
+      "share": 0.014341590612777053
+     },
+     {
+      "zone": "Crypto Technical Price Analysis",
+      "share": 0.012927488541544248
+     }
+    ]
+   },
+   "possible": {
+    "flagged": 1131,
+    "share": 0.002262,
+    "share_on_test": 0.002040635847096018,
+    "top_zones": [
+     {
+      "zone": "US-Iran Military Strikes",
+      "share": 0.0658557966250274
+     },
+     {
+      "zone": "German Football Match Updates",
+      "share": 0.014341590612777053
+     },
+     {
+      "zone": "Crypto Technical Price Analysis",
+      "share": 0.012927488541544248
+     }
+    ]
+   }
+  },
+  "anger": {
+   "state": "shown",
+   "probable": {
+    "flagged": 10103,
+    "share": 0.020206,
+    "share_on_test": 0.02257301408326148,
+    "top_zones": [
+     {
+      "zone": "Hostile Arguments and Insults",
+      "share": 0.23480648671053314
+     },
+     {
+      "zone": "German Political Arguments",
+      "share": 0.1928106722744299
+     },
+     {
+      "zone": "Criticism of Government and Trump",
+      "share": 0.06758654374503938
+     }
+    ]
+   },
+   "possible": {
+    "flagged": 30905,
+    "share": 0.06181,
+    "share_on_test": 0.0670071411200283,
+    "top_zones": [
+     {
+      "zone": "Hostile Arguments and Insults",
+      "share": 0.5533910160095332
+     },
+     {
+      "zone": "German Political Arguments",
+      "share": 0.49628704738121837
+     },
+     {
+      "zone": "Criticism of Government and Trump",
+      "share": 0.27486415532083763
+     }
+    ]
+   }
+  },
+  "fear": {
+   "state": "shown",
+   "possible": {
+    "flagged": 305,
+    "share": 0.00061,
+    "share_on_test": 0.0006256770798788441,
+    "top_zones": [
+     {
+      "zone": "German Social Media Commentary",
+      "share": 0.007657825924542398
+     },
+     {
+      "zone": "Reactions to Rude Behavior",
+      "share": 0.002894088669950739
+     },
+     {
+      "zone": "Debates on Middle East Conflicts",
+      "share": 0.002570694087403599
+     }
+    ]
+   }
+  },
+  "contempt": {
+   "state": "shown",
+   "probable": {
+    "flagged": 32230,
+    "share": 0.06446,
+    "share_on_test": 0.06740288740023435,
+    "top_zones": [
+     {
+      "zone": "Hostile Arguments and Insults",
+      "share": 0.6273768198538936
+     },
+     {
+      "zone": "German Political Arguments",
+      "share": 0.5474797923375172
+     },
+     {
+      "zone": "Criticism of Government and Trump",
+      "share": 0.16918004762195493
+     }
+    ]
+   },
+   "possible": {
+    "flagged": 105894,
+    "share": 0.211788,
+    "share_on_test": 0.22304171917490218,
+    "top_zones": [
+     {
+      "zone": "Hostile Arguments and Insults",
+      "share": 0.9601575047924978
+     },
+     {
+      "zone": "German Political Arguments",
+      "share": 0.9411184859039232
+     },
+     {
+      "zone": "Criticism of Government and Trump",
+      "share": 0.664631540387081
+     }
+    ]
+   }
+  },
+  "enthusiasm": {
+   "state": "shown",
+   "probable": {
+    "flagged": 4143,
+    "share": 0.008286,
+    "share_on_test": 0.008124958546129867,
+    "top_zones": [
+     {
+      "zone": "Congratulations and Supportive Messages",
+      "share": 0.2530240265120133
+     },
+     {
+      "zone": "Expressions of Love and Gratitude",
+      "share": 0.07347560975609756
+     },
+     {
+      "zone": "Condolences and Well Wishes",
+      "share": 0.014327700220426157
+     }
+    ]
+   },
+   "possible": {
+    "flagged": 12690,
+    "share": 0.02538,
+    "share_on_test": 0.024797152395480974,
+    "top_zones": [
+     {
+      "zone": "Congratulations and Supportive Messages",
+      "share": 0.5862468931234466
+     },
+     {
+      "zone": "Expressions of Love and Gratitude",
+      "share": 0.27002032520325203
+     },
+     {
+      "zone": "Condolences and Well Wishes",
+      "share": 0.1002939015429831
+     }
+    ]
+   }
+  }
+ }
+}
