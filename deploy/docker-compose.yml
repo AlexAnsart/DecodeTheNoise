@@ -13,6 +13,7 @@ services:
     restart: unless-stopped
     environment:
       DATA_BUILD_DIR: /data/build/current
+      LABELLED_PATH: /data/method/labelled.sqlite
       WORKSPACES_DIR: /data/workspaces
       # Compiled layout code is kept between restarts: the first refresh does not recompile.
       NUMBA_CACHE_DIR: /data/workspaces/.numba
@@ -32,6 +33,8 @@ services:
     volumes:
       # Map builds are made offline and copied here; they never go through git.
       - ./data/build:/data/build:ro
+      # The posts the annotators read, for the method page: copied here like a build.
+      - ./data/method:/data/method:ro
       # Written by the server: the workspaces of the users, their keys, the embedding cache.
       - ./data/workspaces:/data/workspaces
     depends_on:

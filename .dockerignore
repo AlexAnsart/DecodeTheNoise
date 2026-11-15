@@ -11,7 +11,11 @@
 data
 models
 demos
-docs
+# Of the documentation, the API image takes what the method page shows as it is: the
+# probe campaign (guides, report, figures) and the note on the LLM review.
+docs/*
+!docs/probes
+!docs/review.md
 tests
 .local
 .claude

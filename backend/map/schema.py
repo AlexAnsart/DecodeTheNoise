@@ -2,7 +2,8 @@
 
 A build is a folder holding `map.json` (this manifest), `map.bin` (the buffers, concatenated),
 `items.sqlite` (item content, one row per point) and `vectors.f16` (one unit vector per point).
-Point order is the same in all four.
+Point order is the same in all four. `provenance.json` beside them says where the items come
+from (shape: `backend/method/schema.py`); a build made before it existed has none.
 """
 
 from typing import Literal
@@ -14,8 +15,11 @@ from backend.review.schema import Review
 
 MANIFEST_FILE = "map.json"
 BUFFERS_FILE = "map.bin"
+# The same bytes compressed, served to the browsers that accept it: a large map loads faster.
+BUFFERS_GZIP_FILE = "map.bin.gz"
 ITEMS_FILE = "items.sqlite"
 VECTORS_FILE = "vectors.f16"
+PROVENANCE_FILE = "provenance.json"
 
 # Code of a point that has no value in a categorical column.
 NO_VALUE = 0xFFFF

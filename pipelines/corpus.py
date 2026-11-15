@@ -54,6 +54,15 @@ def write_corpus(path: Path, items: list[Item], meta: dict[str, str]) -> None:
     con.close()
 
 
+def read_meta(path: Path) -> dict[str, str]:
+    """What the step that wrote the corpus recorded about it: its dataset and the files read,
+    or how it was drawn from other builds."""
+    con = sqlite3.connect(f"file:{path.as_posix()}?mode=ro", uri=True)
+    meta = dict(con.execute("SELECT key, value FROM meta"))
+    con.close()
+    return meta
+
+
 def read_corpus(path: Path) -> list[Item]:
     """Items in point order."""
     con = sqlite3.connect(f"file:{path.as_posix()}?mode=ro", uri=True)

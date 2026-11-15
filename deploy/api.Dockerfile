@@ -17,6 +17,10 @@ COPY pipelines ./pipelines
 # The probe pack and the evaluation reports behind it: weights and measures, no text.
 COPY probes ./probes
 COPY reports ./reports
+# What the method page shows as it is: the annotation guides, which the LLM review also
+# applies, the report of the probe campaign and the note on the review. `.dockerignore`
+# keeps the rest of the documentation out.
+COPY docs ./docs
 
 ENV PATH="/app/.venv/bin:$PATH"
 EXPOSE 8000

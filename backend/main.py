@@ -23,6 +23,7 @@ from backend.ingest.routes import router as ingest_router
 from backend.items.routes import router as items_router
 from backend.map.routes import router as map_router
 from backend.map.store import load_build
+from backend.method.routes import router as method_router
 from backend.model_client.embedding import EmbeddingClient
 from backend.model_client.llm import ChatClient
 from backend.probes.pack import load_probes
@@ -48,7 +49,7 @@ MINUTE = 60.0
 DAY = 86_400.0
 
 # Read by anyone, on the demo build.
-PUBLIC = (health_router, accounts_router, sample_router, reports_router)
+PUBLIC = (health_router, accounts_router, sample_router, reports_router, method_router)
 # The map routes: the demo build under /api, the caller's workspace under /api/v1.
 MAP = (map_router, items_router, search_router, analyze_router, voices_router, review_router)
 # What only the owner of a workspace does.
