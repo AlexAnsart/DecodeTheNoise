@@ -46,6 +46,8 @@ def builders(run: str, round_name: str) -> dict[str, Callable[[], str]]:
         "table:results_other": lambda: results.levels_table(("review-only", "dropped")),
         "table:heads": results.heads_table,
         "table:audit": results.audit_table,
+        "table:demo": results.demo_table,
+        "note:demo": results.demo_note,
         "table:languages": results.language_table,
         "note:language_probe": results.language_note,
         "table:ranking": results.ranking_table,
