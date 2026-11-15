@@ -2,6 +2,7 @@ import type { ReactElement, RefObject } from 'react'
 import { maskOfIndices } from '../colour/emphasis'
 import { NeighbourDrawer } from '../neighbours/NeighbourDrawer'
 import { SelectionDrawer } from '../selection/SelectionDrawer'
+import { useSelectionReview } from '../selection/useSelectionReview'
 import { plural } from '../text/format'
 import type { MapData } from './mapData'
 import type { MapActions } from './useMapActions'
@@ -32,6 +33,8 @@ interface MapDrawersProps {
 export function MapDrawers(props: MapDrawersProps): ReactElement {
   const { data, drawers, model, actions, neighbours, pastedNeighbours, listed, onShow, onRing } = props
   const { selected, colouring, filters } = model
+  // Held here, above the list of the selection: closing the list neither stops nor loses it.
+  const review = useSelectionReview(model.picked)
 
   return (
     <div ref={drawers} className="nm-drawers">
@@ -61,6 +64,7 @@ export function MapDrawers(props: MapDrawersProps): ReactElement {
         <SelectionDrawer
           data={data}
           indices={listed}
+          review={review}
           actions={[
             { id: 'likeness', label: 'Raise what resembles this selection', disabled: actions.busy ? 'A score is being computed.' : null, run: actions.liftSelection },
             { id: 'colour', label: 'Colour this selection against the rest', disabled: null, run: () => colouring.compose([{ label: 'The selection', mask: maskOfIndices(data.n, listed) }]) },

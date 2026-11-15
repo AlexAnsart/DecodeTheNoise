@@ -3,6 +3,7 @@ import type { ReactElement, ReactNode } from 'react'
 import { createMapApi } from '../api/client'
 import { MapApiContext, createMapServices } from '../source/mapServices'
 import type { DataSource } from '../source/source'
+import { MapLoading } from './MapLoading'
 import { MapView } from './MapView'
 import { useMapData } from './useMapData'
 import './map.css'
@@ -37,14 +38,7 @@ export function MapScreen({ source, version, empty }: MapScreenProps): ReactElem
     [api, track.generation],
   )
 
-  if (load.status === 'loading') {
-    return (
-      <div className="nm-screen-state" role="status">
-        <strong>Reading the map…</strong>
-        One point per item, placed by meaning.
-      </div>
-    )
-  }
+  if (load.status === 'loading') return <MapLoading progress={load.progress} />
   if (load.status === 'error') {
     return (
       <div className="nm-screen-state nm-screen-state--error" role="alert">

@@ -25,7 +25,7 @@ export function placeTip(x: number, y: number, tip: Box, stage: Box, freeWidth: 
 const CARD_OFFSET_X = 18
 const CARD_OFFSET_Y = 28
 const CARD_EDGE = 8
-const CARD_MAX_HEIGHT = 380
+const CARD_MAX_HEIGHT = 460
 const CARD_MIN_ROOM = 220
 
 export interface PlacedCard extends Placed {

@@ -2,7 +2,6 @@ import type { ReactElement } from 'react'
 import type { ProbeInfo } from '../api/schema'
 import { shownProbes } from './levels'
 import { ProbeVerdict } from './ProbeVerdict'
-import { ReviewBlock } from './ReviewBlock'
 import type { ReadingState } from './usePointReading'
 import './probes.css'
 
@@ -13,14 +12,11 @@ interface PointProbesProps {
 }
 
 /** What the probes say of one item, in its card: the probes that flagged it, each with its
- *  level and its measured reliability, then the LLM review when there is one. */
+ *  level and its measured reliability. The LLM review comes after, in its own block. */
 export function PointProbes({ probes, state }: PointProbesProps): ReactElement | null {
-  if (state.status === 'none') return null
-  const review = state.status === 'ready' && state.reading.review?.status !== 'none' ? (state.reading.review ?? null) : null
+  // Probes that only feed the review are never listed.
+  if (state.status === 'none' || shownProbes(probes).length === 0) return null
   const flags = state.status === 'ready' ? state.reading.probes : []
-  const hasShown = shownProbes(probes).length > 0
-  // Probes that only feed the review are never listed: without a review there is nothing to say.
-  if (state.status === 'ready' && !hasShown && !review) return null
 
   return (
     <section className="nm-verdicts" aria-label="Probes">
@@ -30,8 +26,7 @@ export function PointProbes({ probes, state }: PointProbesProps): ReactElement |
       {flags.map((reading) => (
         <ProbeVerdict key={reading.key} reading={reading} />
       ))}
-      {state.status === 'ready' && flags.length === 0 && hasShown ? <p className="nm-verdicts__note">No probe flags this item.</p> : null}
-      {review ? <ReviewBlock review={review} probes={probes} /> : null}
+      {state.status === 'ready' && flags.length === 0 ? <p className="nm-verdicts__note">No probe flags this item.</p> : null}
     </section>
   )
 }

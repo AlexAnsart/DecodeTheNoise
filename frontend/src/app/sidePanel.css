@@ -21,6 +21,10 @@
   animation: nm-side-in 180ms ease-out;
 }
 
+.nm-side__panel--wide {
+  width: min(920px, 100%);
+}
+
 .nm-side__panel:focus-visible {
   outline: none;
 }

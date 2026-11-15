@@ -95,3 +95,53 @@
 .nm-item-state--error {
   color: var(--nm-danger);
 }
+
+/* The words a review cites, marked inside the text of the item. Each quote ends with its
+   number, the one the row that cites it carries. A part two quotes share is marked stronger,
+   so neither hides the other; the quote of the row under the pointer is brought out. */
+.nm-quote {
+  padding: 0.05em 0;
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--nm-level-possible) 26%, transparent);
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  color: inherit;
+}
+
+.nm-quote--shared {
+  background: color-mix(in srgb, var(--nm-level-possible) 46%, transparent);
+}
+
+.nm-quote.is-active {
+  background: color-mix(in srgb, var(--nm-level-possible) 62%, transparent);
+}
+
+.nm-quote-ref {
+  display: inline-block;
+  min-width: 1.5em;
+  margin: 0 0.15em 0 0.1em;
+  padding: 0 0.3em;
+  border-radius: 999px;
+  background: var(--nm-level-possible);
+  color: var(--nm-on-accent);
+  font-size: 0.56rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 1.45;
+  text-align: center;
+  /* Raised without the line growing taller for it. */
+  position: relative;
+  top: -0.4em;
+  vertical-align: baseline;
+}
+
+.nm-quote-ref.is-active {
+  outline: 2px solid color-mix(in srgb, var(--nm-level-possible) 45%, transparent);
+}
+
+/* The same number, in the row that cites the quote. */
+.nm-quote-ref--row {
+  flex: none;
+  top: 0;
+  margin: 0;
+}

@@ -10,7 +10,8 @@ const log = logger('api')
 export type Request<T> =
   | { status: 'loading' }
   | { status: 'ready'; data: T }
-  | { status: 'error'; message: string }
+  /** `missing`: the server has no such route or file (404), as opposed to a failure. */
+  | { status: 'error'; message: string; missing: boolean }
 
 /** A failure in words the person can act on. */
 export function describeError(error: unknown): string {
@@ -32,7 +33,7 @@ export function useRequest<T>(load: (signal: AbortSignal) => Promise<T>): Reques
       .catch((error: unknown) => {
         if (abort.signal.aborted) return
         log.error('a request failed', error)
-        setState({ status: 'error', message: describeError(error) })
+        setState({ status: 'error', message: describeError(error), missing: error instanceof ApiError && error.status === 404 })
       })
     return () => abort.abort()
   }, [load])

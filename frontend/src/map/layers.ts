@@ -4,6 +4,7 @@ import type { Layer } from '@deck.gl/core'
 import { DataFilterExtension } from '@deck.gl/extensions'
 import { LineLayer, PathLayer, ScatterplotLayer } from '@deck.gl/layers'
 import type { Rgb } from '../theme/theme'
+import { gatherBytes, gatherFloats } from './sample'
 
 export type Vec3 = [number, number, number]
 
@@ -42,6 +43,12 @@ export interface LayerInput {
   flat: boolean
   segments: Segment[]
   rings: Ring[]
+  /** The points drawn, in ascending order, where the browser draws in software; null draws
+   *  every point. */
+  sample: Uint32Array | null
+  /** The GPU says which point is under the pointer and highlights it. False in software,
+   *  where a picking pass costs as much as a frame: picking is then done on the CPU. */
+  gpuPicking: boolean
   /** A point that is not part of the map data, drawn with the same size rule as the others. */
   extra: ExtraPoint | null
   axes: AxisLine[]
@@ -52,6 +59,39 @@ export interface LayerInput {
 
 export const POINTS_LAYER = 'points'
 export const EDGES_LAYER = 'edges'
+
+interface Attribute {
+  value: Float32Array | Uint8Array
+  size: number
+  normalized?: boolean
+}
+
+const attributes = new WeakMap<object, Attribute>()
+
+/** The descriptor deck.gl reads an attribute from. It uploads an attribute again whenever its
+ *  descriptor is another object, so one typed array always gets the same descriptor: a hover,
+ *  a selection or a ring upload nothing, and a new colouring uploads the colours alone. On a
+ *  map of half a million points that is 10 MB not sent to the GPU on every pointer move. */
+function attribute(value: Float32Array | Uint8Array, size: number, normalized = false): Attribute {
+  let kept = attributes.get(value)
+  if (!kept || kept.size !== size) {
+    kept = normalized ? { value, size, normalized } : { value, size }
+    attributes.set(value, kept)
+  }
+  return kept
+}
+
+const gathered = new WeakMap<object, { sample: Uint32Array; rows: Float32Array | Uint8Array }>()
+
+/** The rows of a per-point array for the sampled points, gathered once per array and sample. */
+function sampled<T extends Float32Array | Uint8Array>(values: T, sample: Uint32Array | null, width: number): T {
+  if (!sample) return values
+  const kept = gathered.get(values)
+  if (kept && kept.sample === sample) return kept.rows as T
+  const rows = values instanceof Float32Array ? gatherFloats(values, sample, width) : gatherBytes(values, sample, width)
+  gathered.set(values, { sample, rows })
+  return rows as T
+}
 
 const RADIUS_SHARE = 0.32
 const RADIUS_MIN_PX = 1.6
@@ -77,16 +117,16 @@ export function buildLayers(input: LayerInput): Layer[] {
       getColor: [accent[0], accent[1], accent[2], 200],
       getWidth: 2,
       widthUnits: 'pixels',
-      pickable: true,
+      pickable: input.gpuPicking,
     }),
     new ScatterplotLayer({
       id: POINTS_LAYER,
       data: {
-        length: input.n,
+        length: input.sample ? input.sample.length : input.n,
         attributes: {
-          getPosition: { value: input.positions, size: 3 },
-          getFillColor: { value: input.colours, size: 4, normalized: true },
-          getFilterValue: { value: input.kept, size: 1 },
+          getPosition: attribute(sampled(input.positions, input.sample, 3), 3),
+          getFillColor: attribute(sampled(input.colours, input.sample, 4), 4, true),
+          getFilterValue: attribute(sampled(input.kept, input.sample, 1), 1),
         },
       },
       getRadius: 1,
@@ -95,8 +135,8 @@ export function buildLayers(input: LayerInput): Layer[] {
       radiusMinPixels: RADIUS_MIN_PX,
       radiusMaxPixels: RADIUS_MAX_PX,
       billboard: !input.flat,
-      pickable: true,
-      autoHighlight: true,
+      pickable: input.gpuPicking,
+      autoHighlight: input.gpuPicking,
       highlightColor: [highlight[0], highlight[1], highlight[2], 200],
       // A filtered point is neither drawn nor pickable, and no buffer is rebuilt for it.
       extensions: [new DataFilterExtension({ filterSize: 1 })],

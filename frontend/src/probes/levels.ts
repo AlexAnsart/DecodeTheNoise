@@ -9,15 +9,19 @@ export const PROBABLE_SCORE = 0.8
 export type FlagLevel = 'possible' | 'probable'
 
 export const LEVEL_WORD: Record<FlagLevel, string> = { possible: 'Possible', probable: 'Probable' }
+/** The score a level starts at, the same for every probe that has the level. */
+export const LEVEL_START: Record<FlagLevel, number> = { possible: POSSIBLE_SCORE, probable: PROBABLE_SCORE }
 
 /** The levels a probe was measured at: a level without a measure is never shown as reached. */
 export type MeasuredLevels = Pick<ProbeInfo, 'possible' | 'probable'>
 
-/** The level a score reaches among the measured ones. Null under the first one, or when the
- *  probe did not read the point (NaN). Without a probe, both levels count. */
-export function levelOf(score: number, probe?: MeasuredLevels): FlagLevel | null {
-  if (score >= PROBABLE_SCORE && (!probe || probe.probable)) return 'probable'
-  if (score >= POSSIBLE_SCORE && (!probe || probe.possible)) return 'possible'
+/** The level a score reaches among the ones the probe was measured at. Null under the first
+ *  one, or when the probe did not read the point (NaN). A probe measured at `probable` alone
+ *  has no name for a score between the two: a score is never called by a level that has no
+ *  measure. */
+export function levelOf(score: number, probe: MeasuredLevels): FlagLevel | null {
+  if (score >= PROBABLE_SCORE && probe.probable) return 'probable'
+  if (score >= POSSIBLE_SCORE && probe.possible) return 'possible'
   return null
 }
 

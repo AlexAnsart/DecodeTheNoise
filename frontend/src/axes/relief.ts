@@ -51,9 +51,10 @@ function quantile(sorted: Float32Array, share: number): number {
  *  given points out of the statistics: they are the concept itself. */
 export function likenessRelief(label: string, scores: Float32Array, source: ReliefSource, skip: ArrayLike<number> = []): Relief {
   const left = new Set<number>(Array.from(skip))
-  const crowd = Float32Array.from(Array.from(scores).filter((_, i) => !left.has(i))).sort()
+  // Typed copies sort natively: no plain array of every score is built on the way.
+  const crowd = (left.size === 0 ? scores.slice() : scores.filter((_, i) => !left.has(i))).sort()
   const median = quantile(crowd, 0.5)
-  const spread = Float32Array.from(crowd, (s) => Math.abs(s - median)).sort()
+  const spread = crowd.map((s) => Math.abs(s - median)).sort()
   const mad = 1.4826 * quantile(spread, 0.5) || 1e-6
   const z = (s: number): number => (s - median) / mad
   const top = Math.max(MIN_TOP_Z, z(quantile(crowd, 0.999)))

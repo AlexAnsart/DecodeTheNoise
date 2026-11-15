@@ -27,10 +27,14 @@ function subscribe(notify: () => void): () => void {
   }
 }
 
-/** Goes to a path of the app without loading the page again. */
-export function navigate(to: string): void {
+/** Goes to a path of the app without loading the page again. `replace` keeps the history as
+ *  it is: for what opens and closes inside a page, which "Back" should not walk through. */
+export function navigate(to: string, { replace = false }: { replace?: boolean } = {}): void {
   const { pathname, search, hash } = window.location
-  if (to !== pathname + search + hash) window.history.pushState(null, '', to)
+  if (to !== pathname + search + hash) {
+    if (replace) window.history.replaceState(null, '', to)
+    else window.history.pushState(null, '', to)
+  }
   window.dispatchEvent(new Event(NAVIGATED))
 }
 

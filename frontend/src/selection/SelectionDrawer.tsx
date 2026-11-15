@@ -7,6 +7,9 @@ import '../neighbours/drawers.css'
 import { Popover } from '../popover/Popover'
 import { plural } from '../text/format'
 import { VoicesCheck } from '../voices/VoicesCheck'
+import { ReviewEntry } from './ReviewEntry'
+import { SelectionReviewPanel } from './SelectionReviewPanel'
+import type { SelectionReviewRun } from './useSelectionReview'
 
 const SORT_KEY = 'noisemap.selection.newestFirst'
 
@@ -22,6 +25,8 @@ interface SelectionDrawerProps {
   data: MapData
   indices: Uint32Array
   actions: SelectionAction[]
+  /** The LLM review of this selection: held above the drawer, so closing the list keeps it. */
+  review: SelectionReviewRun
   onKeepInFilters(): void
   onShow(index: number): void
   onOpen(index: number): void
@@ -40,9 +45,12 @@ function storedSort(): boolean {
 
 /** The items chosen with the lasso, as a list, with what can be done with them. */
 export function SelectionDrawer(props: SelectionDrawerProps): ReactElement {
-  const { data, indices, actions, onKeepInFilters, onShow, onOpen, onRing, onClose } = props
+  const { data, indices, actions, review, onKeepInFilters, onShow, onOpen, onRing, onClose } = props
   const [newestFirst, setNewestFirst] = useState(storedSort)
   const [menu, setMenu] = useState(false)
+  // The review panel takes the place of the list; it belongs to the selection it was opened on.
+  const [reviewOf, setReviewOf] = useState<Uint32Array | null>(null)
+  const reviewing = reviewOf === indices
   const more = useRef<HTMLButtonElement>(null)
 
   const sorted = useMemo(() => {
@@ -99,15 +107,19 @@ export function SelectionDrawer(props: SelectionDrawerProps): ReactElement {
           </button>
         ))}
       </Popover>
-      <VoicesCheck indices={indices} onOpen={onOpen} />
-      <ItemList
-        data={data}
-        indices={sorted}
-        listKey={`selection:${indices.length}:${indices[0] ?? 0}:${newestFirst ? 'new' : 'old'}`}
-        onShow={onShow}
-        onOpen={onOpen}
-        onRing={onRing}
-      />
+      <div className="nm-drawer__body" hidden={reviewing}>
+        <VoicesCheck indices={indices} onOpen={onOpen} />
+        <ReviewEntry review={review} onOpen={() => setReviewOf(indices)} />
+        <ItemList
+          data={data}
+          indices={sorted}
+          listKey={`selection:${indices.length}:${indices[0] ?? 0}:${newestFirst ? 'new' : 'old'}`}
+          onShow={onShow}
+          onOpen={onOpen}
+          onRing={onRing}
+        />
+      </div>
+      {reviewing ? <SelectionReviewPanel review={review} selected={indices.length} onOpen={onOpen} onClose={() => setReviewOf(null)} /> : null}
     </aside>
   )
 }

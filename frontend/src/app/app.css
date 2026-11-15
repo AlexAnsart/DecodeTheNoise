@@ -110,6 +110,13 @@
   text-decoration: none;
 }
 
+/* The way to the method page: the one link of the header that stands out. */
+.nm-header__nav .nm-header__method {
+  border-color: color-mix(in srgb, var(--nm-accent) 45%, transparent);
+  color: var(--nm-text);
+  font-weight: 600;
+}
+
 .nm-main {
   display: flex;
   flex: 1;

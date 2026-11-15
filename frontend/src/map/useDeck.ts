@@ -14,6 +14,9 @@ const MAX_LOGGED_ERRORS = 50
 /** Names of the renderers that draw on the CPU: the browser has no hardware acceleration. */
 const SOFTWARE_RENDERER = /swiftshader|basic render|llvmpipe|software/i
 
+/** What draws the canvas: a GPU, or the CPU in its place. Unknown until WebGL has started. */
+export type Renderer = 'unknown' | 'gpu' | 'software'
+
 /** The map has one view at a time: flat or in depth. */
 export type MapDeck = Deck<OrbitView | OrthographicView>
 
@@ -36,6 +39,7 @@ export interface DeckHost {
   size: Size | null
   /** True when WebGL could not start: the stage shows a sentence instead of a blank canvas. */
   failed: boolean
+  renderer: Renderer
 }
 
 export function useDeck(host: RefObject<HTMLDivElement | null>, shape: Shape, events: DeckEvents): DeckHost {
@@ -44,6 +48,7 @@ export function useDeck(host: RefObject<HTMLDivElement | null>, shape: Shape, ev
   const opening = useRef(shape)
   const [size, setSize] = useState<Size | null>(null)
   const [failed, setFailed] = useState(false)
+  const [renderer, setRenderer] = useState<Renderer>('unknown')
 
   useEffect(() => {
     latest.current = events
@@ -67,9 +72,15 @@ export function useDeck(host: RefObject<HTMLDivElement | null>, shape: Shape, ev
         onAfterRender: () => latest.current.onFrame(),
         getCursor: (state) => latest.current.cursor(state),
         onResize: ({ width, height }) => setSize({ width, height }),
-        // The styles adapt to a browser that composes the page on the CPU (theme/base.css).
-        onDeviceInitialized: (device) =>
-          document.documentElement.classList.toggle('is-software', SOFTWARE_RENDERER.test(device.info.renderer)),
+        // The styles adapt to a browser that composes the page on the CPU (theme/base.css), and
+        // the map draws fewer points there (useSoftwareGuard).
+        onDeviceInitialized: (device) => {
+          const software = SOFTWARE_RENDERER.test(device.info.renderer)
+          document.documentElement.classList.toggle('is-software', software)
+          // On the CPU every pixel costs: one canvas pixel per CSS pixel, whatever the screen.
+          if (software) deck.current?.setProps({ useDevicePixels: false })
+          setRenderer(software ? 'software' : 'gpu')
+        },
         onError: (error) => {
           const message = error?.message ?? 'unknown rendering error'
           if (/webgl/i.test(message)) setFailed(true)
@@ -90,5 +101,5 @@ export function useDeck(host: RefObject<HTMLDivElement | null>, shape: Shape, ev
     }
   }, [host])
 
-  return { deck, size, failed }
+  return { deck, size, failed, renderer }
 }

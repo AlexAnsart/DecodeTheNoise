@@ -1,49 +1,70 @@
+import { LoaderCircle, Sparkles } from 'lucide-react'
 import type { ReactElement } from 'react'
-import type { Finding, ProbeInfo, Review } from '../api/schema'
-
-const READING_WORD: Record<Finding['reading'], string> = {
-  supported: 'Supported',
-  'not supported': 'Not supported',
-  unclear: 'Unclear',
-}
+import type { ProbeInfo } from '../api/schema'
+import type { PlacedQuotes } from '../items/quotes'
+import { ReviewReading } from './ReviewReading'
+import type { PointReview } from './usePointReview'
+import './review.css'
 
 interface ReviewBlockProps {
-  /** A review that exists: queued, done, skipped or failed. */
-  review: Review
-  /** The probes of the map, to name the one a finding is about. */
+  point: PointReview
   probes: ProbeInfo[]
+  /** Where the quotes of the review sit in the text of the item. */
+  marks: PlacedQuotes | null
+  active: number | null
+  onActive(number: number | null): void
 }
 
-function labelOf(probes: ProbeInfo[], key: string): string {
-  return probes.find((probe) => probe.key === key)?.label ?? key
+/** `reading`: a review that completed. `fresh`: none was ever made for this post. */
+type Shown = 'running' | 'reading' | 'refused' | 'queued' | 'skipped' | 'failed' | 'empty' | 'fresh'
+
+function shownOf({ review, ask }: PointReview): Shown {
+  if (ask.status === 'running') return 'running'
+  if (ask.status === 'refused') return 'refused'
+  if (!review) return 'fresh'
+  if (review.status === 'done') return 'reading'
+  return review.status === 'none' ? 'empty' : review.status
 }
 
-/** The LLM review of a flagged item: it read the item again with its context, and says for
- *  each probe whether the text supports the flag, with the words it leans on. */
-export function ReviewBlock({ review, probes }: ReviewBlockProps): ReactElement {
-  const pinned = review.model ? `${review.model}${review.prompt_version ? `, prompt ${review.prompt_version}` : ''}` : undefined
+/** The LLM review of one item, in its card. A quiet button asks for it; while it runs, it says
+ *  so; a refusal is a sentence. Then the reading, with its uncertainty left visible. */
+export function ReviewBlock({ point, probes, marks, active, onActive }: ReviewBlockProps): ReactElement {
+  const { review, ask, run } = point
+  const shown = shownOf(point)
+  const canAsk = shown !== 'running' && shown !== 'reading' && shown !== 'queued'
+
   return (
-    <div className="nm-review">
-      <p className="nm-review__head" title={pinned}>
-        LLM review
-      </p>
-      {review.status === 'queued' ? <p className="nm-verdicts__note">Waiting: the item will be read again with its context.</p> : null}
-      {review.status === 'skipped' ? <p className="nm-verdicts__note">Skipped. {review.reason}</p> : null}
-      {review.status === 'failed' ? <p className="nm-verdicts__note nm-verdicts__note--error">It did not complete. {review.reason}</p> : null}
-      {review.status === 'done' && review.findings.length === 0 ? <p className="nm-verdicts__note">The review returned no finding.</p> : null}
-      {review.status === 'done'
-        ? review.findings.map((finding) => (
-            <div key={finding.probe}>
-              <p className="nm-review__finding">
-                <span className={`nm-review__reading nm-review__reading--${finding.reading.replace(' ', '-')}`}>{READING_WORD[finding.reading]}</span>
-                {' · '}
-                {labelOf(probes, finding.probe)}. {finding.explanation}
-              </p>
-              {finding.quote ? <blockquote className="nm-review__quote">“{finding.quote}”</blockquote> : null}
-            </div>
-          ))
-        : null}
-      {review.status === 'done' && !review.measured ? <p className="nm-review__limit">LLM reading, not measured yet.</p> : null}
-    </div>
+    <section className="nm-review" aria-label="LLM review">
+      <p className="nm-verdicts__title">LLM review</p>
+      {shown === 'running' ? (
+        <p className="nm-review__busy" role="status">
+          <LoaderCircle size={13} className="nm-spin" aria-hidden />
+          Reading the post again with its neighbours. A few seconds…
+        </p>
+      ) : null}
+      {shown === 'reading' && review ? <ReviewReading review={review} probes={probes} marks={marks} active={active} onActive={onActive} /> : null}
+      {shown === 'queued' ? <p className="nm-verdicts__note">Waiting: this post will be read again with its context.</p> : null}
+      {shown === 'skipped' ? <p className="nm-verdicts__note">The review was skipped. {review?.reason}</p> : null}
+      {shown === 'failed' ? (
+        <p className="nm-verdicts__note nm-verdicts__note--error" role="alert">
+          The review did not complete. {review?.reason}
+        </p>
+      ) : null}
+      {shown === 'empty' ? <p className="nm-verdicts__note">The review had nothing to read in this post.</p> : null}
+      {shown === 'refused' && ask.status === 'refused' ? (
+        <p className="nm-verdicts__note nm-verdicts__note--error" role="alert">
+          {ask.message}
+        </p>
+      ) : null}
+      {shown === 'fresh' ? (
+        <p className="nm-verdicts__note">Reads the post again with its neighbours, names the techniques it uses and quotes them.</p>
+      ) : null}
+      {canAsk ? (
+        <button type="button" className="nm-btn-secondary nm-btn-small nm-review__ask" onClick={run}>
+          <Sparkles size={12} aria-hidden />
+          {shown === 'fresh' ? 'Review with the LLM' : 'Try again'}
+        </button>
+      ) : null}
+    </section>
   )
 }

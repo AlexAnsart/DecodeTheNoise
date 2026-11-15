@@ -9,7 +9,7 @@ import './connect.css'
 
 function Sending({ sent, total }: { sent: number; total: number }): ReactElement {
   return (
-    <div className="nm-sample__progress" role="status">
+    <div className="nm-sampler__progress" role="status">
       <p className="nm-num">
         Sending {formatCount(sent)} of {formatCount(total)}
       </p>
@@ -35,7 +35,7 @@ export function SampleSender({ sender, info, live }: SampleSenderProps): ReactEl
   // What the last run did. It is not said any more once the workspace was emptied.
   const done = state.status === 'done' && info.items > 0 ? state : null
   return (
-    <div className="nm-sample">
+    <div className="nm-sampler">
       <p>
         Try it without writing code: {SAMPLE_POSTS} posts of the demo dataset are sent to your workspace through the same API, a
         few at a time.
@@ -45,24 +45,24 @@ export function SampleSender({ sender, info, live }: SampleSenderProps): ReactEl
         {busy ? 'Sending…' : waiting ? 'Embedding…' : done ? `Send the ${SAMPLE_POSTS} sample posts again` : `Send ${SAMPLE_POSTS} sample posts`}
       </button>
       {state.status === 'fetching' ? (
-        <p className="nm-sample__note" role="status">
+        <p className="nm-sampler__note" role="status">
           Reading the sample…
         </p>
       ) : null}
       {state.status === 'sending' ? <Sending sent={state.sent} total={state.total} /> : null}
       {done ? (
-        <p className="nm-sample__note" role="status">
+        <p className="nm-sampler__note" role="status">
           {plural(done.sent, 'post', 'posts')} sent{waiting ? '. They are being embedded.' : ' and embedded: they are on your map.'}
         </p>
       ) : null}
       {done && done.rejected > 0 ? (
-        <p className="nm-sample__note nm-sample__note--error" role="alert">
+        <p className="nm-sampler__note nm-sampler__note--error" role="alert">
           {plural(done.rejected, 'post was', 'posts were')} refused: {done.refused ?? 'the server gave no reason'}
         </p>
       ) : null}
       {busy ? null : <IngestProgress info={info} live={live} />}
       {state.status === 'error' ? (
-        <p className="nm-sample__note nm-sample__note--error" role="alert">
+        <p className="nm-sampler__note nm-sampler__note--error" role="alert">
           {state.message}
         </p>
       ) : null}

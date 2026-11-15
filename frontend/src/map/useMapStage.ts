@@ -15,10 +15,13 @@ import type { ExtraPoint, Ring, Segment, Vec3 } from './layers'
 import { EDGES_LAYER, POINTS_LAYER, buildLayers } from './layers'
 import type { MapData } from './mapData'
 import { neighboursOf } from './mapData'
+import { painted } from './painted'
 import type { Camera } from './useCamera'
 import { useCamera } from './useCamera'
 import { currentViewport, useDeck } from './useDeck'
 import type { MapModel } from './useMapModel'
+import type { Sampling } from './useSoftwareGuard'
+import { useSoftwareGuard } from './useSoftwareGuard'
 import type { Size } from './views'
 import { isFlat } from './views'
 
@@ -78,6 +81,13 @@ export interface Stage {
   /** World-to-pixel matrix of the current frame, for tests done on the CPU. */
   pixelMatrix(): number[] | null
   place(): void
+  /** One value per point: 1 where the point is drawn. In software a large map draws a sample:
+   *  the points left out are 0 here, whatever the filters say. */
+  drawn: Float32Array
+  /** Set where a sample of the map is drawn in place of every point. */
+  sampling: Sampling | null
+  /** The points were given to the canvas and their first frame is not drawn yet. */
+  drawing: boolean
 }
 
 export function useMapStage(input: StageInput): Stage {
@@ -85,6 +95,9 @@ export function useMapStage(input: StageInput): Stage {
   const { positions, colours, kept, gap, shape, selected } = model
   const latest = useRef(input)
   const [onEdge, setOnEdge] = useState(false)
+  const [drawing, setDrawing] = useState(true)
+  // A frame is owed since the points were last given to the canvas.
+  const owed = useRef(false)
 
   useEffect(() => {
     latest.current = input
@@ -107,9 +120,11 @@ export function useMapStage(input: StageInput): Stage {
     return null
   }
 
-  const { deck, size, failed } = useDeck(refs.host, shape, {
+  const { deck, size, failed, renderer } = useDeck(refs.host, shape, {
     onView: (view) => camera.onView(view),
     onHover: (info) => {
+      // In software the canvas is not asked: the guard answers the pointer itself.
+      if (!guard.gpuPicking) return
       let hit = pick(info)
       const chosen = latest.current.model.selected
       if (hit?.viaEdge && chosen !== null) {
@@ -120,7 +135,13 @@ export function useMapStage(input: StageInput): Stage {
       // The selected point already has its card: no tooltip on top of it.
       pointer.onHover(hit && hit.index !== latest.current.model.selected ? hit.index : null, info.x, info.y)
     },
-    onFrame: () => place(),
+    onFrame: () => {
+      place()
+      if (!owed.current) return
+      owed.current = false
+      setDrawing(false)
+      guard.frameDrawn()
+    },
     cursor: ({ isDragging, isHovering }) => (isDragging ? 'grabbing' : isHovering ? 'pointer' : 'grab'),
   })
 
@@ -134,6 +155,12 @@ export function useMapStage(input: StageInput): Stage {
     (): number[] | null => currentViewport(deck.current)?.pixelProjectionMatrix ?? null,
     [deck],
   )
+
+  const guard = useSoftwareGuard({ renderer, n: data.n, positions, kept: kept.values, selected, host: refs.host, onHover: pointer.onHover, pixelMatrix })
+  const latestGuard = useRef(guard)
+  useEffect(() => {
+    latestGuard.current = guard
+  })
 
   const place = useCallback(() => {
     const now = latest.current
@@ -187,8 +214,10 @@ export function useMapStage(input: StageInput): Stage {
       if (!start || Math.hypot(event.clientX - start.x, event.clientY - start.y) > CLICK_SLOP_PX) return
       if (!deck.current?.isInitialized) return
       const box = host.getBoundingClientRect()
-      const info = deck.current.pickObject({ x: event.clientX - box.left, y: event.clientY - box.top, radius: CLICK_SLOP_PX })
-      const hit = info ? pick(info)?.index ?? null : null
+      const at = { x: event.clientX - box.left, y: event.clientY - box.top }
+      const asked = latestGuard.current
+      const info = asked.gpuPicking ? deck.current.pickObject({ ...at, radius: CLICK_SLOP_PX }) : null
+      const hit = asked.gpuPicking ? (info ? pick(info)?.index ?? null : null) : asked.pickAt(at.x, at.y)
       const model = latest.current.model
       model.setSelected(hit !== null && hit === model.selected ? null : hit)
       latest.current.onCanvasClick()
@@ -227,10 +256,11 @@ export function useMapStage(input: StageInput): Stage {
   const rings = useMemo<Ring[]>(() => {
     const out: Ring[] = []
     if (selected !== null) out.push({ position: pointAt(positions, selected), radius: SELECTED_RING_PX, fill: 'none' })
-    if (ringed !== null && ringed !== selected) out.push({ position: pointAt(positions, ringed), radius: LISTED_RING_PX, fill: 'tint' })
+    // In software a ring costs a whole frame: a card under the pointer in a list gets none.
+    if (ringed !== null && ringed !== selected && guard.gpuPicking) out.push({ position: pointAt(positions, ringed), radius: LISTED_RING_PX, fill: 'tint' })
     if (pasted?.highlighted) out.push({ position: pasted.position, radius: PASTED_RING_PX, fill: 'solid' })
     return out
-  }, [selected, ringed, positions, pasted])
+  }, [selected, ringed, positions, pasted, guard.gpuPicking])
 
   // The pasted text as a point: it takes the colour its nearest item has right now, so it
   // follows the colouring and the dimming like the points around it.
@@ -243,32 +273,55 @@ export function useMapStage(input: StageInput): Stage {
     }
   }, [pasted, colours])
 
+  const { ready, sample, gpuPicking } = guard
   useEffect(() => {
-    deck.current?.setProps({
-      layers: buildLayers({
-        n: data.n,
-        positions,
-        colours,
-        kept: kept.values,
-        gap,
-        flat: isFlat(shape),
-        segments,
-        rings,
-        extra,
-        axes: marks.lines,
-        accent: palette.accent,
-        muted: palette.muted,
-        highlight: palette.highlight,
-      }),
+    // No point goes to the canvas before the renderer is known and the camera has its view: a
+    // frame drawn too early is a frame wasted, and in software it blocks the page for seconds.
+    if (!ready || !size) return undefined
+    const give = (): void => {
+      owed.current = true
+      deck.current?.setProps({
+        layers: buildLayers({
+          n: data.n,
+          positions,
+          colours,
+          kept: kept.values,
+          sample,
+          gpuPicking,
+          gap,
+          flat: isFlat(shape),
+          segments,
+          rings,
+          extra,
+          axes: marks.lines,
+          accent: palette.accent,
+          muted: palette.muted,
+          highlight: palette.highlight,
+        }),
+      })
+    }
+    if (gpuPicking) {
+      give()
+      return undefined
+    }
+    // In software a frame blocks the page while it is drawn: what the page has to say (a card,
+    // a notice) is painted first.
+    let current = true
+    void painted().then(() => {
+      if (current) give()
     })
-  }, [deck, data, positions, colours, kept, gap, shape, segments, rings, extra, marks, palette, size])
+    return () => {
+      current = false
+    }
+  }, [deck, data, positions, colours, kept, gap, shape, segments, rings, extra, marks, palette, size, ready, sample, gpuPicking])
 
   useEffect(() => {
-    deck.current?.setProps({ controller: lasso ? false : CONTROLLER })
-  }, [deck, lasso, size])
+    // In software every frame of an inertia blocks the page: the map stops where it is let go.
+    deck.current?.setProps({ controller: lasso ? false : gpuPicking ? CONTROLLER : { ...CONTROLLER, inertia: 0 } })
+  }, [deck, lasso, size, gpuPicking])
 
   // The card and the words mount after a render that draws no new frame: place them now.
   useLayoutEffect(() => place(), [place, selected, marks, shape, pasted])
 
-  return { failed, size, camera, pointer, onEdge, neighbours, freeWidth, pixelMatrix, place }
+  return { failed, size, camera, pointer, onEdge, neighbours, freeWidth, pixelMatrix, place, drawn: guard.drawn, sampling: guard.notice, drawing }
 }

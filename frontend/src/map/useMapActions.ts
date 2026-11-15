@@ -37,8 +37,8 @@ export function useMapActions(data: MapData, model: MapModel, stage: Stage, cove
   const scoreStore = useScoreStore()
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const { relief, setRelief, setSelected, setPicked, picked, positions, kept } = model
-  const { camera, size, pixelMatrix } = stage
+  const { relief, setRelief, setSelected, setPicked, picked, positions } = model
+  const { camera, size, pixelMatrix, drawn } = stage
   useReliefRefresh(data, { relief, picked, setRelief })
 
   const lift = useCallback(
@@ -86,19 +86,14 @@ export function useMapActions(data: MapData, model: MapModel, stage: Stage, cove
     (stroke: Stroke, mode: LassoMode): boolean => {
       const matrix = pixelMatrix()
       if (!size || !matrix) return picked !== null
-      const found = pointsInside(
-        matrix,
-        positions,
-        kept.values,
-        stroke,
-        size.width,
-        size.height,
-      )
+      // The lasso takes the points that are drawn: the ones the filters keep, and in software
+      // the ones of the sample.
+      const found = pointsInside(matrix, positions, drawn, stroke, size.width, size.height)
       const next = combine(picked, found, mode)
       setPicked(next)
       return next !== null
     },
-    [size, pixelMatrix, positions, kept, picked, setPicked],
+    [size, pixelMatrix, positions, drawn, picked, setPicked],
   )
 
   return { busy, error, liftConcept, liftSelection, liftProbe, goTo, lasso }

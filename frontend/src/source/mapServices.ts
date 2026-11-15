@@ -5,6 +5,8 @@ import { createContext, useContext } from 'react'
 import type { MapApi } from '../api/client'
 import type { ItemStore } from '../items/itemStore'
 import { createItemStore } from '../items/itemStore'
+import type { ReviewStore } from '../probes/reviewStore'
+import { createReviewStore } from '../probes/reviewStore'
 import type { ScoreStore } from '../probes/scoreStore'
 import { createScoreStore } from '../probes/scoreStore'
 
@@ -12,13 +14,14 @@ export interface MapServices {
   api: MapApi
   items: ItemStore
   scores: ScoreStore
+  reviews: ReviewStore
 }
 
 export const MapApiContext = createContext<MapServices | null>(null)
 
 /** Fresh stores for one map: what one map fetched says nothing of another. */
 export function createMapServices(api: MapApi): MapServices {
-  return { api, items: createItemStore(api), scores: createScoreStore(api) }
+  return { api, items: createItemStore(api), scores: createScoreStore(api), reviews: createReviewStore(api) }
 }
 
 function useMapServices(): MapServices {
@@ -37,4 +40,8 @@ export function useItemStore(): ItemStore {
 
 export function useScoreStore(): ScoreStore {
   return useMapServices().scores
+}
+
+export function useReviewStore(): ReviewStore {
+  return useMapServices().reviews
 }

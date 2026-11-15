@@ -1,7 +1,11 @@
 /* Shapes of what the map routes return, validated where they enter the app. */
 
 import { z } from 'zod'
+import { reviewSchema } from './reviewSchema'
 import { levelMeasureSchema, probeInfoSchema } from './workspaceSchema'
+
+// The review of an item and of a selection: its schemas live in their own module.
+export * from './reviewSchema'
 
 export const bufferSpecSchema = z.object({
   dtype: z.enum(['float32', 'float64', 'uint8', 'uint16', 'uint32']),
@@ -85,27 +89,11 @@ export const probeReadingSchema = z.object({
   report: z.string(),
 })
 
-export const findingSchema = z.object({
-  probe: z.string(),
-  reading: z.enum(['supported', 'not supported', 'unclear']),
-  explanation: z.string(),
-  quote: z.string().nullable(),
-})
-
-export const reviewSchema = z.object({
-  status: z.enum(['none', 'queued', 'done', 'skipped', 'failed']),
-  reason: z.string().nullable().default(null),
-  model: z.string().nullable().default(null),
-  prompt_version: z.string().nullable().default(null),
-  findings: z.array(findingSchema).default([]),
-  measured: z.boolean().default(false),
-})
-
 export const pointReadingSchema = z.object({
   index: z.number().int(),
   probes: z.array(probeReadingSchema),
   scores: z.record(z.string(), z.number()),
-  // Null on the demo dataset: only workspace items are reviewed.
+  // The review stored with the item, when it has one. Null when the map stores none.
   review: reviewSchema.nullable(),
 })
 
@@ -117,6 +105,4 @@ export type Health = z.infer<typeof healthSchema>
 export type LevelMeasure = z.infer<typeof levelMeasureSchema>
 export type ProbeInfo = z.infer<typeof probeInfoSchema>
 export type ProbeReading = z.infer<typeof probeReadingSchema>
-export type Finding = z.infer<typeof findingSchema>
-export type Review = z.infer<typeof reviewSchema>
 export type PointReading = z.infer<typeof pointReadingSchema>

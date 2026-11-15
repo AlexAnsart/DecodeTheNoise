@@ -1,33 +1,65 @@
-/* A text cut around the quotes found in it, so they can be shown inside the text itself. Pure. */
+/* The quotes of a review, placed in the text of the item. Each quote gets a number, in the
+   order it appears, and the text is cut at every start and end: where two quotes overlap, the
+   shared part belongs to both and neither hides the other. Pure. */
 
 export interface TextPart {
   text: string
-  /** The part is a quote: words the review leaned on. */
-  quoted: boolean
+  /** Numbers of the quotes that cover this part; empty for plain text. */
+  quotes: number[]
+  /** Numbers of the quotes that end with this part: their mark goes right after it. */
+  ends: number[]
 }
 
-/** The parts of `text` in order. A quote absent from the text marks nothing; quotes that
- *  overlap are marked as one stretch. */
-export function partsAround(text: string, quotes: string[]): TextPart[] {
-  const spans: Array<[number, number]> = []
+export interface PlacedQuotes {
+  parts: TextPart[]
+  /** The number of a quote in the text; null when the text does not hold it. */
+  numberOf(quote: string): number | null
+}
+
+interface Span {
+  start: number
+  end: number
+}
+
+/** Where `text` holds the quote: as written, or with other spacing between its words. */
+function find(text: string, quote: string): Span | null {
+  const exact = text.indexOf(quote)
+  if (exact >= 0) return { start: exact, end: exact + quote.length }
+  const words = quote.split(/\s+/).filter(Boolean)
+  if (words.length === 0) return null
+  const loose = new RegExp(words.map((word) => word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('\\s+')).exec(text)
+  return loose ? { start: loose.index, end: loose.index + loose[0].length } : null
+}
+
+export function placeQuotes(text: string, quotes: string[]): PlacedQuotes {
+  const found = new Map<string, Span>()
   for (const quote of quotes) {
-    const start = quote ? text.indexOf(quote) : -1
-    if (start >= 0) spans.push([start, start + quote.length])
+    if (!quote || found.has(quote)) continue
+    const span = find(text, quote)
+    if (span) found.set(quote, span)
   }
-  if (spans.length === 0) return [{ text, quoted: false }]
-  spans.sort((a, b) => a[0] - b[0])
+  // Numbered in reading order. Two quotes of the same span share one number.
+  const numbers = new Map<string, number>()
+  const spans: Array<Span & { number: number }> = []
+  for (const [quote, span] of Array.from(found).sort((a, b) => a[1].start - b[1].start || a[1].end - b[1].end)) {
+    const same = spans.find((other) => other.start === span.start && other.end === span.end)
+    const number = same ? same.number : spans.length + 1
+    if (!same) spans.push({ ...span, number })
+    numbers.set(quote, number)
+  }
+  const cuts = Array.from(new Set([0, text.length, ...spans.flatMap((span) => [span.start, span.end])])).sort((a, b) => a - b)
   const parts: TextPart[] = []
-  let cursor = 0
-  for (const [start, end] of spans) {
-    if (end <= cursor) continue
-    const from = Math.max(start, cursor)
-    if (from > cursor) parts.push({ text: text.slice(cursor, from), quoted: false })
-    // A span that starts inside the previous quote lengthens it.
-    const last = parts[parts.length - 1]
-    if (from > start && last?.quoted) last.text += text.slice(from, end)
-    else parts.push({ text: text.slice(from, end), quoted: true })
-    cursor = end
+  for (let i = 0; i + 1 < cuts.length; i += 1) {
+    const from = cuts[i]
+    const to = cuts[i + 1]
+    parts.push({
+      text: text.slice(from, to),
+      quotes: spans.filter((span) => span.start <= from && span.end >= to).map((span) => span.number),
+      ends: spans.filter((span) => span.end === to).map((span) => span.number),
+    })
   }
-  if (cursor < text.length) parts.push({ text: text.slice(cursor), quoted: false })
-  return parts
+  return {
+    parts: parts.length > 0 ? parts : [{ text, quotes: [], ends: [] }],
+    numberOf: (quote) => numbers.get(quote) ?? null,
+  }
 }

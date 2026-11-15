@@ -47,9 +47,9 @@ export function Header({ page, workspaceOpen, onPanel, onTour }: HeaderProps): R
             </button>
           </>
         ) : null}
-        <Link to={PATHS.method} className={`nm-tool${page === 'method' ? ' is-active' : ''}`} title="How it works, and how reliable each probe measured to be">
+        <Link to={PATHS.method} className={`nm-tool nm-header__method${page === 'method' ? ' is-active' : ''}`} title="How it works, the scores of every probe, and the posts and guides behind them">
           <BookOpen size={13} aria-hidden />
-          Method
+          Method and scores
         </Link>
         <button type="button" className="nm-tool nm-tool--icon" onClick={onTour} title="Take the tour of the map" aria-label="Take the tour of the map">
           <CircleHelp size={15} aria-hidden />

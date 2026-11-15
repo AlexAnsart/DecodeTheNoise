@@ -19,6 +19,7 @@ export function probeLegend(data: MapData, key: string, probe: ProbeScores, pale
   const info = data.probes.find((candidate) => candidate.key === key)
   const { scores } = probe
   const entries: LegendEntry[] = [
+    // A level the probe was not measured at never holds a point, so its row is never shown.
     { id: PROBABLE, label: 'Probable', colour: palette.probable, alpha: ALPHA_FULL, total: 0, hint: info?.probable ? `At this level: ${measureWords(info.probable)}` : undefined },
     { id: POSSIBLE, label: 'Possible', colour: palette.possible, alpha: ALPHA_FULL, total: 0, hint: info?.possible ? `At this level: ${measureWords(info.possible)}` : undefined },
     { id: NOT_FLAGGED, label: 'Not flagged', colour: palette.rest, alpha: ALPHA_REST, total: 0 },
@@ -28,7 +29,7 @@ export function probeLegend(data: MapData, key: string, probe: ProbeScores, pale
   for (let i = 0; i < data.n; i += 1) {
     // A point added since the scores were read has none yet.
     const score = scores && i < scores.length ? scores[i] : Number.NaN
-    const level = levelOf(score, info)
+    const level = info ? levelOf(score, info) : null
     const entry = Number.isNaN(score) ? NOT_READ : level === 'probable' ? PROBABLE : level === 'possible' ? POSSIBLE : NOT_FLAGGED
     entryOf[i] = entry
     entries[entry].total += 1

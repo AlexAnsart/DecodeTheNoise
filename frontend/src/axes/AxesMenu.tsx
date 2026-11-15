@@ -67,7 +67,7 @@ export function AxesMenu(props: AxesMenuProps): ReactElement {
         <section className="nm-axes__section">
           <h4>Raise by a probe</h4>
           {shownProbes(probes).length > 0 ? (
-            <p>Each item rises by its score for the probe. Every probe has its two levels at the same height: possible from 0.5, probable from 0.8.</p>
+            <p>Each item rises by its score for the probe. The axis marks the levels the probe was measured at, at the same height for every probe.</p>
           ) : null}
           <ProbeList probes={probes} current={raisedBy} disabled={busy} onPick={onProbe} />
         </section>

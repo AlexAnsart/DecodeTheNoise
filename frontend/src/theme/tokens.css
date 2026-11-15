@@ -127,3 +127,8 @@ html[data-theme='light'] {
   --nm-level-possible: #b8860b;
   --nm-level-probable: #b5461f;
 }
+
+/* The figures of the reports are drawn on white, whatever the theme of the page around them. */
+:root {
+  --nm-figure-bg: #ffffff;
+}

@@ -26,9 +26,10 @@ export const RELIEF_TOP = 1.2
 
 /** The span holding 99% of the dated points: a few stray dates must not flatten the axis. */
 export function busyRange(ts: Float64Array): TimeRange | null {
-  const dated = Array.from(ts).filter((t) => t > 0)
+  // A typed array sorts its numbers natively: on half a million dates, far faster than a
+  // plain array with a comparator.
+  const dated = ts.filter((t) => t > 0).sort()
   if (dated.length === 0) return null
-  dated.sort((a, b) => a - b)
   const at = (share: number): number => dated[Math.min(dated.length - 1, Math.floor(share * dated.length))]
   const from = at(0.005)
   const to = at(0.995)

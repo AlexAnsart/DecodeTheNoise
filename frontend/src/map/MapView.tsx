@@ -22,6 +22,7 @@ import { boundsOf, flatSpan } from './geometry'
 import { MapBar } from './MapBar'
 import type { MapData } from './mapData'
 import { MapDrawers } from './MapDrawers'
+import { SampleNotice } from './SampleNotice'
 import { useMapActions } from './useMapActions'
 import { useMapModel } from './useMapModel'
 import { useMapStage } from './useMapStage'
@@ -131,6 +132,12 @@ export function MapView({ data, stale }: MapViewProps): ReactElement {
       <div ref={refs.stage} className={`nm-stage${lasso ? ' is-lasso' : ''}`} tabIndex={0} onKeyDown={onStageKey} aria-label="Meaning map" data-tour="map">
         <div ref={refs.host} className="nm-stage__canvas" />
         {stage.failed ? <p className="nm-stage__message">The map needs WebGL, and this browser could not start it.</p> : null}
+        {stage.drawing && !stage.failed ? (
+          <p className="nm-stage__message nm-stage__message--over" role="status">
+            Drawing the points…
+          </p>
+        ) : null}
+        {stage.sampling ? <SampleNotice sampling={stage.sampling} /> : null}
         {!stage.failed && kept.shown === 0 ? <p className="nm-stage__message nm-stage__message--over">No point matches the filter.</p> : null}
         {status ? (
           <p className="nm-stage__status" role="status">

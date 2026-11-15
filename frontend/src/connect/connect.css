@@ -55,7 +55,7 @@
 }
 
 .nm-send__panel p,
-.nm-sample p {
+.nm-sampler p {
   margin: 0;
   color: var(--nm-text-muted);
   font-size: 0.74rem;
@@ -91,26 +91,26 @@
   outline-offset: 0;
 }
 
-.nm-sample {
+.nm-sampler {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 0.55rem;
 }
 
-.nm-sample__progress {
+.nm-sampler__progress {
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
   width: 100%;
 }
 
-.nm-sample .nm-sample__progress > p {
+.nm-sampler .nm-sampler__progress > p {
   color: var(--nm-text);
   font-size: 0.78rem;
   font-weight: 600;
 }
 
-.nm-sample .nm-sample__note--error {
+.nm-sampler .nm-sampler__note--error {
   color: var(--nm-danger);
 }

@@ -4,6 +4,7 @@ import type { ReactElement } from 'react'
 import type { WorkspaceInfo } from '../api/workspaceSchema'
 import { agentPrompt, curlExample } from './apiReference'
 import { CopyBlock } from './CopyBlock'
+import { maskedKey } from './maskedKey'
 import { SampleSender } from './SampleSender'
 import type { SampleSender as Sender } from './useSampleSender'
 import './connect.css'
@@ -32,6 +33,8 @@ export function SendTabs({ apiKey, info, live, sender }: SendTabsProps): ReactEl
   const batchItems = info.limits.batch_items
   const prompt = useMemo(() => agentPrompt(origin, apiKey, batchItems), [origin, apiKey, batchItems])
   const curl = useMemo(() => curlExample(origin, apiKey), [origin, apiKey])
+  // On screen the key stays hidden, as in its own field: only the copy holds it whole.
+  const hidden = (text: string): string => text.replaceAll(apiKey, maskedKey(apiKey))
 
   return (
     <div className="nm-send">
@@ -55,14 +58,14 @@ export function SendTabs({ apiKey, info, live, sender }: SendTabsProps): ReactEl
       <div className="nm-send__panel" role="tabpanel" id={`${id}-panel`} aria-labelledby={`${id}-${way}`}>
         {way === 'agent' ? (
           <>
-            <p>Paste this prompt into your coding agent. It holds the address, the fields and your key.</p>
-            <CopyBlock text={prompt} what="the prompt" />
+            <p>Paste this prompt into your coding agent. It holds the address, the fields and your key: hidden here, whole in the copy.</p>
+            <CopyBlock text={prompt} shown={hidden(prompt)} what="the prompt" />
           </>
         ) : null}
         {way === 'curl' ? (
           <>
-            <p>One post from a terminal. The answer holds its scores and what surrounds it.</p>
-            <CopyBlock text={curl} what="the command" />
+            <p>One post from a terminal. The answer holds its scores and what surrounds it. The copy holds your key, hidden here.</p>
+            <CopyBlock text={curl} shown={hidden(curl)} what="the command" />
           </>
         ) : null}
         {way === 'sample' ? <SampleSender sender={sender} info={info} live={live} /> : null}

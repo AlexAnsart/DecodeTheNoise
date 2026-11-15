@@ -1,0 +1,248 @@
+/* The review of a selection: its entry in the drawer, beside the other checks, and the panel
+   that takes the place of the list while it is open. */
+
+/* The checks and the list of the drawer. Hidden, not unmounted, while the review panel is
+   open: what the checks found stays. */
+.nm-drawer__body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
+.nm-drawer__body[hidden] {
+  display: none;
+}
+
+.nm-sreview-entry {
+  flex: none;
+  padding: 0.5rem 0.5rem 0.6rem 0.75rem;
+  border-bottom: 1px solid var(--nm-border-strong);
+  background: color-mix(in srgb, var(--nm-accent) 4%, transparent);
+  font-size: 0.72rem;
+  line-height: 1.4;
+}
+
+.nm-sreview-entry__head {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.nm-sreview-entry__head h3 {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 650;
+}
+
+.nm-sreview-entry__says {
+  display: flex;
+  gap: 0.35rem;
+  margin: 0.3rem 0 0;
+  color: var(--nm-text-muted);
+}
+
+.nm-sreview-entry__says svg {
+  flex: none;
+  margin-top: 0.15rem;
+  color: var(--nm-accent);
+}
+
+.nm-sreview-entry__says.is-error,
+.nm-sreview__error {
+  color: var(--nm-danger);
+}
+
+.nm-sreview {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  font-size: 0.74rem;
+  line-height: 1.45;
+}
+
+.nm-sreview p {
+  margin: 0;
+}
+
+.nm-sreview__head {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  min-height: 36px;
+  padding: 0 0.5rem;
+  border-bottom: 1px solid var(--nm-border);
+  background: color-mix(in srgb, var(--nm-accent) 4%, transparent);
+  flex: none;
+}
+
+.nm-sreview__head h3 {
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 650;
+}
+
+/* One scroll owner: the head stays, the body scrolls. */
+.nm-sreview__body {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  flex: 1;
+  min-height: 0;
+  padding: 0.8rem 0.75rem 1rem;
+  overflow-y: auto;
+}
+
+.nm-sreview__part {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.nm-sreview__label {
+  color: var(--nm-text-muted);
+  font-size: 0.64rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.nm-sreview__sub {
+  margin-top: 0.2rem !important;
+  color: var(--nm-text-muted);
+  font-size: 0.68rem;
+  font-weight: 600;
+}
+
+.nm-sreview__fine {
+  color: var(--nm-text-muted);
+  font-size: 0.66rem;
+}
+
+.nm-sreview__busy {
+  display: flex;
+  gap: 0.55rem;
+  padding: 0.6rem 0.7rem;
+  border: 1px solid var(--nm-border);
+  border-radius: 8px;
+}
+
+.nm-sreview__busy svg {
+  flex: none;
+  margin-top: 0.1rem;
+  color: var(--nm-accent);
+}
+
+.nm-sreview__run,
+.nm-sreview__more {
+  align-self: flex-start;
+}
+
+.nm-sreview__more {
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--nm-accent);
+  font-size: 0.7rem;
+}
+
+.nm-sreview__more:hover {
+  text-decoration: underline;
+}
+
+/* What the posts read have in common: the sentence the panel is opened for. */
+.nm-sreview__statement {
+  padding: 0.5rem 0.65rem;
+  border-left: 3px solid var(--nm-accent);
+  border-radius: 0 6px 6px 0;
+  background: color-mix(in srgb, var(--nm-accent) 7%, transparent);
+  font-size: 0.8rem;
+  overflow-wrap: anywhere;
+}
+
+/* What the review is not. */
+.nm-sreview__not {
+  padding: 0.45rem 0.6rem;
+  border: 1px dashed var(--nm-border-strong);
+  border-radius: 6px;
+  color: var(--nm-text-muted);
+}
+
+.nm-rates {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.72rem;
+}
+
+.nm-rates th,
+.nm-rates td {
+  padding: 0.28rem 0.35rem;
+  border-bottom: 1px solid var(--nm-border);
+  text-align: right;
+  vertical-align: baseline;
+  white-space: nowrap;
+}
+
+.nm-rates thead th {
+  color: var(--nm-text-muted);
+  font-size: 0.64rem;
+  font-weight: 600;
+}
+
+.nm-rates th:first-child {
+  padding-left: 0;
+  text-align: left;
+  white-space: normal;
+}
+
+.nm-rates tbody th {
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.nm-rates__count {
+  display: block;
+  color: var(--nm-text-muted);
+  font-size: 0.64rem;
+  font-weight: 400;
+}
+
+.nm-rates__ratio {
+  color: var(--nm-level-probable);
+  font-weight: 700;
+}
+
+.nm-gtechnique {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.nm-gtechnique__count {
+  margin-left: auto;
+  color: var(--nm-text-muted);
+  font-size: 0.64rem;
+  white-space: nowrap;
+}
+
+/* A quote of one post: a click opens that post on the map. */
+.nm-gtechnique__example {
+  padding: 0.25rem 0.45rem;
+  border: none;
+  border-left: 2px solid color-mix(in srgb, var(--nm-level-possible) 70%, transparent);
+  border-radius: 0 5px 5px 0;
+  background: color-mix(in srgb, var(--nm-level-possible) 10%, transparent);
+  color: var(--nm-text);
+  font-size: 0.72rem;
+  font-style: italic;
+  line-height: 1.35;
+  text-align: left;
+  overflow-wrap: anywhere;
+}
+
+.nm-gtechnique__example:hover {
+  background: color-mix(in srgb, var(--nm-level-possible) 22%, transparent);
+}

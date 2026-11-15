@@ -1,0 +1,154 @@
+/* The LLM review of one item, in its card: a quiet way to ask for it, its states, then what
+   it read. The words it cites are marked in the text above with the same numbers. */
+
+.nm-review {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-top: 0.55rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--nm-border);
+  font-size: 0.72rem;
+  line-height: 1.35;
+}
+
+.nm-review__busy {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0;
+  color: var(--nm-text-muted);
+}
+
+.nm-review__busy svg {
+  flex: none;
+  color: var(--nm-accent);
+}
+
+.nm-review__ask {
+  align-self: flex-start;
+  gap: 0.35rem;
+}
+
+.nm-review__label {
+  margin: 0.15rem 0 0;
+  color: var(--nm-text-muted);
+  font-size: 0.66rem;
+  font-weight: 600;
+}
+
+/* A technique the review names, or what it says of a probe: a small row. */
+.nm-technique,
+.nm-finding {
+  padding: 0.3rem 0.45rem;
+  border: 1px solid var(--nm-border);
+  border-radius: 6px;
+  transition:
+    border-color 0.12s ease,
+    background-color 0.12s ease;
+}
+
+.nm-technique.is-active,
+.nm-finding.is-active {
+  border-color: color-mix(in srgb, var(--nm-level-possible) 60%, transparent);
+  background: color-mix(in srgb, var(--nm-level-possible) 9%, transparent);
+}
+
+.nm-technique__head,
+.nm-finding__head {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0;
+}
+
+.nm-technique__name {
+  min-width: 0;
+  font-weight: 650;
+  overflow-wrap: anywhere;
+}
+
+.nm-technique__says {
+  margin: 0.1rem 0 0;
+  overflow-wrap: anywhere;
+}
+
+/* Three readings, each with its own tone: the review confirms the flag, does not, or leaves
+   it open. "Unclear" is a state of its own, not a softer "confirmed". */
+.nm-finding__reading,
+.nm-technique__flagged {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin: 0.05rem 0 0;
+  color: var(--reading);
+  font-size: 0.68rem;
+  font-weight: 650;
+}
+
+.nm-finding__reading svg,
+.nm-technique__flagged svg {
+  flex: none;
+}
+
+.nm-technique__flagged {
+  --reading: var(--nm-level-probable);
+}
+
+.nm-finding--supported {
+  --reading: var(--nm-level-probable);
+}
+
+.nm-finding--not-supported {
+  --reading: var(--nm-text-muted);
+}
+
+.nm-finding--unclear {
+  --reading: var(--nm-level-possible);
+  border-style: dashed;
+}
+
+.nm-finding__label {
+  flex: 1;
+  min-width: 0;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+/* A quote the text of the item does not hold as written: shown in its row. */
+.nm-review__quote {
+  margin: 0.2rem 0 0;
+  padding-left: 0.5rem;
+  border-left: 2px solid var(--nm-border-strong);
+  font-style: italic;
+  overflow-wrap: anywhere;
+}
+
+.nm-review__measure,
+.nm-review__limit,
+.nm-review__pinned {
+  margin: 0.15rem 0 0;
+  color: var(--nm-text-muted);
+  font-size: 0.66rem;
+}
+
+.nm-review__pinned {
+  margin: 0;
+  font-family: var(--nm-font-mono);
+  font-size: 0.62rem;
+}
+
+/* The voice of the post, what it asks, whom it targets: one line each. */
+.nm-review__line {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.nm-review__key {
+  margin-right: 0.15rem;
+  font-weight: 650;
+}
+
+.nm-review__key::after {
+  content: ':';
+}

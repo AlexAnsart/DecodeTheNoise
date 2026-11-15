@@ -31,8 +31,8 @@ function shareOf(t: number, cuts: Float64Array): number {
 
 export function dateBase(ts: Float64Array, palette: Palette): DateBase {
   const n = ts.length
-  const dated = Array.from(ts).filter((t) => t > 0)
-  dated.sort((a, b) => a - b)
+  // A typed array sorts its numbers natively: no plain array of every date, no comparator.
+  const dated = ts.filter((t) => t > 0).sort()
   const base = new Uint8Array(n * 4)
   const cuts = new Float64Array(CUTS)
   if (dated.length > 0) {
