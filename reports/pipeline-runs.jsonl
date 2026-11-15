@@ -40,3 +40,12 @@
 {"at": "2026-11-15T00:17:19+00:00", "step": "pack", "build": "tweets-2026-500k", "machine": "laptop Snapdragon X, CPU", "items": 500000, "seconds": 89.3}
 {"at": "2026-11-15T00:22:07+00:00", "step": "review-evaluate", "build": "m1", "machine": "laptop Snapdragon X, CPU", "items": 1196, "seconds": 633.8, "note": "gemini-3.8-flash, review-v2, 1484 answers stored"}
 {"at": "2026-11-15T00:23:14+00:00", "step": "review-evaluate", "build": "m1", "machine": "laptop Snapdragon X, CPU", "items": 1196, "seconds": 0.7, "note": "gemini-3.8-flash, review-v2, 0 calls now, 1484 answers stored"}
+{"at": "2026-11-15T01:21:17+00:00", "step": "sample", "build": "tweets-2026-100k", "machine": "laptop Snapdragon X, CPU", "items": 100000, "seconds": 372.9, "note": "whole actors, actors of the test split of the probe campaign, from 5 builds"}
+{"at": "2026-11-15T01:31:25+00:00", "step": "sample", "build": "tweets-2026-100k", "machine": "laptop Snapdragon X, CPU", "items": 100000, "seconds": 425.0, "note": "whole actors, actors of the test split of the probe campaign, from 5 builds"}
+{"at": "2026-11-15T01:33:27+00:00", "step": "zones", "build": "tweets-2026-100k", "machine": "laptop Snapdragon X, CPU", "items": 100000, "seconds": 44.8}
+{"at": "2026-11-15T01:34:11+00:00", "step": "neighbours", "build": "tweets-2026-100k", "machine": "laptop Snapdragon X, CPU", "items": 100000, "seconds": 130.7}
+{"at": "2026-11-15T01:34:18+00:00", "step": "zone-names", "build": "tweets-2026-100k", "machine": "laptop Snapdragon X, CPU", "items": 48, "seconds": 0.4, "note": "gemini-3.8-flash through the AI Router, 0 zones named"}
+{"at": "2026-11-15T01:40:43+00:00", "step": "layout", "build": "tweets-2026-100k", "machine": "laptop Snapdragon X, CPU", "items": 100000, "seconds": 386.2, "note": "umap"}
+{"at": "2026-11-15T05:12:00+00:00", "step": "zone-names", "build": "tweets-2026-100k", "machine": "laptop Snapdragon X, CPU", "items": 48, "seconds": 97.3, "note": "gemini-3.8-flash through the AI Router, 48 zones named"}
+{"at": "2026-11-15T05:12:47+00:00", "step": "pack", "build": "tweets-2026-100k", "machine": "laptop Snapdragon X, CPU", "items": 100000, "seconds": 22.7}
+{"at": "2026-11-15T05:14:02+00:00", "step": "pack", "build": "tweets-2026-100k", "machine": "laptop Snapdragon X, CPU", "items": 100000, "seconds": 15.9}

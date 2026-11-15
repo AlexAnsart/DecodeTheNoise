@@ -122,4 +122,15 @@ In the night of 14 to 15 Nov 2026 the demo build was first `tweets-2026-500k`: 5
 - **Probe scores are computed in blocks of 50,000 rows.** In one piece each temporary array is hundreds of megabytes: the same computation took 4 s in the container and 10.5 s inside a request.
 - **Without a GPU, drawing is the cost, not the download.** Of the 34.5 s, 32 s are the browser drawing 500,000 points in software, with the page blocked.
 
+The 100,000-point build served since the morning of 15 Nov 2026 (`tweets-2026-100k`, commit `2115308`), measured from outside on the live site:
+
+| What | Measured |
+| --- | --- |
+| The map's buffers: plain, sent gzip | 7.2 MB, 4.9 MB |
+| First display of the map in Edge: with a GPU, without one | 3.1 s, 9.1 s |
+| A point card, then its LLM review already kept; a review asked for the first time | under 2 s; 4 to 10 s |
+| The 200 sample posts sent to a new workspace while the site was being filmed; sent again | 70 s (6.2 posts a second); 0.2 s |
+
+- **The front end guards a browser without a GPU.** No frame is drawn before the renderer is known; above 100,000 points a seeded sample is drawn, with a notice and a button to draw them all, and picking runs on the CPU. On the 500,000-point build in software this brought the first display from 32.9 s to 8.7 s and a hover from 112 s to 0.5 s.
+
 Before a push that changes an image, build it on the server from the committed tree, with the ignore file: `git archive HEAD .dockerignore pyproject.toml uv.lock backend pipelines probes reports docs deploy | ssh root@<server> 'tar -x -C /tmp/x && docker build -f /tmp/x/deploy/api.Dockerfile /tmp/x'`. A first deploy failed in the CI on a folder the ignore file left out, which a build without that file had not shown.
