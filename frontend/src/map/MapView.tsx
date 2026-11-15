@@ -15,6 +15,7 @@ import { HoverTip } from '../picking/HoverTip'
 import { ItemCard } from '../picking/ItemCard'
 import { TimeScrubber } from '../scrubber/TimeScrubber'
 import { SelectionPill } from '../selection/SelectionPill'
+import { isNarrow } from '../theme/narrow'
 import { useTheme } from '../theme/theme'
 import { ControlsHint } from './ControlsHint'
 import { boundsOf, flatSpan } from './geometry'
@@ -60,7 +61,11 @@ export function MapView({ data, stale }: MapViewProps): ReactElement {
   const [lasso, setLasso] = useState(false)
   const [ringed, setRinged] = useState<number | null>(null)
   const [listOpen, setListOpen] = useState(false)
-  const [neighboursClosedFor, setNeighboursClosedFor] = useState<number | null>(null)
+  // The point whose list of neighbours was closed by hand, or on a phone opened by hand: there
+  // the list is a sheet that would cover the card of the point, so it does not open by itself.
+  const [neighboursFlippedFor, setNeighboursFlippedFor] = useState<number | null>(null)
+  const narrow = isNarrow()
+  const neighboursOpen = (neighboursFlippedFor === selected) === narrow
   const flow = usePasteFlow(model, lasso)
   const { analysis, pasted, pasting } = flow
 
@@ -75,7 +80,7 @@ export function MapView({ data, stale }: MapViewProps): ReactElement {
   const actions = useMapActions(data, model, stage, coveredRight)
   usePasteLocate(flow, model, stage, coveredRight)
 
-  const showNeighbours = selected !== null && stage.neighbours.length > 0 && !lasso && neighboursClosedFor !== selected
+  const showNeighbours = selected !== null && stage.neighbours.length > 0 && !lasso && neighboursOpen
   const showList = picked !== null && listOpen
   const showPastedNeighbours = flow.neighbours !== null
 
@@ -184,8 +189,8 @@ export function MapView({ data, stale }: MapViewProps): ReactElement {
               index={selected}
               card={refs.card}
               neighbours={stage.neighbours.length}
-              canOpenNeighbours={neighboursClosedFor === selected}
-              onOpenNeighbours={() => setNeighboursClosedFor(null)}
+              canOpenNeighbours={!neighboursOpen}
+              onOpenNeighbours={() => setNeighboursFlippedFor(narrow ? selected : null)}
               onClose={() => model.setSelected(null)}
             />
           </div>
@@ -212,7 +217,7 @@ export function MapView({ data, stale }: MapViewProps): ReactElement {
           listed={showList ? picked : null}
           onShow={(index) => stage.camera.centreOn(index, coveredRight())}
           onRing={setRinged}
-          onCloseNeighbours={() => setNeighboursClosedFor(selected)}
+          onCloseNeighbours={() => setNeighboursFlippedFor(narrow ? null : selected)}
           onClosePasted={() => flow.setOpen(false)}
           onCloseList={() => setListOpen(false)}
         />

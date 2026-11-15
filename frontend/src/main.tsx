@@ -4,6 +4,8 @@ import { App } from './app/App'
 import { initTheme } from './theme/theme'
 import './theme/tokens.css'
 import './theme/base.css'
+// Last: it overrides the stylesheets of the features, which come in with the app.
+import './theme/small-screens.css'
 
 initTheme()
 

@@ -4,6 +4,7 @@ import type { ReactElement } from 'react'
 import type { Legend as LegendModel } from '../colour/legend'
 import { cssColour } from '../colour/palette'
 import { formatDay } from '../text/format'
+import { isCramped } from '../theme/narrow'
 import { LegendRow } from './LegendRow'
 import './legend.css'
 
@@ -24,7 +25,9 @@ interface LegendProps {
 
 function storedFold(): boolean {
   try {
-    return localStorage.getItem(FOLD_KEY) === '1'
+    const stored = localStorage.getItem(FOLD_KEY)
+    // On a phone the open legend hides the map it explains: it starts folded until asked.
+    return stored === null ? isCramped() : stored === '1'
   } catch {
     return false
   }
