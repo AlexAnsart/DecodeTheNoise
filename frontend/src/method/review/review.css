@@ -1,0 +1,97 @@
+/* The LLM review: its steps, the techniques it screens, its prompts as they are sent. */
+
+.nm-method__section .nm-steps-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  max-width: 54rem;
+  margin: 0;
+  padding-left: 1.4rem;
+}
+
+.nm-steps-list li::marker {
+  color: var(--nm-accent);
+  font-weight: 650;
+}
+
+.nm-techniques {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+  gap: 0.5rem 1.2rem;
+  margin: 0;
+}
+
+.nm-techniques dt {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  font-weight: 600;
+}
+
+.nm-method__section .nm-techniques code {
+  background: none;
+  color: var(--nm-text-muted);
+  font-size: 0.68rem;
+  font-weight: 400;
+}
+
+.nm-techniques dd {
+  margin: 0.1rem 0 0;
+  color: var(--nm-text-muted);
+}
+
+/* The tables of the evaluation: a name over its key, then many figures, so the columns are
+   kept narrow and their titles wrap. */
+.nm-table.nm-review-eval th,
+.nm-table.nm-review-eval td {
+  padding-inline: 0.4rem;
+}
+
+.nm-table.nm-review-eval :is(th, td):first-child {
+  padding-left: 0.7rem;
+}
+
+.nm-table.nm-review-eval :is(th, td):last-child {
+  padding-right: 0.7rem;
+}
+
+.nm-table.nm-review-eval thead th {
+  white-space: normal;
+  vertical-align: bottom;
+}
+
+.nm-table.nm-review-eval td {
+  white-space: nowrap;
+}
+
+.nm-method__section .nm-review-eval th code {
+  display: block;
+  padding: 0;
+  background: none;
+  color: var(--nm-text-muted);
+  font-size: 0.66rem;
+  font-weight: 400;
+  overflow-wrap: anywhere;
+}
+
+.nm-table.nm-review-eval td.nm-review-eval__none {
+  color: var(--nm-text-muted);
+  white-space: normal;
+}
+
+/* A prompt is shown as it is sent: every character, no wrapping of its own. */
+.nm-prompt {
+  max-height: 32rem;
+  margin: 0;
+  padding: 0.7rem 0.8rem;
+  overflow: auto;
+  border: 1px solid var(--nm-border);
+  border-radius: var(--nm-radius-sm);
+  background: var(--nm-inset-bg);
+  font-family: var(--nm-font-mono);
+  font-size: 0.7rem;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}

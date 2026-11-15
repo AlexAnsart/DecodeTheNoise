@@ -1,19 +1,76 @@
-/* The method page: one column that scrolls, sections, and plain tables. */
+/* The method page: a table of contents that stays in view, one column of sections, and the
+   pieces every section shares (facts, rows that open, chips, tables). */
 
 .nm-method {
   flex: 1;
   min-height: 0;
   overflow-y: auto;
-  scroll-behavior: smooth;
+}
+
+.nm-method__layout {
+  display: grid;
+  grid-template-columns: 13.5rem minmax(0, 1fr);
+  gap: 2.2rem;
+  width: min(1240px, 100%);
+  margin: 0 auto;
+  padding: 2rem 1.25rem 5rem;
+}
+
+.nm-toc {
+  position: sticky;
+  top: 2rem;
+  align-self: start;
+  max-height: calc(100vh - 6rem);
+  overflow-y: auto;
+  font-size: 0.78rem;
+  line-height: 1.35;
+}
+
+.nm-toc__title {
+  margin: 0 0 0.5rem;
+  color: var(--nm-text-muted);
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.nm-toc ol {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-left: 1px solid var(--nm-border);
+}
+
+.nm-toc a {
+  display: block;
+  margin-left: -1px;
+  padding: 0.3rem 0.75rem;
+  border-left: 2px solid transparent;
+  color: var(--nm-text-muted);
+  text-decoration: none;
+  transition:
+    color 0.12s ease,
+    border-color 0.12s ease;
+}
+
+.nm-toc a:hover {
+  color: var(--nm-text);
+}
+
+.nm-toc a.is-active {
+  border-left-color: var(--nm-accent);
+  color: var(--nm-text);
+  font-weight: 600;
 }
 
 .nm-method__page {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
-  width: min(980px, 100%);
-  margin: 0 auto;
-  padding: 2rem 1.25rem 4rem;
+  gap: 2.6rem;
+  min-width: 0;
 }
 
 .nm-method__head {
@@ -24,63 +81,67 @@
 
 .nm-method__head h1 {
   margin: 0;
-  font-size: 1.5rem;
+  font-size: 1.55rem;
   font-weight: 650;
   line-height: 1.25;
   letter-spacing: -0.01em;
 }
 
-.nm-method__toc {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.35rem;
-  margin-top: 0.2rem;
-}
-
-.nm-method__toc a {
-  padding: 0.2rem 0.65rem;
-  border: 1px solid var(--nm-border);
-  border-radius: 999px;
+.nm-method__head > p:last-child {
+  max-width: 46rem;
+  margin: 0;
   color: var(--nm-text-muted);
-  font-size: 0.74rem;
-  line-height: 1.5;
-  text-decoration: none;
-  transition:
-    border-color 0.12s ease,
-    color 0.12s ease;
-}
-
-.nm-method__toc a:hover {
-  border-color: var(--nm-border-strong);
-  color: var(--nm-text);
+  font-size: 0.9rem;
+  line-height: 1.55;
 }
 
 .nm-method__section {
   display: flex;
   flex-direction: column;
-  gap: 0.7rem;
+  gap: 0.8rem;
+  min-width: 0;
   /* A section opened from a link clears the top of the page. */
   scroll-margin-top: 1rem;
   font-size: 0.82rem;
   line-height: 1.55;
 }
 
+.nm-method__section-head {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid var(--nm-border);
+}
+
 .nm-method__section h2 {
   margin: 0;
-  padding-bottom: 0.45rem;
-  border-bottom: 1px solid var(--nm-border);
-  font-size: 1.05rem;
+  font-size: 1.1rem;
   font-weight: 650;
 }
 
-.nm-method__section h3 {
-  margin: 0.6rem 0 0;
+.nm-method__summary {
+  max-width: 46rem;
+  margin: 0;
+  color: var(--nm-text-muted);
   font-size: 0.84rem;
+}
+
+.nm-method__section h3 {
+  margin: 0.5rem 0 0;
+  font-size: 0.86rem;
   font-weight: 600;
 }
 
-.nm-method__section > p {
+.nm-method__section > p,
+.nm-method__section > ul,
+.nm-method__section > ol {
   margin: 0;
+}
+
+.nm-method__section ul,
+.nm-method__section ol {
+  padding-left: 1.2rem;
 }
 
 .nm-method__section code {
@@ -91,15 +152,21 @@
   font-size: 0.74rem;
 }
 
-.nm-method__section > .nm-method__empty {
-  padding: 0.8rem 0.9rem;
+/* A part that is not there yet says so in one line, in the place where it will be. */
+.nm-method__empty {
+  margin: 0;
+  padding: 0.7rem 0.9rem;
   border: 1px dashed var(--nm-border-strong);
   border-radius: var(--nm-radius-sm);
   color: var(--nm-text-muted);
 }
 
-.nm-method__shape,
-.nm-method__raw pre {
+.nm-method__cta {
+  align-self: flex-start;
+  text-decoration: none;
+}
+
+.nm-method__shape {
   margin: 0;
   padding: 0.7rem 0.8rem;
   overflow: auto;
@@ -111,19 +178,303 @@
   line-height: 1.55;
 }
 
-.nm-method__raw pre {
-  max-height: 22rem;
-  margin-top: 0.5rem;
+/* Facts: a name, then what the server says of it. */
+.nm-facts {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  border: 1px solid var(--nm-border);
+  border-radius: var(--nm-radius-sm);
 }
 
-.nm-method__raw summary {
+.nm-facts > div {
+  display: grid;
+  grid-template-columns: minmax(8rem, 15rem) minmax(0, 1fr);
+  gap: 0.2rem 1rem;
+  padding: 0.45rem 0.7rem;
+  border-bottom: 1px solid var(--nm-border);
+}
+
+.nm-facts > div:last-child {
+  border-bottom: none;
+}
+
+.nm-facts dt {
   color: var(--nm-text-muted);
-  font-size: 0.76rem;
-  cursor: pointer;
 }
 
-.nm-method__raw summary:hover {
+.nm-facts dd {
+  min-width: 0;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.nm-facts__none {
+  color: var(--nm-text-muted);
+  font-style: italic;
+}
+
+.nm-two {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.2rem;
+}
+
+.nm-two h3 {
+  margin-top: 0;
+}
+
+.nm-two ul,
+.nm-two p {
+  margin: 0.35rem 0 0;
+}
+
+.nm-two li + li {
+  margin-top: 0.3rem;
+}
+
+/* A row that opens in place. */
+.nm-disclosure {
+  border: 1px solid var(--nm-border);
+  border-radius: var(--nm-radius-sm);
+  background: color-mix(in srgb, var(--nm-surface-1) 60%, transparent);
+}
+
+.nm-disclosure__row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  min-height: 34px;
+  padding: 0.35rem 0.7rem;
+  border: none;
+  border-radius: var(--nm-radius-sm);
+  background: transparent;
+  font-size: 0.82rem;
+  text-align: left;
+}
+
+.nm-disclosure__row:hover {
+  background: color-mix(in srgb, var(--nm-accent) 7%, transparent);
+}
+
+.nm-disclosure__row > svg {
+  flex: none;
+  color: var(--nm-text-muted);
+  transition: transform 0.12s ease;
+}
+
+.nm-disclosure.is-open > .nm-disclosure__row > svg {
+  transform: rotate(90deg);
+}
+
+.nm-disclosure__title {
+  flex: 1;
+  min-width: 0;
+  font-weight: 600;
+}
+
+.nm-disclosure__hint {
+  flex: none;
+  color: var(--nm-text-muted);
+  font-size: 0.72rem;
+}
+
+.nm-disclosure__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  padding: 0.6rem 0.8rem 0.8rem;
+  border-top: 1px solid var(--nm-border);
+}
+
+/* What became of a probe, and what a label is for. */
+.nm-state {
+  display: inline-block;
+  padding: 0 0.45rem;
+  border: 1px solid var(--nm-border-strong);
+  border-radius: 999px;
+  color: var(--nm-text-muted);
+  font-size: 0.66rem;
+  font-weight: 600;
+  line-height: 1.65;
+  white-space: nowrap;
+}
+
+.nm-state--shown {
+  border-color: color-mix(in srgb, var(--nm-success) 55%, transparent);
+  background: color-mix(in srgb, var(--nm-success) 12%, transparent);
+  color: var(--nm-success);
+}
+
+.nm-state--review-only {
+  border-color: color-mix(in srgb, var(--nm-level-possible) 60%, transparent);
+  background: color-mix(in srgb, var(--nm-level-possible) 12%, transparent);
+  color: var(--nm-level-possible);
+}
+
+.nm-state--none {
+  border-style: dashed;
+  font-weight: 500;
+}
+
+.nm-state--use {
+  font-weight: 500;
+}
+
+/* Filters: a name, then choices that switch on and off. */
+.nm-chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.nm-chips__label {
+  margin-right: 0.2rem;
+  color: var(--nm-text-muted);
+  font-size: 0.72rem;
+}
+
+.nm-chip-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  min-height: 24px;
+  padding: 0 0.55rem;
+  border: 1px solid var(--nm-border);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--nm-text-muted);
+  font-size: 0.72rem;
+  line-height: 1.2;
+  text-decoration: none;
+  transition:
+    border-color 0.12s ease,
+    color 0.12s ease,
+    background 0.12s ease;
+}
+
+.nm-chip-btn:hover:not(:disabled) {
+  border-color: var(--nm-border-strong);
   color: var(--nm-text);
+}
+
+.nm-chip-btn.is-on,
+.nm-chip-btn[aria-pressed='true'] {
+  border-color: color-mix(in srgb, var(--nm-accent) 45%, transparent);
+  background: color-mix(in srgb, var(--nm-accent) 14%, transparent);
+  color: var(--nm-text);
+}
+
+.nm-chip-btn > span {
+  color: var(--nm-text-muted);
+  font-size: 0.66rem;
+}
+
+.nm-tag {
+  display: inline-block;
+  padding: 0 0.45rem;
+  border: 1px solid var(--nm-border);
+  border-radius: 999px;
+  color: var(--nm-text-muted);
+  font-size: 0.66rem;
+  line-height: 1.65;
+  white-space: nowrap;
+}
+
+/* A path of the repository, linked at the deployed commit. */
+.nm-source {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  color: var(--nm-accent);
+  font-family: var(--nm-font-mono);
+  font-size: 0.72rem;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+a.nm-source:hover {
+  text-decoration: underline;
+}
+
+.nm-method__section code.nm-source {
+  background: none;
+  color: var(--nm-text-muted);
+}
+
+.nm-method__section .nm-sources {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.nm-method__section .nm-files {
+  columns: 3 14rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--nm-font-mono);
+  font-size: 0.7rem;
+}
+
+/* The numbers that size the product. */
+.nm-glance {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(7rem, 1fr));
+  gap: 0.5rem;
+  margin: 0;
+}
+
+.nm-glance > div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--nm-border);
+  border-radius: var(--nm-radius-sm);
+  background: var(--nm-surface-1);
+}
+
+.nm-glance dd {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 650;
+  line-height: 1.2;
+}
+
+.nm-glance dt {
+  color: var(--nm-text-muted);
+  font-size: 0.72rem;
+  line-height: 1.3;
+}
+
+.nm-claims {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+  gap: 0.6rem;
+  margin: 0;
+}
+
+.nm-claims > div {
+  padding: 0.7rem 0.85rem;
+  border: 1px solid var(--nm-border);
+  border-left: 3px solid var(--nm-accent);
+  border-radius: var(--nm-radius-sm);
+  background: var(--nm-surface-1);
+}
+
+.nm-claims dt {
+  font-weight: 600;
+}
+
+.nm-claims dd {
+  margin: 0.25rem 0 0;
+  color: var(--nm-text-muted);
 }
 
 .nm-table-wrap {
@@ -137,6 +488,14 @@
   border-collapse: collapse;
   font-size: 0.76rem;
   line-height: 1.45;
+}
+
+.nm-table caption {
+  padding: 0.5rem 0.7rem;
+  border-bottom: 1px solid var(--nm-border);
+  color: var(--nm-text-muted);
+  font-size: 0.72rem;
+  text-align: left;
 }
 
 .nm-table th,
@@ -163,49 +522,27 @@
   border-bottom: none;
 }
 
-.nm-table td > span {
+/* Under a measured rate, its interval: in a cell of figures, or anywhere in a table of figures. */
+.nm-table td.nm-num > span,
+.nm-table.nm-num td > span {
   display: block;
   color: var(--nm-text-muted);
   font-size: 0.68rem;
 }
 
-.nm-table__probe {
-  min-width: 15rem;
-  max-width: 22rem;
-}
-
-.nm-table__probe > strong,
-.nm-table__probe > span {
-  display: block;
-}
-
-.nm-table__probe > span {
-  color: var(--nm-text-muted);
-  font-weight: 400;
-}
-
-.nm-table__tags {
-  display: flex !important;
-  flex-wrap: wrap;
-  gap: 0.3rem;
-  margin-top: 0.3rem;
-}
-
-.nm-table__tags i,
-.nm-table__required {
-  padding: 0 0.4rem;
-  border: 1px solid var(--nm-border);
-  border-radius: 999px;
-  color: var(--nm-text-muted);
-  font-size: 0.64rem;
-  font-style: normal;
-  line-height: 1.6;
+.nm-table td.nm-num {
+  white-space: nowrap;
 }
 
 .nm-table__required {
   margin-left: 0.4rem;
-  border-color: color-mix(in srgb, var(--nm-accent) 45%, transparent);
+  padding: 0 0.4rem;
+  border: 1px solid color-mix(in srgb, var(--nm-accent) 45%, transparent);
+  border-radius: 999px;
   color: var(--nm-accent);
+  font-size: 0.64rem;
+  font-style: normal;
+  line-height: 1.6;
 }
 
 .nm-table__route,
@@ -214,11 +551,63 @@
   white-space: nowrap;
 }
 
-.nm-table td.nm-num {
-  white-space: nowrap;
-}
-
 .nm-table__route b {
   color: var(--nm-accent);
   font-weight: 600;
+}
+
+/* On a narrow window the table of contents becomes a bar across the top. */
+@media (max-width: 1020px) {
+  .nm-method__layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+    padding-top: 0;
+  }
+
+  .nm-toc {
+    top: 0;
+    z-index: 5;
+    max-height: none;
+    margin: 0 -1.25rem;
+    padding: 0.4rem 1.25rem;
+    overflow-x: auto;
+    border-bottom: 1px solid var(--nm-border);
+    background: var(--nm-surface-1);
+  }
+
+  .nm-toc__title {
+    display: none;
+  }
+
+  .nm-toc ol {
+    flex-direction: row;
+    gap: 0.2rem;
+    border-left: none;
+    white-space: nowrap;
+  }
+
+  .nm-toc a {
+    margin: 0;
+    padding: 0.25rem 0.6rem;
+    border: 1px solid transparent;
+    border-radius: 999px;
+  }
+
+  .nm-toc a.is-active {
+    border-color: color-mix(in srgb, var(--nm-accent) 45%, transparent);
+  }
+
+  .nm-method__section {
+    scroll-margin-top: 3.2rem;
+  }
+}
+
+@media (max-width: 720px) {
+  .nm-two {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .nm-facts > div {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }

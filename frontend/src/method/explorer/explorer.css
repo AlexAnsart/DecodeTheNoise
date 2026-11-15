@@ -1,0 +1,291 @@
+/* The labelled posts: filters, a paged list, a post opened on its readings. */
+
+.nm-explorer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.nm-explorer__filters {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(11.5rem, 1fr));
+  gap: 0.5rem 0.7rem;
+  padding: 0.7rem 0.8rem;
+  border: 1px solid var(--nm-border);
+  border-radius: var(--nm-radius-md);
+  background: var(--nm-surface-1);
+}
+
+.nm-explorer__filters label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.nm-explorer__filters label > span {
+  color: var(--nm-text-muted);
+  font-size: 0.68rem;
+}
+
+.nm-explorer__filters select:disabled {
+  opacity: 0.5;
+}
+
+.nm-explorer__words {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.4rem;
+  grid-column: span 2;
+  min-width: 0;
+}
+
+.nm-explorer__words label {
+  flex: 1;
+}
+
+.nm-explorer__bar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.8rem;
+}
+
+.nm-explorer__bar p {
+  margin: 0;
+  color: var(--nm-text-muted);
+  font-size: 0.76rem;
+}
+
+.nm-explorer__bar .nm-segmented span {
+  color: var(--nm-text-muted);
+  font-size: 0.66rem;
+}
+
+.nm-explorer__download {
+  margin-left: auto;
+  text-decoration: none;
+}
+
+.nm-method__section .nm-posts {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border: 1px solid var(--nm-border);
+  border-radius: var(--nm-radius-sm);
+  transition: opacity 0.12s ease;
+}
+
+.nm-posts.is-busy {
+  opacity: 0.55;
+}
+
+.nm-post + .nm-post {
+  border-top: 1px solid var(--nm-border);
+}
+
+.nm-post__row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.55rem 0.7rem;
+  border: none;
+  background: transparent;
+  text-align: left;
+}
+
+.nm-post__row:hover,
+.nm-post.is-open > .nm-post__row {
+  background: color-mix(in srgb, var(--nm-accent) 6%, transparent);
+}
+
+.nm-post__row > svg {
+  flex: none;
+  margin-top: 0.25rem;
+  color: var(--nm-text-muted);
+  transition: transform 0.12s ease;
+}
+
+.nm-post.is-open > .nm-post__row > svg {
+  transform: rotate(90deg);
+}
+
+.nm-post__line {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
+.nm-post__excerpt {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  font-size: 0.8rem;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.nm-post.is-open .nm-post__excerpt {
+  display: none;
+}
+
+.nm-post__chips,
+.nm-post__scores,
+.nm-readings__answers {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.nm-tag--second {
+  border-color: color-mix(in srgb, var(--nm-accent) 45%, transparent);
+  color: var(--nm-accent);
+}
+
+.nm-post__detail {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.7rem;
+  padding: 0.2rem 0.9rem 0.9rem 1.9rem;
+}
+
+.nm-post__detail > .nm-table-wrap {
+  align-self: stretch;
+}
+
+.nm-post__detail > p {
+  margin: 0;
+}
+
+.nm-post__text {
+  align-self: stretch;
+  padding: 0.7rem 0.85rem;
+  border: 1px solid var(--nm-border);
+  border-radius: var(--nm-radius-sm);
+  background: var(--nm-surface-1);
+  font-size: 0.86rem;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.nm-post__text mark {
+  padding: 0.05rem 0.1rem;
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--nm-level-possible) 38%, transparent);
+  color: inherit;
+}
+
+/* An answer on a label. */
+.nm-answer {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0 0.45rem;
+  border: 1px solid var(--nm-border);
+  border-radius: 999px;
+  color: var(--nm-text-muted);
+  font-size: 0.68rem;
+  line-height: 1.65;
+  white-space: nowrap;
+}
+
+.nm-answer i {
+  color: var(--nm-text-muted);
+  font-style: normal;
+  font-weight: 400;
+}
+
+.nm-answer--yes {
+  border-color: color-mix(in srgb, var(--nm-success) 55%, transparent);
+  background: color-mix(in srgb, var(--nm-success) 12%, transparent);
+  color: var(--nm-success);
+  font-weight: 600;
+}
+
+.nm-answer--unclear {
+  border-color: color-mix(in srgb, var(--nm-warning) 55%, transparent);
+  color: var(--nm-warning);
+}
+
+.nm-answer--invalid {
+  border-color: color-mix(in srgb, var(--nm-danger) 55%, transparent);
+  color: var(--nm-danger);
+  text-decoration: line-through;
+}
+
+.nm-answer--own {
+  border-color: color-mix(in srgb, var(--nm-accent) 45%, transparent);
+  color: var(--nm-accent);
+}
+
+/* What a probe scores on a post, tinted by the level it reaches. */
+.nm-score {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0 0.45rem;
+  border: 1px solid var(--nm-border);
+  border-radius: 999px;
+  color: var(--nm-text-muted);
+  font-family: var(--nm-font-mono);
+  font-size: 0.66rem;
+  line-height: 1.7;
+  white-space: nowrap;
+}
+
+.nm-score b {
+  color: var(--nm-text);
+}
+
+.nm-score.is-possible {
+  border-color: color-mix(in srgb, var(--nm-level-possible) 60%, transparent);
+  background: color-mix(in srgb, var(--nm-level-possible) 14%, transparent);
+}
+
+.nm-score.is-probable {
+  border-color: color-mix(in srgb, var(--nm-level-probable) 65%, transparent);
+  background: color-mix(in srgb, var(--nm-level-probable) 16%, transparent);
+}
+
+.nm-readings td {
+  white-space: normal;
+}
+
+.nm-readings__quotes q {
+  display: block;
+  color: var(--nm-text);
+  font-style: italic;
+  overflow-wrap: anywhere;
+}
+
+.nm-readings__quotes q + q {
+  margin-top: 0.25rem;
+}
+
+.nm-explorer__pages {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  color: var(--nm-text-muted);
+  font-size: 0.76rem;
+}
+
+@media (max-width: 720px) {
+  .nm-explorer__words {
+    grid-column: auto;
+  }
+
+  .nm-post__detail {
+    padding-left: 0.9rem;
+  }
+}

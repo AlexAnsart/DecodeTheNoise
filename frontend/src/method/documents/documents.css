@@ -1,0 +1,74 @@
+/* The documents of the campaign: their cards on the page, and a document read in full. */
+
+.nm-method__section .nm-docs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: 0.7rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.nm-doc {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.4rem;
+  padding: 0.8rem 0.9rem 0.9rem;
+  border: 1px solid var(--nm-border);
+  border-radius: var(--nm-radius-md);
+  background: var(--nm-surface-1);
+}
+
+.nm-doc h3 {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.3;
+}
+
+.nm-doc p {
+  margin: 0;
+  color: var(--nm-text-muted);
+}
+
+.nm-doc__meta,
+.nm-reader__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.3rem 0.9rem;
+  font-size: 0.72rem;
+}
+
+.nm-doc > a {
+  margin-top: auto;
+  text-decoration: none;
+}
+
+.nm-reader__meta {
+  margin: 0;
+  color: var(--nm-text-muted);
+}
+
+.nm-reader__toc {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  padding-bottom: 0.8rem;
+  border-bottom: 1px solid var(--nm-border);
+}
+
+.nm-reader__toc a {
+  padding: 0.15rem 0.6rem;
+  border: 1px solid var(--nm-border);
+  border-radius: 999px;
+  color: var(--nm-text-muted);
+  font-size: 0.72rem;
+  line-height: 1.5;
+  text-decoration: none;
+}
+
+.nm-reader__toc a:hover {
+  border-color: var(--nm-border-strong);
+  color: var(--nm-text);
+}

@@ -1,0 +1,174 @@
+/* The pipeline at a glance: six stages in a row, joined by arrows; one opens under the row. */
+
+.nm-pipeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  scroll-margin-top: 1rem;
+}
+
+.nm-method__section .nm-pipeline__stages {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 0.9rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.nm-pipeline__stages > li {
+  position: relative;
+  display: flex;
+}
+
+/* The arrow from a stage to the next one. */
+.nm-pipeline__stages > li + li::before {
+  content: '';
+  position: absolute;
+  top: 1.25rem;
+  left: -0.68rem;
+  width: 0.4rem;
+  height: 0.4rem;
+  border-top: 2px solid var(--nm-border-strong);
+  border-right: 2px solid var(--nm-border-strong);
+  transform: rotate(45deg);
+}
+
+.nm-pipeline__stage {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.3rem;
+  min-width: 0;
+  padding: 0.65rem 0.7rem 0.7rem;
+  border: 1px solid var(--nm-border);
+  border-radius: var(--nm-radius-md);
+  background: var(--nm-surface-1);
+  text-align: left;
+  transition:
+    border-color 0.12s ease,
+    background 0.12s ease,
+    transform 0.12s ease;
+}
+
+.nm-pipeline__stage:hover {
+  border-color: var(--nm-border-strong);
+  transform: translateY(-1px);
+}
+
+.nm-pipeline__stage.is-open {
+  border-color: var(--nm-accent);
+  background: color-mix(in srgb, var(--nm-accent) 9%, var(--nm-surface-1));
+}
+
+.nm-pipeline__step {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--nm-accent);
+}
+
+.nm-pipeline__step b {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 50%;
+  background: var(--nm-accent);
+  color: var(--nm-on-accent);
+  font-size: 0.68rem;
+  line-height: 1;
+}
+
+.nm-pipeline__stage strong {
+  font-size: 0.86rem;
+  font-weight: 650;
+  line-height: 1.25;
+}
+
+.nm-pipeline__stage > span:not(.nm-pipeline__step) {
+  color: var(--nm-text-muted);
+  font-size: 0.72rem;
+  line-height: 1.4;
+}
+
+.nm-pipeline__stage em {
+  margin-top: auto;
+  padding-top: 0.3rem;
+  color: var(--nm-text);
+  font-size: 0.72rem;
+  font-style: normal;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.nm-stage-detail {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem 1.5rem;
+  padding: 0.9rem 1rem 1rem;
+  border: 1px solid color-mix(in srgb, var(--nm-accent) 35%, transparent);
+  border-radius: var(--nm-radius-md);
+  background: var(--nm-surface-1);
+}
+
+.nm-stage-detail .nm-facts > div {
+  grid-template-columns: minmax(6rem, 11rem) minmax(0, 1fr);
+}
+
+.nm-stage-detail h3 {
+  margin: 0 0 0.35rem;
+  color: var(--nm-text-muted);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.nm-stage-detail p {
+  margin: 0;
+}
+
+.nm-stage-detail p + p {
+  margin-top: 0.45rem;
+}
+
+.nm-stage-detail__more {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-top: 0.45rem;
+}
+
+@media (max-width: 1180px) {
+  .nm-method__section .nm-pipeline__stages {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  /* A new row starts without an arrow. */
+  .nm-pipeline__stages > li:nth-child(3n + 1)::before {
+    display: none;
+  }
+}
+
+@media (max-width: 720px) {
+  .nm-method__section .nm-pipeline__stages {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .nm-pipeline__stages > li::before {
+    display: none;
+  }
+
+  .nm-stage-detail {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nm-pipeline__stage {
+    transition: none;
+  }
+}

@@ -1,0 +1,458 @@
+/* The probes: the score scale, the three states, the figures, the table and an opened probe. */
+
+.nm-scale {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.8rem 0.9rem;
+  border: 1px solid var(--nm-border);
+  border-radius: var(--nm-radius-md);
+  background: var(--nm-surface-1);
+}
+
+.nm-scale__track {
+  display: flex;
+  height: 1.5rem;
+  overflow: hidden;
+  border-radius: 6px;
+  background: var(--nm-inset-bg);
+  font-size: 0.68rem;
+  font-weight: 600;
+  line-height: 1.5rem;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.nm-scale__track > span {
+  overflow: hidden;
+  color: var(--nm-text-muted);
+}
+
+.nm-scale__track > .nm-scale__possible {
+  background: color-mix(in srgb, var(--nm-level-possible) 45%, transparent);
+  color: var(--nm-text);
+}
+
+.nm-scale__track > .nm-scale__probable {
+  background: color-mix(in srgb, var(--nm-level-probable) 60%, transparent);
+  color: var(--nm-text);
+}
+
+.nm-scale__marks {
+  position: relative;
+  height: 1rem;
+  color: var(--nm-text-muted);
+  font-size: 0.66rem;
+}
+
+.nm-scale__marks > span {
+  position: absolute;
+  transform: translateX(-50%);
+}
+
+.nm-scale__marks > span:first-child {
+  transform: none;
+}
+
+.nm-scale__marks > span:last-child {
+  transform: translateX(-100%);
+}
+
+.nm-scale p {
+  max-width: 50rem;
+  margin: 0.3rem 0 0;
+}
+
+.nm-states-legend {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: 0.6rem;
+  margin: 0;
+}
+
+.nm-states-legend > div {
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--nm-border);
+  border-radius: var(--nm-radius-sm);
+}
+
+.nm-states-legend dt {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.nm-states-legend dt b {
+  font-size: 1rem;
+}
+
+.nm-states-legend dd {
+  margin: 0.3rem 0 0;
+  color: var(--nm-text-muted);
+  font-size: 0.76rem;
+}
+
+.nm-method__section .nm-figures {
+  display: flex;
+  gap: 0.6rem;
+  margin: 0;
+  padding: 0 0 0.3rem;
+  overflow-x: auto;
+  list-style: none;
+}
+
+.nm-figures__thumb {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  width: 10.5rem;
+  padding: 0.35rem;
+  border: 1px solid var(--nm-border);
+  border-radius: var(--nm-radius-sm);
+  background: var(--nm-surface-1);
+  color: var(--nm-text-muted);
+  font-size: 0.68rem;
+  line-height: 1.3;
+  text-align: left;
+}
+
+.nm-figures__thumb:hover {
+  border-color: var(--nm-accent);
+  color: var(--nm-text);
+}
+
+.nm-figures__thumb img {
+  width: 100%;
+  height: 5.4rem;
+  border-radius: 4px;
+  background: var(--nm-figure-bg);
+  object-fit: cover;
+  object-position: top left;
+}
+
+.nm-probe-filters {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.nm-probe-filters__search {
+  position: relative;
+  display: block;
+  width: min(22rem, 100%);
+}
+
+.nm-probe-filters__search svg {
+  position: absolute;
+  top: 50%;
+  left: 0.5rem;
+  transform: translateY(-50%);
+  color: var(--nm-text-muted);
+}
+
+.nm-probe-filters__search .nm-field {
+  padding-left: 1.7rem;
+}
+
+.nm-probe-filters__count {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0;
+  color: var(--nm-text-muted);
+  font-size: 0.72rem;
+}
+
+.nm-ptable__sort {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+}
+
+.nm-ptable__sort:hover {
+  color: var(--nm-text);
+}
+
+.nm-ptable th.nm-num,
+.nm-ptable td.nm-num {
+  text-align: right;
+}
+
+.nm-ptable__line {
+  cursor: pointer;
+}
+
+.nm-ptable__line:hover > *,
+.nm-ptable__line.is-open > * {
+  background: color-mix(in srgb, var(--nm-accent) 6%, transparent);
+}
+
+.nm-ptable__line.is-open > * {
+  border-bottom-color: transparent;
+}
+
+.nm-ptable__name {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.4rem;
+  width: 100%;
+  padding: 0;
+  border: none;
+  background: transparent;
+  text-align: left;
+}
+
+.nm-ptable__name > svg {
+  flex: none;
+  margin-top: 0.2rem;
+  color: var(--nm-text-muted);
+  transition: transform 0.12s ease;
+}
+
+.nm-ptable__line.is-open .nm-ptable__name > svg {
+  transform: rotate(90deg);
+}
+
+.nm-ptable__name strong {
+  display: block;
+  font-weight: 600;
+}
+
+.nm-method__section .nm-ptable__name code {
+  padding: 0;
+  background: none;
+  color: var(--nm-text-muted);
+  font-size: 0.68rem;
+}
+
+.nm-ptable__family {
+  display: block;
+  margin-top: 0.2rem;
+  color: var(--nm-text-muted);
+  font-size: 0.68rem;
+}
+
+.nm-ptable td.nm-ptable__none {
+  color: var(--nm-placeholder);
+}
+
+.nm-ptable__detail > td {
+  padding: 0;
+  background: color-mix(in srgb, var(--nm-accent) 4%, transparent);
+  white-space: normal;
+}
+
+.nm-probe-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  padding: 0.4rem 0.9rem 1rem 1.9rem;
+  font-size: 0.8rem;
+}
+
+.nm-probe-detail p {
+  margin: 0;
+}
+
+.nm-probe-detail__about {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  max-width: 52rem;
+}
+
+.nm-probe-detail__question {
+  font-size: 0.92rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.nm-probe-detail__actions,
+.nm-label__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.nm-probe-detail__actions a,
+.nm-label__actions a {
+  text-decoration: none;
+}
+
+.nm-probe-detail__levels {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.7rem;
+}
+
+.nm-level {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  min-width: 0;
+  padding: 0.7rem 0.8rem;
+  border: 1px solid var(--nm-border);
+  border-radius: var(--nm-radius-sm);
+  background: var(--nm-surface-1);
+}
+
+.nm-level--none {
+  border-style: dashed;
+  background: transparent;
+  color: var(--nm-text-muted);
+}
+
+.nm-level h4 {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin: 0;
+  font-size: 0.86rem;
+  font-weight: 650;
+}
+
+.nm-level h4 span {
+  color: var(--nm-text-muted);
+  font-size: 0.72rem;
+  font-weight: 400;
+}
+
+.nm-level dl {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  margin: 0;
+}
+
+.nm-rate {
+  display: grid;
+  grid-template-columns: minmax(7rem, 11rem) minmax(0, 1fr);
+  gap: 0.1rem 0.8rem;
+  align-items: center;
+}
+
+.nm-rate dt span {
+  display: block;
+  color: var(--nm-text-muted);
+  font-size: 0.66rem;
+  line-height: 1.3;
+}
+
+.nm-rate dd {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.2rem 0.6rem;
+  margin: 0;
+}
+
+.nm-rate dd strong {
+  min-width: 3.2rem;
+  font-weight: 650;
+}
+
+.nm-rate__track {
+  position: relative;
+  flex: 1;
+  min-width: 5rem;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--nm-inset-bg);
+}
+
+.nm-rate__band {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--nm-accent) 45%, transparent);
+}
+
+.nm-rate__tick {
+  position: absolute;
+  top: -3px;
+  bottom: -3px;
+  width: 2px;
+  margin-left: -1px;
+  border-radius: 1px;
+  background: var(--nm-accent);
+}
+
+.nm-rate__interval {
+  color: var(--nm-text-muted);
+  font-size: 0.68rem;
+}
+
+.nm-level__counts,
+.nm-level__cut {
+  color: var(--nm-text-muted);
+  font-size: 0.74rem;
+}
+
+.nm-level__rates {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.72rem;
+}
+
+.nm-level__rates caption {
+  padding-bottom: 0.25rem;
+  color: var(--nm-text-muted);
+  font-size: 0.68rem;
+  text-align: left;
+}
+
+.nm-level__rates th,
+.nm-level__rates td {
+  padding: 0.25rem 0.4rem;
+  border: 1px solid var(--nm-border);
+  text-align: center;
+}
+
+.nm-level__rates th {
+  color: var(--nm-text-muted);
+  font-weight: 500;
+}
+
+.nm-method__section .nm-probe-extras,
+.nm-method__section .nm-label-facts {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  max-width: 56rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.nm-probe-extras li,
+.nm-label-facts li {
+  padding-left: 0.7rem;
+  border-left: 2px solid var(--nm-border-strong);
+}
+
+.nm-probe-making {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.nm-calibration tr.is-kept > td {
+  background: color-mix(in srgb, var(--nm-accent) 10%, transparent);
+  font-weight: 600;
+}
+
+@media (max-width: 900px) {
+  .nm-probe-detail__levels {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .nm-probe-detail {
+    padding-left: 0.9rem;
+  }
+}

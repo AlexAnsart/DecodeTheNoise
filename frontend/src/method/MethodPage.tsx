@@ -1,63 +1,53 @@
-import { useEffect } from 'react'
-import type { ReactElement, ReactNode } from 'react'
-import { PATHS, navigate, useHash } from '../route/useRoute'
-import { VoicesMethod } from '../voices/VoicesMethod'
-import { ApiReference } from './ApiReference'
-import { LimitsTable } from './LimitsTable'
-import { ProbeTable } from './ProbeTable'
+import { useMemo, useRef } from 'react'
+import type { ReactElement } from 'react'
+import { Overlay } from './documents/Overlay'
+import type { MethodShared } from './MethodContext'
+import { MethodContext } from './MethodContext'
+import { MethodSections } from './MethodSections'
+import { Toc } from './Toc'
+import { useActiveSection } from './useActiveSection'
+import { useMethodData } from './useMethodData'
+import { useMethodNav } from './useMethodNav'
 import './method.css'
 
-/** The sections of the page. Those without a body yet say so in one line. */
-const SECTIONS: { id: string; title: string; body: ReactNode | null }[] = [
-  { id: 'how', title: 'How it works', body: null },
-  { id: 'probes', title: 'Probes and their reliability', body: <ProbeTable /> },
-  { id: 'voices', title: 'One voice or several: the check and its reliability', body: <VoicesMethod /> },
-  { id: 'api', title: 'The API', body: <ApiReference /> },
-  { id: 'limits', title: 'Limits', body: <LimitsTable /> },
-  { id: 'claims', title: 'What NoiseMap does not claim', body: null },
-]
-
-function show(id: string, smooth: boolean): void {
-  document.getElementById(id)?.scrollIntoView({ block: 'start', behavior: smooth ? 'smooth' : 'auto' })
-}
-
-/** The method page: how it works, what each probe measured to be worth, and the API. */
+/** The method page: the whole method in two minutes from its top, and any part of it open
+ *  down to the file that produced a number. What is open is in the address. */
 export function MethodPage(): ReactElement {
-  const hash = useHash()
-  // A link from elsewhere (`/method#probes`) opens the page on its section.
-  useEffect(() => {
-    if (hash) show(hash, false)
-  }, [hash])
+  const scroller = useRef<HTMLDivElement>(null)
+  const nav = useMethodNav(scroller)
+  const active = useActiveSection(scroller)
+  const page = useMethodData()
+  const { data } = page
+  const shared = useMemo<MethodShared>(
+    () => ({
+      nav,
+      source: data ? { repository: data.repository, commit: data.commit } : null,
+      guides: data?.guides ?? [],
+      documents: data?.documents ?? [],
+    }),
+    [nav, data],
+  )
 
   return (
-    <div className="nm-method">
-      <article className="nm-method__page">
-        <header className="nm-method__head">
-          <p className="nm-eyebrow">Method</p>
-          <h1>How NoiseMap works, and what it measured</h1>
-          <nav className="nm-method__toc" aria-label="Sections of this page">
-            {SECTIONS.map((section) => (
-              <a
-                key={section.id}
-                href={`#${section.id}`}
-                onClick={(event) => {
-                  event.preventDefault()
-                  navigate(`${PATHS.method}#${section.id}`)
-                  show(section.id, true)
-                }}
-              >
-                {section.title}
-              </a>
-            ))}
-          </nav>
-        </header>
-        {SECTIONS.map((section) => (
-          <section key={section.id} id={section.id} className="nm-method__section" aria-labelledby={`${section.id}-title`}>
-            <h2 id={`${section.id}-title`}>{section.title}</h2>
-            {section.body ?? <p className="nm-method__empty">To be written.</p>}
-          </section>
-        ))}
-      </article>
-    </div>
+    <MethodContext value={shared}>
+      <div ref={scroller} className="nm-method">
+        <div className="nm-method__layout">
+          <Toc active={active} />
+          <article className="nm-method__page">
+            <header className="nm-method__head">
+              <p className="nm-eyebrow">Method and scores</p>
+              <h1>How NoiseMap reads a post, and how far each reading can be trusted</h1>
+              <p>
+                Every post becomes a vector of meaning. A map places close meanings together; small probes read the vector and flag what they were
+                trained to see; an LLM reads again what they flag and quotes its evidence. Nothing is shown without what it measured, and every
+                number on this page leads to the file that produced it.
+              </p>
+            </header>
+            <MethodSections page={page} />
+          </article>
+        </div>
+        <Overlay method={data} />
+      </div>
+    </MethodContext>
   )
 }

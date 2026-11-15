@@ -1,6 +1,4 @@
 import type { ReactElement } from 'react'
-import { useRequest } from '../api/useRequest'
-import { fetchConfig } from '../api/workspace'
 import type { Limits } from '../api/workspaceSchema'
 import { formatCount } from '../text/format'
 
@@ -13,23 +11,7 @@ const ROWS: { label: string; of(limits: Limits): number }[] = [
 ]
 
 /** What a workspace may hold and send, as the server states it. */
-export function LimitsTable(): ReactElement {
-  const config = useRequest(fetchConfig)
-  if (config.status === 'loading') {
-    return (
-      <p className="nm-note" role="status">
-        Reading the limits…
-      </p>
-    )
-  }
-  if (config.status === 'error') {
-    return (
-      <p className="nm-note nm-note--error" role="alert">
-        The limits could not be read. {config.message}
-      </p>
-    )
-  }
-  const { limits } = config.data
+export function LimitsTable({ limits }: { limits: Limits }): ReactElement {
   return (
     <div className="nm-table-wrap">
       <table className="nm-table">
