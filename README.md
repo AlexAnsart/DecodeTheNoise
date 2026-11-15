@@ -8,9 +8,9 @@ By Team Lowkey, for the Hostinger challenge "Decode the Noise" at [Junction 2026
 
 | Live demo | Pitch film | Pitch deck | Method and measures |
 | :---: | :---: | :---: | :---: |
-| [noisemap.srv2160938.hstgr.cloud](https://noisemap.srv2160938.hstgr.cloud) | [Watch (1 min 57)](https://drive.google.com/file/d/1wXeRQtZbRxGp6ARC0GBcE6TJckT3Fiuo/view?usp=sharing) | [PDF, 11 pages](docs/pitch/noisemap-deck.pdf) | [Method page](https://noisemap.srv2160938.hstgr.cloud/method) |
+| [noisemap.srv2160938.hstgr.cloud](https://noisemap.srv2160938.hstgr.cloud) | [Watch (1 min 57)](https://www.youtube.com/watch?v=Hc7838hy1qk) | [PDF, 11 pages](docs/pitch/noisemap-deck.pdf) | [Method page](https://noisemap.srv2160938.hstgr.cloud/method) |
 
-[![Watch the pitch film. On our benchmark of synthetic groups, each written from one prompt, a near-duplicate detector finds 1.5% (1 of 67) and NoiseMap 94% (50 of 53).](docs/pitch/film-poster.png)](https://drive.google.com/file/d/1wXeRQtZbRxGp6ARC0GBcE6TJckT3Fiuo/view?usp=sharing)
+[![Watch the pitch film. On our benchmark of synthetic groups, each written from one prompt, a near-duplicate detector finds 1.5% (1 of 67) and NoiseMap 94% (50 of 53).](docs/pitch/film-poster.png)](https://www.youtube.com/watch?v=Hc7838hy1qk)
 
 *The pitch film: 1 min 57, narrated, with captions. Click the image to watch it.*
 
