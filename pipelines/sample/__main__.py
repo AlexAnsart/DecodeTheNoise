@@ -8,6 +8,9 @@ With `--held-out`, only the actors of the test split of the probe campaign are d
 (`pipelines/probes/pool.py`): the probes never trained or set a threshold on them, so what a
 probe shows on this build is on the kind of posts its reliability was measured on.
 
+`--keep` names actors taken first, whole (under the same `--held-out` rule): a smaller sample
+keeps the accounts an example rests on. They are recorded with the sample, with `--keep-note`.
+
 Run: uv run python -m pipelines.sample --name tweets-2026-500k --items 500000 --held-out \
          --sources tweets-2026-s00 tweets-2026-s18 tweets-2026-s36 tweets-2026-s54 tweets-2026-s72
 """
@@ -103,6 +106,8 @@ def main() -> None:
     parser.add_argument("--sources", nargs="+", required=True)
     parser.add_argument("--items", type=int, required=True)
     parser.add_argument("--held-out", action="store_true")
+    parser.add_argument("--keep", nargs="*", default=[], help="actors taken first, whole")
+    parser.add_argument("--keep-note", default="", help="why they are kept, recorded as given")
     args = parser.parse_args()
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(name)s %(message)s")
     work: Path = work_dir(args.name)
@@ -112,7 +117,8 @@ def main() -> None:
         counts = count_items(
             args.sources, held_out_of_probes() if args.held_out else lambda _: True
         )
-        chosen = set(draw_actors(counts, args.items, SEED))
+        chosen = set(draw_actors(counts, args.items, SEED, first=args.keep))
+        kept_first = sorted(set(args.keep) & chosen)
         log.info("%d actors drawn of %d, for %d items", len(chosen), len(counts), args.items)
         items: list[Item] = []
         parts: list[np.ndarray] = []
@@ -140,6 +146,13 @@ def main() -> None:
             "drawn_from": kept,
             "unit": "whole actors: every item an actor has in the sources",
         }
+        if kept_first:
+            # Said with the sample: these actors were not drawn, they were asked for.
+            description["kept"] = {
+                "actors": kept_first,
+                "items": sum(item.actor_id in kept_first for item in items),
+                "why": args.keep_note,
+            }
         write_corpus(work / CORPUS_FILE, items, {"sample": json.dumps(description)})
         write_vectors(work, np.concatenate(parts), keys.pop(), int(metas[0]["native_dims"]))
         np.save(work / ORIGIN_FILE, np.asarray(origin, dtype=np.int32))

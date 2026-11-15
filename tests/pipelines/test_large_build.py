@@ -4,11 +4,10 @@ found by several workers, and columns only for attributes that tell points apart
 import numpy as np
 
 from backend.analyze.place import neighbour_weights
-from backend.map.schema import NO_VALUE
 from pipelines.ingest.ira import Item
 from pipelines.layout.landmarks import place_from_landmarks
 from pipelines.neighbours.__main__ import MEMORY, nearest, rows_at_once
-from pipelines.pack.__main__ import columns_of, tells_apart
+from pipelines.pack.__main__ import MAX_COLUMN_VALUES, columns_of, tells_apart
 from pipelines.pack.items import display_attrs
 from pipelines.sample.draw import draw_actors
 
@@ -99,7 +98,8 @@ def test_blocks_shrink_to_fit_the_memory_set() -> None:
 def test_only_attributes_that_tell_points_apart_get_a_column() -> None:
     assert tells_apart(["a", "b", None])
     assert not tells_apart(["a", "a", None]) and not tells_apart([None, None])
-    assert not tells_apart([str(i) for i in range(NO_VALUE)])
+    assert tells_apart([str(i) for i in range(MAX_COLUMN_VALUES)])
+    assert not tells_apart([str(i) for i in range(MAX_COLUMN_VALUES + 1)])
 
     items = [
         _item(i, f"actor{i % 3}", post_type="reply" if i % 2 else "original") for i in range(6)
@@ -119,3 +119,16 @@ def test_an_attribute_every_item_shares_is_left_out_of_the_cards() -> None:
         "post_type": "original",
         "followers": None,
     }
+
+
+def test_actors_asked_for_come_first_and_the_draw_fills_the_rest() -> None:
+    counts = {f"actor-{i}": 10 for i in range(40)}
+    plain = draw_actors(counts, 100, seed="s")
+    asked = [actor for actor in counts if actor not in plain][:2]
+
+    chosen = draw_actors(counts, 100, seed="s", first=[*asked, "not in the corpus", asked[0]])
+
+    assert chosen[:2] == asked and len(set(chosen)) == len(chosen)
+    assert sum(counts[actor] for actor in chosen) == 100
+    # The rest is the same seeded order: the first actors of the plain draw, as many as fit.
+    assert chosen[2:] == plain[:8]

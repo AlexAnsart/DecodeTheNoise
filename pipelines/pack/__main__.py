@@ -17,7 +17,6 @@ from backend.map.schema import (
     BUFFERS_GZIP_FILE,
     ITEMS_FILE,
     MANIFEST_FILE,
-    NO_VALUE,
     VECTORS_FILE,
     ColumnInfo,
     MapManifest,
@@ -48,11 +47,16 @@ log = logging.getLogger("pack")
 GZIP_LEVEL = 6
 
 
+# A column is a legend, a colouring and a filter, and the manifest carries each of its
+# names. The 120,000-point build had 2,306 accounts and read well; 38,088 would not.
+MAX_COLUMN_VALUES = 5_000
+
+
 def tells_apart(values: list[str | None]) -> bool:
     """Whether an attribute is worth a column of the map: it takes at least two values, and
-    few enough to be coded. One value for every point says nothing; hundreds of thousands of
-    accounts cannot be coloured, and do not fit a column."""
-    return 1 < len({value for value in values if value is not None}) < NO_VALUE
+    few enough to be read. One value for every point says nothing; tens of thousands of
+    accounts cannot be told apart by a colour, nor listed in a legend."""
+    return 1 < len({value for value in values if value is not None}) <= MAX_COLUMN_VALUES
 
 
 def columns_of(
