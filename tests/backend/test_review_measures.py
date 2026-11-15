@@ -124,3 +124,20 @@ def test_without_a_readable_report_nothing_is_measured(tmp_path: Path) -> None:
     (tmp_path / "review").mkdir()
     (tmp_path / "review" / "metrics.json").write_text('{"model": "x"}', encoding="utf-8")
     assert load_measures(tmp_path) is NO_MEASURES
+
+
+def test_a_reading_that_does_not_support_the_probe_carries_no_figure(tmp_path: Path) -> None:
+    _write_report(tmp_path)
+    readings = [
+        Finding(probe="whataboutism", reading=reading, explanation="x", quote=None)
+        for reading in ("supported", "not supported", "unclear")
+    ]
+    review = _review().model_copy(update={"findings": readings})
+
+    attached = load_measures(tmp_path).attach(review)
+
+    assert [finding.reliability is not None for finding in attached.findings] == [
+        True,
+        False,
+        False,
+    ]

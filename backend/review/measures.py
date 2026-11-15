@@ -103,8 +103,16 @@ class Measures:
         """The review with the measure of each reading, when the report is about the model and
         the prompt that made it. Otherwise the review says it is not measured."""
         measured = review.status == "done" and self.covers(review.model, review.prompt_version)
+        # The precision of a label is what a `supported` reading is worth. It says nothing of
+        # a reading that does not support the probe: that one carries no figure.
         findings = [
-            finding.model_copy(update={"reliability": self.of(finding.probe) if measured else None})
+            finding.model_copy(
+                update={
+                    "reliability": self.of(finding.probe)
+                    if measured and finding.reading == "supported"
+                    else None
+                }
+            )
             for finding in review.findings
         ]
         techniques = [
