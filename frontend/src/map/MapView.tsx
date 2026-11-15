@@ -6,9 +6,6 @@ import type { AxisWordsHandle } from '../axes/AxisWords'
 import { AxisWords } from '../axes/AxisWords'
 import type { Relief } from '../axes/relief'
 import { readPalette } from '../colour/palette'
-import { ComposePanel } from '../compose/ComposePanel'
-import { useDrafts } from '../compose/useDrafts'
-import { hasFilters } from '../filters/mask'
 import { LassoOverlay } from '../lasso/LassoOverlay'
 import { Legend } from '../legend/Legend'
 import { PastedLabel } from '../paste/PastedLabel'
@@ -49,7 +46,7 @@ export function MapView({ data, stale }: MapViewProps): ReactElement {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const palette = useMemo(() => readPalette(), [theme])
   const model = useMapModel(data, palette)
-  const { colouring, scrubber, shape, relief, selected, picked, range, kept, filters } = model
+  const { colouring, scrubber, shape, relief, selected, picked, range, kept } = model
 
   const refs = {
     stage: useRef<HTMLDivElement>(null),
@@ -61,11 +58,8 @@ export function MapView({ data, stale }: MapViewProps): ReactElement {
     pastedLabel: useRef<HTMLDivElement>(null),
   }
   const [lasso, setLasso] = useState(false)
-  const [edges, setEdges] = useState(true)
   const [ringed, setRinged] = useState<number | null>(null)
   const [listOpen, setListOpen] = useState(false)
-  const [composing, setComposing] = useState(false)
-  const [drafts, setDrafts] = useDrafts(data)
   const [neighboursClosedFor, setNeighboursClosedFor] = useState<number | null>(null)
   const flow = usePasteFlow(model, lasso)
   const { analysis, pasted, pasting } = flow
@@ -76,7 +70,7 @@ export function MapView({ data, stale }: MapViewProps): ReactElement {
     return NO_MARKS
   }, [shape, range, relief, data, model.positions])
 
-  const stage = useMapStage({ data, model, palette, refs, lasso, edges, ringed, marks, pasted, onCanvasClick: () => flow.setOpen(false) })
+  const stage = useMapStage({ data, model, palette, refs, lasso, ringed, marks, pasted, onCanvasClick: () => flow.setOpen(false) })
   const coveredRight = useCallback(() => refs.drawers.current?.offsetWidth ?? 0, [refs.drawers])
   const actions = useMapActions(data, model, stage, coveredRight)
   usePasteLocate(flow, model, stage, coveredRight)
@@ -125,19 +119,9 @@ export function MapView({ data, stale }: MapViewProps): ReactElement {
         model={model}
         actions={actions}
         lasso={lasso}
-        edges={edges}
-        composing={composing}
         pasting={pasting}
         onLasso={setLasso}
-        onEdges={setEdges}
-        onComposing={(open) => {
-          setComposing(open)
-          if (open) flow.setPasting(false)
-        }}
-        onPasting={(open) => {
-          flow.setPasting(open)
-          setComposing(false)
-        }}
+        onPasting={flow.setPasting}
       />
       <div ref={refs.stage} className={`nm-stage${lasso ? ' is-lasso' : ''}`} tabIndex={0} onKeyDown={onStageKey} aria-label="Meaning map" data-tour="map">
         <div ref={refs.host} className="nm-stage__canvas" />
@@ -205,17 +189,6 @@ export function MapView({ data, stale }: MapViewProps): ReactElement {
               onClose={() => model.setSelected(null)}
             />
           </div>
-        ) : null}
-        {composing ? (
-          <ComposePanel
-            sources={{ data, selection: picked, filtered: hasFilters(filters) ? Uint8Array.from(kept.values) : null }}
-            active={colouring.composed !== null}
-            drafts={drafts}
-            onDrafts={setDrafts}
-            onApply={colouring.compose}
-            onLeave={() => colouring.compose(null)}
-            onClose={() => setComposing(false)}
-          />
         ) : null}
         {pasting ? (
           <PastePanel

@@ -55,8 +55,6 @@ export interface StageInput {
   palette: Palette
   refs: StageRefs
   lasso: boolean
-  /** Lines from the selected point to its neighbours are drawn. */
-  edges: boolean
   /** Point whose card is under the pointer in a list. */
   ringed: number | null
   marks: AxisMarks
@@ -83,7 +81,7 @@ export interface Stage {
 }
 
 export function useMapStage(input: StageInput): Stage {
-  const { data, model, palette, refs, lasso, edges, ringed, marks, pasted } = input
+  const { data, model, palette, refs, lasso, ringed, marks, pasted } = input
   const { positions, colours, kept, gap, shape, selected } = model
   const latest = useRef(input)
   const [onEdge, setOnEdge] = useState(false)
@@ -214,7 +212,7 @@ export function useMapStage(input: StageInput): Stage {
 
   const segments = useMemo<Segment[]>(() => {
     const out: Segment[] = []
-    if (selected !== null && edges) {
+    if (selected !== null) {
       const from = pointAt(positions, selected)
       for (const other of neighbours) out.push({ from, to: pointAt(positions, other), index: other })
     }
@@ -224,7 +222,7 @@ export function useMapStage(input: StageInput): Stage {
       }
     }
     return out
-  }, [selected, edges, neighbours, positions, pasted, kept])
+  }, [selected, neighbours, positions, pasted, kept])
 
   const rings = useMemo<Ring[]>(() => {
     const out: Ring[] = []
