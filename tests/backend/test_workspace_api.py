@@ -366,3 +366,19 @@ def test_buffers_are_those_of_the_manifest_that_was_read(platform: Platform) -> 
     assert manifest["n"] == 1 and manifest["buffers"]["pos3"]["length"] == 3
     assert len(now.content) > len(then.content)
     assert gone.status_code == 409
+
+
+def test_the_demo_buffers_are_served_compressed_when_the_file_is_there(platform: Platform) -> None:
+    import gzip
+
+    raw = platform.build.buffers_path.read_bytes()
+    plain = platform.client.get("/api/map/buffers", headers={"Accept-Encoding": "identity"})
+    (platform.build.folder / "map.bin.gz").write_bytes(gzip.compress(raw))
+
+    packed = platform.client.get("/api/map/buffers", headers={"Accept-Encoding": "gzip"})
+    refused = platform.client.get("/api/map/buffers", headers={"Accept-Encoding": "identity"})
+
+    assert "content-encoding" not in plain.headers and plain.content == raw
+    # The client library decompresses: the bytes are the same, the header says how they came.
+    assert packed.headers["content-encoding"] == "gzip" and packed.content == raw
+    assert "content-encoding" not in refused.headers and refused.content == raw

@@ -15,11 +15,13 @@ CREATE VIRTUAL TABLE items_fts USING fts5(
 """
 
 
-def display_attrs(item: Item) -> dict[str, str | int | None]:
-    return {"category": item.category, "post_type": item.post_type, "followers": item.followers}
+def display_attrs(item: Item, hidden: frozenset[str] = frozenset()) -> dict[str, str | int | None]:
+    attrs = {"category": item.category, "post_type": item.post_type, "followers": item.followers}
+    return {key: value for key, value in attrs.items() if key not in hidden}
 
 
-def write_items(path: Path, items: list[Item]) -> None:
+def write_items(path: Path, items: list[Item], hidden: frozenset[str] = frozenset()) -> None:
+    """`hidden` names the attributes left out of the cards: those every item shares."""
     path.unlink(missing_ok=True)
     con = sqlite3.connect(path)
     with con:
@@ -36,7 +38,7 @@ def write_items(path: Path, items: list[Item]) -> None:
                     item.lang,
                     item.repost_of,
                     json.dumps(list(item.urls)),
-                    json.dumps(display_attrs(item)),
+                    json.dumps(display_attrs(item, hidden)),
                 )
                 for idx, item in enumerate(items)
             ],

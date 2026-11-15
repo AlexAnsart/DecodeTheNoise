@@ -25,17 +25,18 @@ def nearest(vectors: np.ndarray, vector: np.ndarray, k: int) -> tuple[np.ndarray
 
 
 def neighbour_weights(scores: np.ndarray) -> np.ndarray:
-    """Weights of the neighbours for the position, summing to 1. `scores` is nearest first.
+    """Weights of the neighbours for the position, summing to 1. `scores` is nearest first:
+    the scores of one point, or one row per point.
 
     Cosines of the ten nearest sit close together, so weighting by the cosine itself would be
     an almost plain average, often in the empty space between clusters. The weight falls off
     with the gap to the nearest neighbour instead, measured in units of the mean gap: the
     nearest weighs 1, a neighbour at the mean gap 1/e. Equal scores give equal weights.
     """
-    gaps = scores[0] - scores
-    scale = max(float(gaps.mean()), 1e-6)
+    gaps = scores[..., :1] - scores
+    scale = np.maximum(gaps.mean(axis=-1, keepdims=True), 1e-6)
     weights = np.exp(-gaps / scale)
-    return weights / weights.sum()
+    return weights / weights.sum(axis=-1, keepdims=True)
 
 
 def weighted_position(

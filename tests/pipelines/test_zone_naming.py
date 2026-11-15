@@ -77,6 +77,35 @@ def test_another_model_is_another_question() -> None:
 def test_a_malformed_answer_gives_no_name() -> None:
     client = FakeClient("I think this is about sport.")
     assert name_zone(client, "model-a", {}, ["workout"], ["Leg day"]) is None
+    assert client.calls == 2
+
+
+class WordyThenShort:
+    """Answers one word too many, then follows the rule once it is restated."""
+
+    def __init__(self) -> None:
+        self.asked: list[str] = []
+
+    def complete(self, system: str, user: str) -> str:
+        self.asked.append(user)
+        if len(self.asked) == 1:
+            return '{"name": "Reactions to Rude or Delusional Behavior"}'
+        return '{"name": "Reactions to Rude Behavior"}'
+
+
+def test_an_answer_that_breaks_the_format_is_asked_once_more() -> None:
+    client = WordyThenShort()
+    cache: dict[str, CachedName] = {}
+    assert (
+        name_zone(client, "model-a", cache, ["rude"], ["How rude"]) == "Reactions to Rude Behavior"
+    )
+    first, second = client.asked
+    assert second.startswith(first) and "2 to 5" in second
+    # Both answers are kept: the same zone costs nothing the next time.
+    assert (
+        name_zone(client, "model-a", cache, ["rude"], ["How rude"]) == "Reactions to Rude Behavior"
+    )
+    assert len(client.asked) == 2
 
 
 def test_twin_names_are_told_apart_by_a_word_the_others_lack() -> None:

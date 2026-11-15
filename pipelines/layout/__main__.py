@@ -1,6 +1,10 @@
 """Lays the vectors out in 3D and in 2D, with UMAP or on their principal axes (PCA).
 
+A large build is laid out from landmarks: UMAP on a random part of the points, the others set
+down among the landmarks they resemble most (`--landmarks`).
+
 Run: uv run --group pipelines python -m pipelines.layout --name ira-3k [--method pca]
+     uv run --group pipelines python -m pipelines.layout --name tweets-2026-500k --landmarks 100000
 """
 
 import argparse
@@ -10,6 +14,7 @@ import numpy as np
 import umap
 
 from pipelines import runlog
+from pipelines.layout.landmarks import place_from_landmarks
 from pipelines.layout.pca import principal_axes
 from pipelines.layout.scale import scale_layout
 from pipelines.paths import LAYOUT_FILE, work_dir
@@ -34,10 +39,17 @@ def lay_out(vectors: np.ndarray, components: int) -> np.ndarray:
     return scale_layout(reducer.fit_transform(vectors))
 
 
+def lay_out_from(vectors: np.ndarray, landmarks: np.ndarray, components: int) -> np.ndarray:
+    """UMAP on the landmarks, then every other point among its nearest landmarks."""
+    placed = place_from_landmarks(vectors, landmarks, lay_out(vectors[landmarks], components))
+    return scale_layout(placed)
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--name", required=True)
     parser.add_argument("--method", choices=("umap", "pca"), default="umap")
+    parser.add_argument("--landmarks", type=int, default=0, help="points UMAP is run on")
     args = parser.parse_args()
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(name)s %(message)s")
     work = work_dir(args.name)
@@ -48,6 +60,12 @@ def main() -> None:
             pos3, pos2 = scale_layout(coordinates), scale_layout(coordinates[:, :2])
             shares = ", ".join(f"{share:.4f}" for share in kept)
             note = f"pca, share of the variance kept by each axis: {shares}"
+        elif 0 < args.landmarks < len(vectors):
+            rng = np.random.default_rng(SEED)
+            landmarks = np.sort(rng.choice(len(vectors), size=args.landmarks, replace=False))
+            pos3 = lay_out_from(vectors, landmarks, 3)
+            pos2 = lay_out_from(vectors, landmarks, 2)
+            note = f"umap on {args.landmarks} landmarks, the other points among their nearest"
         else:
             pos3, pos2 = lay_out(vectors, 3), lay_out(vectors, 2)
             note = "umap"

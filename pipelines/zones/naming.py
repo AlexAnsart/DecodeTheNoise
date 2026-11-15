@@ -25,6 +25,10 @@ SYSTEM = (
     "about, whatever language they are written in. It makes no claim about truth, intent or "
     "who wrote the posts."
 )
+AGAIN = (
+    f"\n\nYour last answer was not accepted. The name must have {MIN_WORDS} to {MAX_WORDS} "
+    f"words and at most {MAX_NAME_CHARS} characters. Answer again with the JSON object only."
+)
 
 
 class Completer(Protocol):
@@ -77,15 +81,7 @@ def cache_key(model: str, user: str) -> str:
     return hashlib.sha256(text.encode("utf-8")).hexdigest()
 
 
-def name_zone(
-    client: Completer,
-    model: str,
-    cache: dict[str, CachedName],
-    words: list[str],
-    samples: list[str],
-) -> str | None:
-    """One call per zone, answered from the cache when the same question was asked before."""
-    user = build_prompt(words, samples)
+def _ask(client: Completer, model: str, cache: dict[str, CachedName], user: str) -> str | None:
     key = cache_key(model, user)
     if key not in cache:
         raw = client.complete(SYSTEM, user)
@@ -93,6 +89,21 @@ def name_zone(
             model=model, prompt_version=PROMPT_VERSION, raw=raw, name=parse_name(raw)
         )
     return cache[key].name
+
+
+def name_zone(
+    client: Completer,
+    model: str,
+    cache: dict[str, CachedName],
+    words: list[str],
+    samples: list[str],
+) -> str | None:
+    """One call per zone, answered from the cache when the same question was asked before.
+    An answer that breaks the format is asked for once more, with the rule restated: a model
+    now and then answers a word too many."""
+    user = build_prompt(words, samples)
+    name = _ask(client, model, cache, user)
+    return name if name is not None else _ask(client, model, cache, user + AGAIN)
 
 
 def tell_apart(names: list[str], words: list[list[str]]) -> list[str]:

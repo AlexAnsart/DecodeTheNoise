@@ -10,7 +10,7 @@ from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.responses import FileResponse, Response
 
 from backend.map.deps import get_build, get_probes
-from backend.map.schema import MapManifest, PointReading
+from backend.map.schema import BUFFERS_GZIP_FILE, MapManifest, PointReading
 from backend.map.store import MapBuild
 from backend.probes.pack import Probes
 from backend.review.schema import NO_REVIEW, Review
@@ -45,11 +45,13 @@ def buffers(
             build = earlier
         return Response(build.blob, media_type=_OCTETS, headers={"Cache-Control": "no-store"})
     # The front end adds the build name to the URL, so a URL never changes content.
-    return FileResponse(
-        build.buffers_path,
-        media_type=_OCTETS,
-        headers={"Cache-Control": "public, max-age=31536000, immutable"},
-    )
+    headers = {"Cache-Control": "public, max-age=31536000, immutable", "Vary": "Accept-Encoding"}
+    compressed = build.folder / BUFFERS_GZIP_FILE
+    if "gzip" in request.headers.get("accept-encoding", "") and compressed.is_file():
+        # Measured on the 500,000-point build: 25 MB sent instead of 36.
+        headers["Content-Encoding"] = "gzip"
+        return FileResponse(compressed, media_type=_OCTETS, headers=headers)
+    return FileResponse(build.buffers_path, media_type=_OCTETS, headers=headers)
 
 
 def probe_scores(request: Request, build: MapBuild, probes: Probes) -> np.ndarray:
