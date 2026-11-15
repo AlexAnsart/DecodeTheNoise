@@ -1,0 +1,57 @@
+{
+ "prompt_sha256": "d6cd58763cf5972a73a151ffc1665887797d280ae6cf44ac9e87c5133cd1c629",
+ "read": [
+  {"post": "tweets-2026-s54:710099", "label": "authority_appeal", "kind": "miss", "mode": "silent"},
+  {"post": "tweets-2026-s72:4936", "label": "loaded_language", "kind": "miss", "mode": "left_out"},
+  {"post": "tweets-2026-s54:834042", "label": "exaggeration", "kind": "miss", "mode": "left_out"},
+  {"post": "tweets-2026-s54:410117", "label": "exaggeration", "kind": "miss", "mode": "both_ways"},
+  {"post": "tweets-2026-s54:1011745", "label": "authority_appeal", "kind": "miss", "mode": "left_out"},
+  {"post": "tweets-2026-s54:685614", "label": "loaded_language", "kind": "miss", "mode": "both_ways"},
+  {"post": "tweets-2026-s54:388286", "label": "loaded_language", "kind": "miss", "mode": "left_out"},
+  {"post": "tweets-2026-s54:604298", "label": "us_vs_them", "kind": "miss", "mode": "left_out"},
+  {"post": "tweets-2026-s72:137701", "label": "exaggeration", "kind": "miss", "mode": "left_out"},
+  {"post": "tweets-2026-s00:956832", "label": "loaded_language", "kind": "miss", "mode": "both_ways"},
+  {"post": "tweets-2026-s54:639378", "label": "us_vs_them", "kind": "false positive", "mode": "overread"},
+  {"post": "tweets-2026-s54:650205", "label": "us_vs_them", "kind": "miss", "mode": "silent"},
+  {"post": "tweets-2026-s54:651553", "label": "identity_appeal", "kind": "miss", "mode": "both_ways"},
+  {"post": "tweets-2026-s00:136015", "label": "loaded_language", "kind": "false positive", "mode": "overread"},
+  {"post": "tweets-2026-s72:191679", "label": "loaded_language", "kind": "miss", "mode": "both_ways"},
+  {"post": "tweets-2026-s54:14425", "label": "loaded_language", "kind": "false positive", "mode": "both_ways"},
+  {"post": "tweets-2026-s00:778015", "label": "exaggeration", "kind": "miss", "mode": "left_out"},
+  {"post": "tweets-2026-s54:710099", "label": "straw_man", "kind": "miss", "mode": "silent"},
+  {"post": "tweets-2026-s54:270541", "label": "doubt", "kind": "miss", "mode": "left_out"},
+  {"post": "tweets-2026-s00:109336", "label": "loaded_language", "kind": "miss", "mode": "silent"},
+  {"post": "tweets-2026-s54:249302", "label": "exaggeration", "kind": "miss", "mode": "silent"},
+  {"post": "tweets-2026-s00:464285", "label": "loaded_language", "kind": "miss", "mode": "left_out"},
+  {"post": "tweets-2026-s54:364896", "label": "loaded_language", "kind": "miss", "mode": "left_out"},
+  {"post": "tweets-2026-s00:7126", "label": "loaded_language", "kind": "miss", "mode": "silent"},
+  {"post": "tweets-2026-s54:950794", "label": "us_vs_them", "kind": "miss", "mode": "left_out"},
+  {"post": "tweets-2026-s54:81119", "label": "doubt", "kind": "miss", "mode": "silent"},
+  {"post": "tweets-2026-s00:483000", "label": "exaggeration", "kind": "miss", "mode": "left_out"},
+  {"post": "tweets-2026-s00:640693", "label": "exaggeration", "kind": "miss", "mode": "both_ways"},
+  {"post": "tweets-2026-s00:741215", "label": "us_vs_them", "kind": "miss", "mode": "left_out"},
+  {"post": "tweets-2026-s54:873360", "label": "slogan", "kind": "miss", "mode": "left_out"}
+ ],
+ "modes": {
+  "left_out": {
+   "name": "Names one technique and leaves out another the post also shows",
+   "example": "A one-line post says a political camp is the worst fascists of the country. The review names the comparison with Nazis and not the superlative, which the annotators marked as exaggeration.",
+   "product": "A probe that flags the post asks its own question directly, and that direct question keeps more true positives than the screen (cascade section). Each technique named carries the recall measured here, so a short list need not be read as a complete one."
+  },
+  "silent": {
+   "name": "Names nothing where the annotators quote a span that fits the guide",
+   "example": "A post asks a government to stop talking to a foreign state and calls that state a regime, the very pair of words the guide gives as an example. The review returned an empty list.",
+   "product": "An empty list means that nothing was found, not that nothing is there: the recall measured here says how often that happens. A post a probe flags is still sent to the direct question."
+  },
+  "both_ways": {
+   "name": "The guide can be read both ways, or the annotation looks wrong",
+   "example": "A post says, in plain sarcasm, that a court case has nothing at all to do with politics. The annotators marked the absolute as exaggeration although the guide exempts sarcasm; the review left it out.",
+   "product": "Nothing to change in the review. These cases cap the agreement any reader can reach, which is why the reference is named as an LLM annotation beside the numbers."
+  },
+  "overread": {
+   "name": "Marks a technique where a condition of the guide is not met in the text",
+   "example": "A post dismisses a claim as rubbish. The review marks loaded language, although the guide leaves plain evaluations out.",
+   "product": "The review returns its quote and its explanation with each technique, so a reader can check it, and the precision measured here goes with it."
+  }
+ }
+}
