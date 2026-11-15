@@ -2,21 +2,39 @@ import { ChevronRight } from 'lucide-react'
 import type { ReactElement } from 'react'
 import { formatInterval, formatLift, formatShare } from '../figures'
 import { StateChip } from '../StateChip'
+import { absenceOf } from './absence'
 import { ProbeDetail } from './ProbeDetail'
-import type { LevelView, ProbeRow } from './probeRows'
-import { widestLevel } from './probeRows'
+import type { Level, ProbeRow } from './probeRows'
+import { LEVELS } from './probeRows'
 import type { ProbeSetting } from './setting'
 
-export const PROBE_COLUMNS = 7
+/** The columns of one level: precision, recall, share flagged. */
+export const LEVEL_CELLS = 3
 
-function Precision({ level }: { level: LevelView | null }): ReactElement {
-  const precision = level?.precision
-  if (!precision) return <td className="nm-num nm-ptable__none">–</td>
+/** Probe, state, the levels, ranking. */
+export const PROBE_COLUMNS = 3 + LEVELS.length * LEVEL_CELLS
+
+/** One level of a probe: its three figures, or in their place why the probe has no such level. */
+function LevelCells({ row, level, setting }: { row: ProbeRow; level: Level; setting: ProbeSetting }): ReactElement {
+  const view = row[level]
+  if (!view) {
+    const absence = absenceOf(row, level, setting.starts)
+    return (
+      <td colSpan={LEVEL_CELLS} className={`nm-ptable__group nm-ptable__absent${absence ? '' : ' nm-ptable__none'}`} title={absence?.long}>
+        {absence?.short ?? '–'}
+      </td>
+    )
+  }
+  const { precision } = view
   return (
-    <td className="nm-num">
-      <strong>{formatShare(precision.value)}</strong>
-      {precision.low !== null && precision.high !== null ? <span>{formatInterval(precision.low, precision.high)}</span> : null}
-    </td>
+    <>
+      <td className="nm-num nm-ptable__group">
+        <strong>{formatShare(precision?.value ?? null)}</strong>
+        {precision && precision.low !== null && precision.high !== null ? <span>{formatInterval(precision.low, precision.high)}</span> : null}
+      </td>
+      <td className="nm-num">{formatShare(view.recall?.value ?? null)}</td>
+      <td className="nm-num">{formatShare(view.flagRate)}</td>
+    </>
   )
 }
 
@@ -29,7 +47,6 @@ interface ProbeLineProps {
 
 /** One probe of the table: its line, and under it what it measured when it is opened. */
 export function ProbeLine({ row, open, setting, onToggle }: ProbeLineProps): ReactElement {
-  const widest = widestLevel(row)
   const detail = `probe-detail-${row.key}`
   return (
     <>
@@ -57,11 +74,10 @@ export function ProbeLine({ row, open, setting, onToggle }: ProbeLineProps): Rea
           <StateChip state={row.state} />
           {row.family ? <span className="nm-ptable__family">{row.family}</span> : null}
         </td>
-        <Precision level={row.possible} />
-        <Precision level={row.probable} />
-        <td className="nm-num">{formatShare(widest?.recall?.value ?? null)}</td>
-        <td className="nm-num">{formatShare(widest?.flagRate ?? null)}</td>
-        <td className="nm-num">{formatLift(row.lift)}</td>
+        {LEVELS.map((level) => (
+          <LevelCells key={level} row={row} level={level} setting={setting} />
+        ))}
+        <td className="nm-num nm-ptable__group">{formatLift(row.lift)}</td>
       </tr>
       {open ? (
         <tr id={detail} className="nm-ptable__detail">

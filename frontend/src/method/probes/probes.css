@@ -183,6 +183,64 @@
   text-align: right;
 }
 
+.nm-ptable thead th {
+  vertical-align: bottom;
+}
+
+/* Two levels, the same three figures each: a rule on the left of a group keeps them apart. */
+.nm-ptable .nm-ptable__group {
+  border-left: 1px solid var(--nm-border);
+}
+
+.nm-ptable thead .nm-ptable__level {
+  padding-bottom: 0;
+  border-bottom: none;
+  color: var(--nm-text);
+  font-size: 0.74rem;
+}
+
+.nm-ptable thead tr + tr th {
+  padding-top: 0.2rem;
+}
+
+.nm-ptable__level > span {
+  margin-left: 0.45rem;
+  color: var(--nm-text-muted);
+  font-size: 0.68rem;
+  font-weight: 400;
+}
+
+/* The colour a level has on the score scale, beside its name wherever the level is named. */
+.nm-ptable__level::before,
+.nm-level h4::before {
+  flex: none;
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 2px;
+  content: '';
+}
+
+.nm-ptable__level::before {
+  display: inline-block;
+  margin-right: 0.4rem;
+}
+
+.nm-ptable__level--probable::before,
+.nm-level--probable h4::before {
+  background: var(--nm-level-probable);
+}
+
+.nm-ptable__level--possible::before,
+.nm-level--possible h4::before {
+  background: var(--nm-level-possible);
+}
+
+.nm-ptable td.nm-ptable__absent {
+  color: var(--nm-text-muted);
+  font-size: 0.7rem;
+  text-align: center;
+}
+
 .nm-ptable__line {
   cursor: pointer;
 }
@@ -241,16 +299,25 @@
   color: var(--nm-placeholder);
 }
 
-.nm-ptable__detail > td {
+.nm-ptable .nm-ptable__detail > td {
   padding: 0;
   background: color-mix(in srgb, var(--nm-accent) 4%, transparent);
   white-space: normal;
 }
 
+/* On a narrow screen the table scrolls sideways; an opened probe stays as wide as the screen. */
+.nm-ptable-wrap {
+  container-type: inline-size;
+}
+
 .nm-probe-detail {
+  position: sticky;
+  left: 0;
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
+  box-sizing: border-box;
+  width: 100cqw;
   padding: 0.4rem 0.9rem 1rem 1.9rem;
   font-size: 0.8rem;
 }
@@ -343,23 +410,25 @@
   line-height: 1.3;
 }
 
+/* The value over its interval, the track beside them: every rate of a level reads the same way. */
 .nm-rate dd {
-  display: flex;
+  display: grid;
+  grid-template-columns: 6.8rem minmax(0, 1fr);
+  gap: 0 0.7rem;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 0.2rem 0.6rem;
   margin: 0;
 }
 
 .nm-rate dd strong {
-  min-width: 3.2rem;
+  grid-row: 1;
+  grid-column: 1;
   font-weight: 650;
 }
 
 .nm-rate__track {
   position: relative;
-  flex: 1;
-  min-width: 5rem;
+  grid-row: 1 / span 2;
+  grid-column: 2;
   height: 8px;
   border-radius: 999px;
   background: var(--nm-inset-bg);
@@ -384,8 +453,11 @@
 }
 
 .nm-rate__interval {
+  grid-row: 2;
+  grid-column: 1;
   color: var(--nm-text-muted);
   font-size: 0.68rem;
+  white-space: nowrap;
 }
 
 .nm-level__counts,
@@ -454,5 +526,16 @@
 
   .nm-probe-detail {
     padding-left: 0.9rem;
+  }
+}
+
+/* A phone has no room for a track beside the figures. */
+@media (max-width: 560px) {
+  .nm-rate dd {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .nm-rate__track {
+    display: none;
   }
 }

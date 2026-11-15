@@ -1,9 +1,11 @@
 /* Ordering and narrowing the table of probes. Pure. */
 
-import type { ProbeRow } from './probeRows'
-import { widestLevel } from './probeRows'
+import type { Level, LevelView, ProbeRow } from './probeRows'
 
-export type SortKey = 'name' | 'state' | 'possible' | 'probable' | 'recall' | 'flagged' | 'lift'
+/** What the table gives for each level. */
+export type Measure = 'precision' | 'recall' | 'flagged'
+
+export type SortKey = 'name' | 'state' | 'lift' | `${Level}.${Measure}`
 
 export interface Sort {
   key: SortKey
@@ -23,34 +25,42 @@ export const NO_FILTER: ProbeFilter = { query: '', families: new Set(), states: 
 /** As the report lists them: shown first. */
 const STATE_ORDER = ['shown', 'review-only', 'dropped']
 
-function valueOf(row: ProbeRow, key: SortKey): number | string | null {
-  switch (key) {
-    case 'name':
-      return row.name.toLowerCase()
-    case 'state': {
-      const at = STATE_ORDER.indexOf(row.state ?? '')
-      return at === -1 ? STATE_ORDER.length : at
-    }
-    case 'possible':
-      return row.possible?.precision?.value ?? null
-    case 'probable':
-      return row.probable?.precision?.value ?? null
-    case 'recall':
-      return widestLevel(row)?.recall?.value ?? null
-    case 'flagged':
-      return widestLevel(row)?.flagRate ?? null
-    case 'lift':
-      return row.lift
+const MEASURES: Record<Measure, (view: LevelView) => number | null> = {
+  precision: (view) => view.precision?.value ?? null,
+  recall: (view) => view.recall?.value ?? null,
+  flagged: (view) => view.flagRate,
+}
+
+function measured(level: Level, measure: Measure): (row: ProbeRow) => number | null {
+  return (row) => {
+    const view = row[level]
+    return view ? MEASURES[measure](view) : null
   }
+}
+
+const VALUES: Record<SortKey, (row: ProbeRow) => number | string | null> = {
+  name: (row) => row.name.toLowerCase(),
+  state: (row) => {
+    const at = STATE_ORDER.indexOf(row.state ?? '')
+    return at === -1 ? STATE_ORDER.length : at
+  },
+  lift: (row) => row.lift,
+  'probable.precision': measured('probable', 'precision'),
+  'probable.recall': measured('probable', 'recall'),
+  'probable.flagged': measured('probable', 'flagged'),
+  'possible.precision': measured('possible', 'precision'),
+  'possible.recall': measured('possible', 'recall'),
+  'possible.flagged': measured('possible', 'flagged'),
 }
 
 /** Rows without a value for the column go last, whichever way it is sorted. */
 export function sortRows(rows: ProbeRow[], sort: Sort | null): ProbeRow[] {
   if (!sort) return rows
   const way = sort.descending ? -1 : 1
+  const valueOf = VALUES[sort.key]
   return [...rows].sort((a, b) => {
-    const left = valueOf(a, sort.key)
-    const right = valueOf(b, sort.key)
+    const left = valueOf(a)
+    const right = valueOf(b)
     if (left === null || right === null) return left === right ? 0 : left === null ? 1 : -1
     if (typeof left === 'string' || typeof right === 'string') return way * String(left).localeCompare(String(right))
     return way * (left - right)

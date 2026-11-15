@@ -30,6 +30,13 @@ export interface LevelView {
   baseRates: [rate: number, precision: number][]
 }
 
+export type Level = 'probable' | 'possible'
+
+/** The order the two levels are read in, everywhere: the stricter one first. */
+export const LEVELS: readonly Level[] = ['probable', 'possible']
+
+export const LEVEL_NAMES: Record<Level, string> = { probable: 'Probable', possible: 'Possible' }
+
 export interface ProbeRow {
   key: string
   name: string
@@ -130,9 +137,4 @@ export function probeRows(infos: ProbeInfo[], report: ProbesReport | null, label
       report: target ?? null,
     }
   })
-}
-
-/** The deepest level a probe keeps: the one that flags most. */
-export function widestLevel(row: ProbeRow): LevelView | null {
-  return row.possible ?? row.probable
 }

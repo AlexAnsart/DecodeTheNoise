@@ -1,11 +1,12 @@
 import type { ReactElement } from 'react'
 import { formatCount } from '../../text/format'
 import { formatNumber, formatRate } from '../figures'
-import type { LevelView } from './probeRows'
+import type { Level, LevelView } from './probeRows'
+import { LEVEL_NAMES } from './probeRows'
 import { RateLine } from './RateLine'
 
 interface LevelCardProps {
-  name: 'Possible' | 'Probable'
+  name: Level
   /** The score from which this level starts, the same for every probe; null while unknown. */
   from: number | null
   level: LevelView | null
@@ -17,16 +18,16 @@ interface LevelCardProps {
 export function LevelCard({ name, from, level, missing }: LevelCardProps): ReactElement {
   if (!level) {
     return (
-      <section className="nm-level nm-level--none" aria-label={name}>
-        <h4>{name}</h4>
+      <section className={`nm-level nm-level--${name} nm-level--none`} aria-label={LEVEL_NAMES[name]}>
+        <h4>{LEVEL_NAMES[name]}</h4>
         <p>{missing}</p>
       </section>
     )
   }
   return (
-    <section className="nm-level" aria-label={name}>
+    <section className={`nm-level nm-level--${name}`} aria-label={LEVEL_NAMES[name]}>
       <h4>
-        {name}
+        {LEVEL_NAMES[name]}
         {from !== null ? <span>from a score of {from}</span> : null}
       </h4>
       <dl>
