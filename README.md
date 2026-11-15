@@ -4,7 +4,7 @@ Every post becomes a point on a 3D meaning map. Switch on layers to see what is 
 
 **Live:** <https://noisemap.srv2160938.hstgr.cloud> (Hostinger VPS).
 
-**Status:** the map is up on 120,000 posts, a sample of the IRA tweets published by FiveThirtyEight, embedded with EmbeddingGemma on a Verda GPU, with zones named by Gemini through the Hostinger AI Router. A pasted text or link is placed on the map live. No detector is shown yet: a layer appears in the product only once its evaluation report exists. How each partner technology is used: [`docs/tech-challenge-status.md`](docs/tech-challenge-status.md).
+**Status:** the demo map shows 100,000 posts from X, a sample of the public dataset [`SinclairSchneider/tweets_sample_2026`](https://huggingface.co/datasets/SinclairSchneider/tweets_sample_2026) (nearly all dated January to July 2026): every post of 38,088 actors the probes never trained on, a seeded draw except 26 accounts kept on purpose for the demonstration. The posts are embedded with EmbeddingGemma on a Verda GPU and the 48 zones are named by Gemini through the Hostinger AI Router. A workspace maps your own posts through the API (`POST /api/v1/items`) as they arrive. A pasted text or link is placed on the map live. A layer appears in the product only once its evaluation report exists: the method page of the site lists what is measured. How each partner technology is used: [`docs/tech-challenge-status.md`](docs/tech-challenge-status.md).
 
 ## What is here
 

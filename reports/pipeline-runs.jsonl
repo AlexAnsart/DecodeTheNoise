@@ -30,3 +30,13 @@
 {"at": "2026-11-14T14:44:09+00:00", "step": "pack", "build": "ira-120k", "machine": "laptop Snapdragon X, CPU", "items": 120000, "seconds": 6.9}
 {"at": "2026-11-14T15:39:23+00:00", "step": "layout", "build": "ira-120k-pca", "machine": "laptop Snapdragon X, CPU", "items": 120000, "seconds": 5.0, "note": "pca, share of the variance kept by each axis: 0.0653, 0.0619, 0.0398"}
 {"at": "2026-11-14T15:39:35+00:00", "step": "pack", "build": "ira-120k-pca", "machine": "laptop Snapdragon X, CPU", "items": 120000, "seconds": 9.9}
+{"at": "2026-11-14T23:20:22+00:00", "step": "sample", "build": "tweets-2026-500k", "machine": "laptop Snapdragon X, CPU", "items": 500000, "seconds": 93.1, "note": "whole actors, actors of the test split of the probe campaign, from 5 builds"}
+{"at": "2026-11-14T23:59:47+00:00", "step": "labelled", "build": "method", "machine": "laptop Snapdragon X, CPU", "items": 29887, "seconds": 67.4, "note": "64 rounds of the probe campaign: 29004 annotation, 883 second reader"}
+{"at": "2026-11-15T00:00:42+00:00", "step": "zones", "build": "tweets-2026-500k", "machine": "laptop Snapdragon X, CPU", "items": 500000, "seconds": 215.3}
+{"at": "2026-11-15T00:04:55+00:00", "step": "zone-names", "build": "tweets-2026-500k", "machine": "laptop Snapdragon X, CPU", "items": 48, "seconds": 112.2, "note": "gemini-3.8-flash through the AI Router, 47 zones named"}
+{"at": "2026-11-15T00:09:18+00:00", "step": "neighbours", "build": "tweets-2026-500k", "machine": "laptop Snapdragon X, CPU", "items": 500000, "seconds": 2905.8}
+{"at": "2026-11-15T00:09:55+00:00", "step": "zone-names", "build": "tweets-2026-500k", "machine": "laptop Snapdragon X, CPU", "items": 48, "seconds": 4.6, "note": "gemini-3.8-flash through the AI Router, 48 zones named"}
+{"at": "2026-11-15T00:15:29+00:00", "step": "layout", "build": "tweets-2026-500k", "machine": "laptop Snapdragon X, CPU", "items": 500000, "seconds": 3264.1, "note": "umap on 100000 landmarks, the other points among their nearest"}
+{"at": "2026-11-15T00:17:19+00:00", "step": "pack", "build": "tweets-2026-500k", "machine": "laptop Snapdragon X, CPU", "items": 500000, "seconds": 89.3}
+{"at": "2026-11-15T00:22:07+00:00", "step": "review-evaluate", "build": "m1", "machine": "laptop Snapdragon X, CPU", "items": 1196, "seconds": 633.8, "note": "gemini-3.8-flash, review-v2, 1484 answers stored"}
+{"at": "2026-11-15T00:23:14+00:00", "step": "review-evaluate", "build": "m1", "machine": "laptop Snapdragon X, CPU", "items": 1196, "seconds": 0.7, "note": "gemini-3.8-flash, review-v2, 0 calls now, 1484 answers stored"}

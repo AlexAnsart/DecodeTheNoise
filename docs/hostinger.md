@@ -73,9 +73,12 @@ Set up on 14 Nov 2026. No secrets.
 | Compose project path on the server | `/docker/noisemap` (a clone of this repository; `.env` and `data/build/` live there and are not in git) |
 | Reverse proxy | The Traefik container Hostinger installs (`/docker/traefik`, host network, ports 80 and 443, Let's Encrypt by HTTP challenge). Our services are published by labels in `deploy/docker-compose.yml` |
 | Health route | `/api/health` returns the commit and the map build being served |
-| Map build served | The folder `data/build/current` points to. On the server today: `ira-120k` (UMAP layout, the one served) and `ira-120k-pca` (PCA layout, served for an hour on 14 Nov as a test), same posts, vectors, neighbours and zones. To switch: `ln -sfn <build> data/build/current` in `/docker/noisemap`, then `docker compose --project-directory . -f deploy/docker-compose.yml restart api`. A deploy does not change it |
+| Map build served | The folder `data/build/current` points to. On the server since 15 Nov 2026: `tweets-2026-100k`, 100,000 posts of the 2026 X corpus (38,088 whole actors held out of the probe training, drawn by `pipelines/sample`, 26 of them kept on purpose for the demonstration; plain UMAP). The earlier builds (`tweets-2026-500k`, and the IRA tweets `ira-120k`, `ira-120k-pca`, `ira-18k`, `ira-3k`) are kept under `data/build/archive/`, no longer served. To switch: `ln -sfn <build> data/build/current` in `/docker/noisemap`, then `docker compose --project-directory . -f deploy/docker-compose.yml restart api`. A deploy does not change it |
 | Deploy | Push to `main`: the CI builds the images on CRACI and loads them on the server (`.github/workflows/ci.yml`, `deploy/up.sh`) |
 | Workspaces | `/docker/noisemap/data/workspaces` on the server, mounted in the API container and written by it: one folder per workspace, `accounts.sqlite` (hashed keys, settings, daily usage), `embeddings.sqlite` (vectors already computed, by text), `.numba` (compiled layout code). Not in git and not in an image: a redeploy keeps it |
+| Probe pack | `probes/probes.json` and `probes/probes.npz` in the API image (committed: weights and measures, no text). The server loads them at start-up; a new pack is a new export (`uv run --group pipelines python -m pipelines.probes.export --run <run>`), a commit and a push |
+| Method page data | The documents the page shows are in the API image (`docs/probes`, `docs/review.md`, `reports/`). The posts the annotators read are not in git: `data/method/labelled.sqlite`, written by `uv run --group pipelines python -m pipelines.method.labelled`, is copied to `/docker/noisemap/data/method/` like a build and mounted read-only. Without it the page shows its documents and no labelled post |
+| LLM reviews kept | `reviews.sqlite` under `/docker/noisemap/data/workspaces`: one row per question already paid for, for the demo and the workspaces. A redeploy keeps it |
 | Server `.env` | `LLM_MODEL=gemini-3.8-flash` added on 15 Nov 2026: without it the server names no zone and reviews nothing |
 | Also on the server | Hermes Agent (`/docker/hermes-agent-yciq`), left as installed |
 | Firewall | Hostinger firewall group `noisemap` (id 401111), active on the VPS: TCP 22, 80 and 443 from anywhere, everything else dropped. Hermes Agent is still reachable through Traefik, no longer on its direct port |
@@ -102,4 +105,21 @@ What these measures decided:
 - **Layouts run in a process of their own, one at a time.** A refresh that started during the start-up compilation got corrupted neighbour indices from the compiled code under UMAP, and compiling inside the API process slowed every request.
 - **The first start compiles for about 80 s; later ones do not.** The compiled code is kept in `.numba` on the volume: after the second deploy, the first refresh took 0.5 s.
 
-Before a push that changes an image, build it on the server from the committed tree, with the ignore file: `git archive HEAD .dockerignore pyproject.toml uv.lock backend pipelines probes reports deploy | ssh root@<server> 'tar -x -C /tmp/x && docker build -f /tmp/x/deploy/api.Dockerfile /tmp/x'`. A first deploy failed in the CI on a folder the ignore file left out, which a build without that file had not shown.
+In the night of 14 to 15 Nov 2026 the demo build was first `tweets-2026-500k`: 500,000 points instead of 120,000, with the probe pack of run `v1` (50 probes) and the LLM review. It was reduced to 100,000 points the same morning (`tweets-2026-100k`) because of the last row of this table. Measured in the API container on the server, commit `cf24ef3`, the routes called from inside the container; the last two rows from outside.
+
+| What | Measured |
+| --- | --- |
+| Start of the API with the build (500,000 vectors in memory) | 4 to 5 s |
+| Memory of the API container at start, then after every route below was used | 0.66 GiB, 1.1 to 1.3 GiB (limit 3 GiB) |
+| Search by meaning over the 500,000 points; a pasted text placed on the map | 0.13 to 0.23 s; 0.18 s |
+| Scores of the 50 probes on the 500,000 points: first request, later ones | 0.5 s, 0.01 s |
+| The map's buffers: plain, sent gzip | 36.0 MB, 25.3 MB |
+| LLM review of one post; of a selection (24 posts read); the same question again | 1.7 to 5.8 s; 3.4 s; 0.2 s |
+| A batch of 200 fresh posts in a workspace, while the demo is served | 31.5 s, 6.3 posts a second |
+| `GET /api/method` (guides, reports, review prompts): size, time from outside | 839 kB, 2.7 s |
+| First frame of the map in Edge, from outside: with a GPU, without one | 5.4 s, 34.5 s |
+
+- **Probe scores are computed in blocks of 50,000 rows.** In one piece each temporary array is hundreds of megabytes: the same computation took 4 s in the container and 10.5 s inside a request.
+- **Without a GPU, drawing is the cost, not the download.** Of the 34.5 s, 32 s are the browser drawing 500,000 points in software, with the page blocked.
+
+Before a push that changes an image, build it on the server from the committed tree, with the ignore file: `git archive HEAD .dockerignore pyproject.toml uv.lock backend pipelines probes reports docs deploy | ssh root@<server> 'tar -x -C /tmp/x && docker build -f /tmp/x/deploy/api.Dockerfile /tmp/x'`. A first deploy failed in the CI on a folder the ignore file left out, which a build without that file had not shown.
