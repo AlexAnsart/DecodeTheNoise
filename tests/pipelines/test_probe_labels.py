@@ -6,6 +6,7 @@ from pathlib import Path
 import numpy as np
 import pytest
 
+from pipelines.probes.audit_sheet import question_of
 from pipelines.probes.bands import rank_bands, threshold_bands
 from pipelines.probes.batches import batch_text, label_specs
 from pipelines.probes.calibrate import merge_unread
@@ -165,3 +166,8 @@ def test_unread_bands_join_the_band_below() -> None:
         (-inf, 5.0, 9000, 400, 4),
     ]
     assert estimate(merged, 5.0)["precision"]["value"] == pytest.approx(0.9)
+
+
+def test_every_label_has_a_question_for_the_audit_sheet() -> None:
+    for label in LABELS:
+        assert question_of(label.name).endswith("?"), label.name
