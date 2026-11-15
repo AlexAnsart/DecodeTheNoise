@@ -30,6 +30,20 @@
 {"at": "2026-11-14T14:44:09+00:00", "step": "pack", "build": "ira-120k", "machine": "laptop Snapdragon X, CPU", "items": 120000, "seconds": 6.9}
 {"at": "2026-11-14T15:39:23+00:00", "step": "layout", "build": "ira-120k-pca", "machine": "laptop Snapdragon X, CPU", "items": 120000, "seconds": 5.0, "note": "pca, share of the variance kept by each axis: 0.0653, 0.0619, 0.0398"}
 {"at": "2026-11-14T15:39:35+00:00", "step": "pack", "build": "ira-120k-pca", "machine": "laptop Snapdragon X, CPU", "items": 120000, "seconds": 9.9}
+{"at": "2026-11-14T16:22:02+00:00", "step": "ingest", "build": "tweets-2026-s72-first600", "machine": "laptop Snapdragon X, CPU", "items": 600, "seconds": 0.4}
+{"at": "2026-11-14T16:23:22+00:00", "step": "embed", "build": "tweets-2026-s72-first600", "machine": "laptop Snapdragon X, CPU", "items": 592, "seconds": 76.1}
+{"at": "2026-11-14T16:35:41+00:00", "step": "ingest", "build": "tweets-2026-s54", "machine": "Verda 1A100.40S.22V spot, NVIDIA A100 40GB", "items": 1021808, "seconds": 36.9}
+{"at": "2026-11-14T16:35:54+00:00", "step": "ingest", "build": "tweets-2026-s72", "machine": "Verda 1A100.40S.22V spot, NVIDIA A100 40GB", "items": 340717, "seconds": 12.9}
+{"at": "2026-11-14T16:41:54+00:00", "step": "ingest", "build": "tweets-2026-s00", "machine": "Verda 1A100.22V spot, NVIDIA A100 80GB", "items": 1029888, "seconds": 41.0}
+{"at": "2026-11-14T17:22:47+00:00", "step": "embed", "build": "tweets-2026-s72", "machine": "Verda 1A100.40S.22V spot, NVIDIA A100 40GB", "items": 333166, "seconds": 2789.3}
+{"at": "2026-11-14T17:39:06+00:00", "step": "ingest", "build": "tweets-2026-s18", "machine": "Verda 1A100.22V, NVIDIA A100 80GB", "items": 1025307, "seconds": 30.5}
+{"at": "2026-11-14T19:08:18+00:00", "step": "embed", "build": "tweets-2026-s00", "machine": "Verda 1A100.22V spot, NVIDIA A100 80GB", "items": 1009583, "seconds": 8669.9}
+{"at": "2026-11-14T19:09:05+00:00", "step": "ingest", "build": "tweets-2026-s36", "machine": "Verda 1A100.22V spot, NVIDIA A100 80GB", "items": 1016635, "seconds": 29.6}
+{"at": "2026-11-14T19:38:32+00:00", "step": "embed", "build": "tweets-2026-s54", "machine": "Verda 1A100.40S.22V spot, NVIDIA A100 40GB", "items": 1002702, "seconds": 8121.3}
+{"at": "2026-11-14T19:56:57+00:00", "step": "embed", "build": "tweets-2026-s18", "machine": "Verda 1A100.22V, NVIDIA A100 80GB", "items": 1004304, "seconds": 8258.0}
+{"at": "2026-11-14T20:47:01+00:00", "step": "embed", "build": "tweets-2026-s72", "machine": "laptop Snapdragon X, CPU", "items": 0, "seconds": 0.1, "note": "rebuilt from the merged cache of the dataset: nothing embedded, file identical"}
+{"at": "2026-11-14T21:25:56+00:00", "step": "embed", "build": "tweets-2026-s36", "machine": "Verda 1A100.22V spot, NVIDIA A100 80GB", "items": 995493, "seconds": 8196.3}
+{"at": "2026-11-14T22:03:35+00:00", "step": "embed", "build": "tweets-2026-s36", "machine": "laptop Snapdragon X, CPU", "items": 0, "seconds": 1.0, "note": "rebuilt from the merged cache of the dataset: nothing embedded, file identical"}
 {"at": "2026-11-14T23:20:22+00:00", "step": "sample", "build": "tweets-2026-500k", "machine": "laptop Snapdragon X, CPU", "items": 500000, "seconds": 93.1, "note": "whole actors, actors of the test split of the probe campaign, from 5 builds"}
 {"at": "2026-11-14T23:59:47+00:00", "step": "labelled", "build": "method", "machine": "laptop Snapdragon X, CPU", "items": 29887, "seconds": 67.4, "note": "64 rounds of the probe campaign: 29004 annotation, 883 second reader"}
 {"at": "2026-11-15T00:00:42+00:00", "step": "zones", "build": "tweets-2026-500k", "machine": "laptop Snapdragon X, CPU", "items": 500000, "seconds": 215.3}
