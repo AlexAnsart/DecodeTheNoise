@@ -2,32 +2,40 @@
 
 The server scores a build itself from the exported pack. This does the same sum offline, from
 the run's weights and the levels kept by the evaluation, to check a build before it is shown:
-the share flagged at each level should match the share measured on test. Writes
+the share flagged at each level should match the share measured on test. It also records who
+wrote the build: the split of its actors, and the accounts kept by hand. Writes
 `reports/probes/demo.json` and `docs/probes/figures/demo-<run>.png`.
 
-Run: uv run --group pipelines python -m pipelines.probes.demo --run v1 --build tweets-2026-500k
+Run: uv run --group pipelines python -m pipelines.probes.demo --run v1 --build tweets-2026-100k
 """
 
 import argparse
 import json
 import logging
+import sqlite3
+from collections import Counter
+from pathlib import Path
 
 import numpy as np
 
-from pipelines.paths import LAYOUT_FILE, VECTORS_FILE, VECTORS_META, ZONES_FILE, work_dir
-from pipelines.probes.evaluate import LEVELS, REPORT
-from pipelines.probes.plots import GRID, plt, save
+from pipelines.paths import (
+    CORPUS_FILE,
+    LAYOUT_FILE,
+    VECTORS_FILE,
+    VECTORS_META,
+    ZONE_OF_POINT_FILE,
+    ZONES_FILE,
+    work_dir,
+)
+from pipelines.probes.demo_picture import picture
+from pipelines.probes.evaluate import REPORT
+from pipelines.probes.pool import SPLITS, split_of
 from pipelines.probes.score import CHUNK, load_probes
+from pipelines.sample.__main__ import SAMPLE_FILE
 
 log = logging.getLogger("probes.demo")
 
 OUT = REPORT.with_name("demo.json")
-ZONE_OF_POINT = "zone.npy"
-# The probes drawn: frequent ones and rare ones, from different families.
-DRAWN = ("political", "loaded_language", "contempt", "theme:sport", "lang:de",
-         "commercial_promo", "attack_addressee", "urgency_framing")  # fmt: skip
-# One hue, light then dark: `possible`, then `probable`.
-COLOURS = {"possible": "#86b6ef", "probable": "#1c5cab"}
 TOP_ZONES = 3
 
 
@@ -48,7 +56,29 @@ def flags(run: str, build: str, levels: dict[str, dict]) -> dict[str, dict[str, 
     return out
 
 
-def summary(found: dict, metrics: dict, zones: np.ndarray, names: list[str]) -> dict[str, object]:
+def authors(work: Path) -> tuple[dict[str, object], np.ndarray]:
+    """Who wrote the build, and which points come from the accounts kept by hand, not drawn."""
+    corpus = sqlite3.connect(f"file:{(work / CORPUS_FILE).as_posix()}?mode=ro", uri=True)
+    actor_of_point = dict(corpus.execute("SELECT idx, actor_id FROM items"))
+    corpus.close()
+    actors = set(actor_of_point.values())
+    sample = json.loads((work / SAMPLE_FILE).read_text(encoding="utf-8"))
+    hand_kept = set(sample.get("kept", {}).get("actors", []))
+    kept = np.zeros(len(actor_of_point), dtype=bool)
+    for point, actor in actor_of_point.items():
+        kept[point] = actor in hand_kept
+    described = {
+        "actors": len(actors),
+        "actors_by_split": dict(Counter(SPLITS[split_of(actor)] for actor in actors)),
+        "kept_actors": len(hand_kept),
+        "kept_posts": int(kept.sum()),
+    }
+    return described, kept
+
+
+def summary(
+    found: dict, metrics: dict, zones: np.ndarray, names: list[str], kept: np.ndarray
+) -> dict[str, object]:
     rows = {}
     for name, by_level in found.items():
         row: dict[str, object] = {"state": metrics[name]["state"]}
@@ -57,47 +87,13 @@ def summary(found: dict, metrics: dict, zones: np.ndarray, names: list[str]) -> 
             top = np.argsort(-share_by_zone)[:TOP_ZONES]
             row[level] = {
                 "flagged": int(mask.sum()),
+                "flagged_in_kept": int((mask & kept).sum()),
                 "share": float(mask.mean()),
                 "share_on_test": metrics[name]["levels"][level]["flag_rate"],
                 "top_zones": [{"zone": names[z], "share": float(share_by_zone[z])} for z in top],
             }
         rows[name] = row
     return rows
-
-
-def picture(run: str, build: str, found: dict, positions: np.ndarray) -> None:
-    """Small multiples of the 2D map: every point in grey, the flagged ones in blue."""
-    rng = np.random.default_rng(0)
-    base = rng.choice(len(positions), size=min(len(positions), 120_000), replace=False)
-    drawn = [name for name in DRAWN if name in found]
-    fig, axes = plt.subplots(2, 4, figsize=(13, 6.8))
-    for ax, name in zip(axes.flat, drawn, strict=False):
-        ax.scatter(*positions[base].T, s=0.15, color=GRID, linewidths=0, rasterized=True)
-        for level in reversed(LEVELS):
-            mask = found[name].get(level)
-            if mask is not None:
-                ax.scatter(*positions[mask].T, s=0.6, color=COLOURS[level], linewidths=0,
-                           rasterized=True, label=level)  # fmt: skip
-        widest = max(found[name].values(), key=lambda mask: mask.sum())
-        ax.set_title(f"{name}  ({100 * widest.mean():.2f}% of posts)", fontsize=9, pad=4)
-        # A few stray points would shrink the cloud: the frame keeps the bulk of the map.
-        ax.set_xlim(*np.percentile(positions[:, 0], [0.2, 99.8]))
-        ax.set_ylim(*np.percentile(positions[:, 1], [0.2, 99.8]))
-        ax.set_xticks([])
-        ax.set_yticks([])
-        for side in ax.spines.values():
-            side.set_visible(False)
-    for ax in axes.flat[len(drawn) :]:
-        ax.set_visible(False)
-    handles = [
-        plt.Line2D([], [], marker="o", linestyle="", color=c, label=lv) for lv, c in COLOURS.items()
-    ]
-    fig.legend(handles=handles, loc="lower center", ncol=2, fontsize=9)
-    fig.suptitle(
-        f"Where eight probes fire on the map of {build}", x=0.01, ha="left", fontweight="bold"
-    )
-    fig.tight_layout(rect=(0, 0.04, 1, 0.97))
-    save(fig, f"demo-{run}")
 
 
 def main() -> None:
@@ -115,13 +111,13 @@ def main() -> None:
     found = flags(args.run, args.build, levels)
     work = work_dir(args.build)
     zone_names = [zone["name"] for zone in json.loads((work / ZONES_FILE).read_text("utf-8"))]
-    rows = summary(found, metrics, np.load(work / ZONE_OF_POINT), zone_names)
-    posts = len(next(iter(next(iter(found.values())).values())))
-    report = {"run": args.run, "build": args.build, "posts": posts, "probes": rows}
+    described, kept = authors(work)
+    rows = summary(found, metrics, np.load(work / ZONE_OF_POINT_FILE), zone_names, kept)
+    report = {"run": args.run, "build": args.build, "posts": len(kept), **described, "probes": rows}
     OUT.write_text(json.dumps(report, indent=1), encoding="utf-8")
     with np.load(work / LAYOUT_FILE) as layout:
         picture(args.run, args.build, found, layout["pos2"])
-    log.info("%s: %d probes on %d posts", OUT, len(rows), posts)
+    log.info("%s: %d probes on %d posts", OUT, len(rows), len(kept))
 
 
 if __name__ == "__main__":

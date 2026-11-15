@@ -133,24 +133,3 @@ def audit_table() -> str:
         rows.append([f"`{name}`", row["state"], *cells])
     header = ["Target", "State", "Yes confirmed", "Share", "No overturned", "Share"]
     return table(header, rows)
-
-
-def demo_table() -> str:
-    """Share of the demo build flagged at each level, beside the share measured on test."""
-    report = read_json(REPORT.with_name("demo.json"))
-    rows = []
-    for name, row in report["probes"].items():
-        for level in LEVELS:
-            got = row.get(level)
-            if got:
-                zone = got["top_zones"][0]
-                where = f"{zone['zone']} ({pct(zone['share'])})"
-                cells = [got["flagged"], pct(got["share"], 2), pct(got["share_on_test"], 2), where]
-                rows.append([f"`{name}`", row["state"], level, *cells])
-    header = ["Target", "State", "Level", "Posts flagged", "Share of the build", "Share on test"]
-    return table([*header, "Zone where it fires most (share of the zone)"], rows)
-
-
-def demo_note() -> str:
-    report = read_json(REPORT.with_name("demo.json"))
-    return f"`{report['build']}`, {report['posts']:,} posts"

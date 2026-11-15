@@ -952,80 +952,82 @@ Every number above is measured against the answers of the Haiku annotators. To s
 
 ### 9.9 On the build the site shows
 
-The demo build is `tweets-2026-500k`, 500,000 posts, all written by actors of the test split: no probe was trained or calibrated on a post it holds. The server scores it from the exported pack when it starts. The same sum was done offline, to check that each probe flags there the share it flagged on test.
+The demo build is `tweets-2026-100k`, 100,000 posts by 38,088 actors (38,088 of the test split). It is a seeded draw of whole actors, plus 26 accounts (1,379 posts) kept by hand for the demonstration. No probe was trained or calibrated on a post written by an actor of the test split. The server scores the build from the exported pack when it starts. The same sum was done offline, to check that each probe flags there the share it flagged on test.
 
 ![Where eight probes fire on the map](figures/demo-v1.png)
 
 | Target | State | Level | Posts flagged | Share of the build | Share on test | Zone where it fires most (share of the zone) |
 | --- | --- | --- | --- | --- | --- | --- |
-| `call_amplify` | shown | possible | 146 | 0.03% | 0.02% | Accusations of Child Endangerment (0.4%) |
-| `call_boycott` | shown | probable | 54 | 0.01% | 0.02% | Accusations of Child Endangerment (0.3%) |
-| `call_boycott` | shown | possible | 54 | 0.01% | 0.02% | Accusations of Child Endangerment (0.3%) |
-| `call_vote` | shown | possible | 112 | 0.02% | 0.02% | Criticism of Government and Trump (0.2%) |
-| `attack_addressee` | shown | probable | 3410 | 0.68% | 0.68% | Hostile Arguments and Insults (9.8%) |
-| `attack_addressee` | shown | possible | 3410 | 0.68% | 0.68% | Hostile Arguments and Insults (9.8%) |
-| `attack_person` | shown | probable | 139 | 0.03% | 0.03% | Criticism of Government and Trump (0.4%) |
-| `attack_person` | shown | possible | 1131 | 0.23% | 0.22% | Criticism of Government and Trump (3.1%) |
-| `attack_identity_group` | shown | probable | 301 | 0.06% | 0.07% | Hostile Arguments and Insults (0.8%) |
-| `attack_identity_group` | shown | possible | 301 | 0.06% | 0.07% | Hostile Arguments and Insults (0.8%) |
-| `attack_political_group` | shown | probable | 100 | 0.02% | 0.02% | German Politics and AfD Debates (0.4%) |
-| `attack_political_group` | shown | possible | 1037 | 0.21% | 0.22% | German Politics and AfD Debates (2.7%) |
-| `dehumanisation` | review-only | possible | 105 | 0.02% | 0.03% | Hostile Arguments and Insults (0.4%) |
-| `profanity` | shown | probable | 10654 | 2.13% | 2.19% | Hostile Arguments and Insults (34.8%) |
-| `profanity` | shown | possible | 10654 | 2.13% | 2.19% | Hostile Arguments and Insults (34.8%) |
-| `loaded_language` | shown | probable | 3179 | 0.64% | 0.64% | Criticism of Government and Trump (6.7%) |
-| `loaded_language` | shown | possible | 30712 | 6.14% | 6.55% | Criticism of Government and Trump (47.2%) |
-| `exaggeration` | shown | probable | 1039 | 0.21% | 0.23% | Criticism of Government and Trump (2.3%) |
-| `exaggeration` | shown | possible | 10199 | 2.04% | 2.19% | Criticism of Government and Trump (16.8%) |
-| `fear_appeal` | shown | possible | 128 | 0.03% | 0.02% | Middle East Political Conflicts (0.3%) |
-| `us_vs_them` | shown | probable | 361 | 0.07% | 0.07% | Criticism of Government and Trump (1.0%) |
-| `us_vs_them` | shown | possible | 1056 | 0.21% | 0.21% | Criticism of Government and Trump (2.7%) |
-| `commercial_promo` | shown | probable | 362 | 0.07% | 0.09% | Concerts, Music, and Fan Events (2.0%) |
-| `commercial_promo` | shown | possible | 3765 | 0.75% | 0.71% | Concerts, Music, and Fan Events (13.2%) |
-| `money_request` | shown | possible | 298 | 0.06% | 0.02% | Diplomatic Initiatives and Cooperation (2.0%) |
-| `gain_promise` | review-only | possible | 1432 | 0.29% | 0.21% | Crypto Technical Price Analysis (10.0%) |
-| `off_platform_redirect` | shown | probable | 296 | 0.06% | 0.06% | Agreeable and Relatable Reactions (0.7%) |
-| `off_platform_redirect` | shown | possible | 902 | 0.18% | 0.17% | Concerts, Music, and Fan Events (1.5%) |
-| `adult_promo` | review-only | possible | 139 | 0.03% | 0.02% | Concerts, Music, and Fan Events (0.3%) |
-| `news_headline` | review-only | probable | 1077 | 0.22% | 0.22% | US-Iran Military Strikes (5.0%) |
-| `news_headline` | review-only | possible | 33282 | 6.66% | 6.47% | U.S. Politics and Global News (74.8%) |
-| `automated_alert` | shown | probable | 406 | 0.08% | 0.08% | US-Iran Military Strikes (3.5%) |
-| `automated_alert` | shown | possible | 406 | 0.08% | 0.08% | US-Iran Military Strikes (3.5%) |
-| `templated_post` | shown | possible | 379 | 0.08% | 0.07% | Concerts, Music, and Fan Events (1.6%) |
-| `quote_post` | shown | probable | 188 | 0.04% | 0.03% | Christian Theology and Scripture (1.6%) |
-| `quote_post` | shown | possible | 1827 | 0.37% | 0.22% | Christian Theology and Scripture (11.2%) |
-| `lang:en` | shown | probable | 284890 | 56.98% | 56.51% | Criticism of Government and Trump (96.8%) |
-| `lang:en` | shown | possible | 284890 | 56.98% | 56.51% | Criticism of Government and Trump (96.8%) |
-| `lang:de` | shown | probable | 99162 | 19.83% | 21.60% | German Politics and AfD Debates (86.3%) |
-| `lang:de` | shown | possible | 99162 | 19.83% | 21.60% | German Politics and AfD Debates (86.3%) |
-| `political` | shown | probable | 103257 | 20.65% | 21.57% | German Politics and AfD Debates (93.7%) |
-| `political` | shown | possible | 212283 | 42.46% | 43.71% | German Politics and AfD Debates (99.9%) |
-| `institution_distrust` | review-only | possible | 108 | 0.02% | 0.02% | Criticism of Government and Trump (0.2%) |
-| `conspiracy_narrative` | shown | probable | 165 | 0.03% | 0.02% | US Politics and Foreign Affairs (0.3%) |
-| `endorsement` | shown | possible | 3565 | 0.71% | 0.71% | Congratulations and Supportive Messages (17.1%) |
-| `theme:war_geopolitics` | shown | possible | 32734 | 6.55% | 6.47% | Debates on Middle East Conflicts (60.3%) |
-| `theme:crime_justice` | review-only | possible | 9765 | 1.95% | 2.15% | US-Iran Military Strikes (16.7%) |
-| `theme:economy_work` | shown | possible | 67253 | 13.45% | 13.46% | Crypto Technical Price Analysis (96.9%) |
-| `theme:politics_government` | shown | possible | 61839 | 12.37% | 13.01% | German Politics and AfD Debates (92.2%) |
-| `theme:sport` | shown | probable | 30476 | 6.10% | 6.84% | German Football Match Updates (94.6%) |
-| `theme:sport` | shown | possible | 30476 | 6.10% | 6.84% | German Football Match Updates (94.6%) |
-| `theme:entertainment_culture` | shown | probable | 36278 | 7.26% | 6.85% | Concerts, Music, and Fan Events (61.0%) |
-| `political_side:none` | shown | probable | 396757 | 79.35% | 78.43% | Food Recipes and Meals (99.9%) |
-| `political_side:none` | shown | possible | 396757 | 79.35% | 78.43% | Food Recipes and Meals (99.9%) |
-| `checkable_claim` | shown | probable | 68655 | 13.73% | 13.12% | US-Iran Military Strikes (82.6%) |
-| `checkable_claim` | shown | possible | 167929 | 33.59% | 33.12% | US-Iran Military Strikes (97.2%) |
-| `unsourced_statistic` | shown | possible | 160 | 0.03% | 0.02% | Crypto Technical Price Analysis (0.7%) |
-| `urgency_framing` | shown | probable | 1131 | 0.23% | 0.20% | US-Iran Military Strikes (6.6%) |
-| `urgency_framing` | shown | possible | 1131 | 0.23% | 0.20% | US-Iran Military Strikes (6.6%) |
-| `anger` | shown | probable | 10103 | 2.02% | 2.26% | Hostile Arguments and Insults (23.5%) |
-| `anger` | shown | possible | 30905 | 6.18% | 6.70% | Hostile Arguments and Insults (55.3%) |
-| `fear` | shown | possible | 305 | 0.06% | 0.06% | German Social Media Commentary (0.8%) |
-| `contempt` | shown | probable | 32230 | 6.45% | 6.74% | Hostile Arguments and Insults (62.7%) |
-| `contempt` | shown | possible | 105894 | 21.18% | 22.30% | Hostile Arguments and Insults (96.0%) |
-| `enthusiasm` | shown | probable | 4143 | 0.83% | 0.81% | Congratulations and Supportive Messages (25.3%) |
-| `enthusiasm` | shown | possible | 12690 | 2.54% | 2.48% | Congratulations and Supportive Messages (58.6%) |
+| `call_amplify` | shown | possible | 68 | 0.07% | 0.02% | Demands for Justice and Accountability (2.7%) |
+| `call_boycott` | shown | probable | 19 | 0.02% | 0.02% | Demands for Justice and Accountability (0.8%) |
+| `call_boycott` | shown | possible | 19 | 0.02% | 0.02% | Demands for Justice and Accountability (0.8%) |
+| `call_vote` | shown | possible | 27 | 0.03% | 0.02% | French Social Commentary and Reactions (0.4%) |
+| `attack_addressee` | shown | probable | 674 | 0.67% | 0.68% | Hostile Political Arguments (7.9%) |
+| `attack_addressee` | shown | possible | 674 | 0.67% | 0.68% | Hostile Political Arguments (7.9%) |
+| `attack_person` | shown | probable | 18 | 0.02% | 0.03% | Hostile Political Arguments (0.3%) |
+| `attack_person` | shown | possible | 204 | 0.20% | 0.22% | Hostile Political Arguments (3.4%) |
+| `attack_identity_group` | shown | probable | 62 | 0.06% | 0.07% | Hostile Arguments and Insults (1.1%) |
+| `attack_identity_group` | shown | possible | 62 | 0.06% | 0.07% | Hostile Arguments and Insults (1.1%) |
+| `attack_political_group` | shown | probable | 24 | 0.02% | 0.02% | German Politics and Parties (0.4%) |
+| `attack_political_group` | shown | possible | 242 | 0.24% | 0.22% | German Politics and Parties (3.3%) |
+| `dehumanisation` | review-only | possible | 30 | 0.03% | 0.03% | Hostile Political Arguments (0.4%) |
+| `profanity` | shown | probable | 2185 | 2.19% | 2.19% | Hostile Political Arguments (32.0%) |
+| `profanity` | shown | possible | 2185 | 2.19% | 2.19% | Hostile Political Arguments (32.0%) |
+| `loaded_language` | shown | probable | 629 | 0.63% | 0.64% | Middle East Geopolitical Conflicts (5.8%) |
+| `loaded_language` | shown | possible | 6145 | 6.14% | 6.55% | Hostile Political Arguments (38.5%) |
+| `exaggeration` | shown | probable | 225 | 0.22% | 0.23% | Political Corruption and Government Criticism (2.6%) |
+| `exaggeration` | shown | possible | 2077 | 2.08% | 2.19% | German Politics and Parties (16.8%) |
+| `fear_appeal` | shown | possible | 21 | 0.02% | 0.02% | Middle East Geopolitical Conflicts (0.2%) |
+| `us_vs_them` | shown | probable | 77 | 0.08% | 0.07% | Political Corruption and Government Criticism (1.0%) |
+| `us_vs_them` | shown | possible | 212 | 0.21% | 0.21% | Political Corruption and Government Criticism (2.7%) |
+| `commercial_promo` | shown | probable | 73 | 0.07% | 0.09% | Promotions Giveaways and Sales (3.3%) |
+| `commercial_promo` | shown | possible | 766 | 0.77% | 0.71% | Promotions Giveaways and Sales (23.9%) |
+| `money_request` | shown | possible | 55 | 0.06% | 0.02% | Demands for Justice and Accountability (2.0%) |
+| `gain_promise` | review-only | possible | 337 | 0.34% | 0.21% | Cryptocurrency Technical Analysis Signals (13.4%) |
+| `off_platform_redirect` | shown | probable | 33 | 0.03% | 0.06% | Promotions Giveaways and Sales (0.5%) |
+| `off_platform_redirect` | shown | possible | 140 | 0.14% | 0.17% | Promotions Giveaways and Sales (2.7%) |
+| `adult_promo` | review-only | possible | 33 | 0.03% | 0.02% | Complaints About Vulgarity (0.8%) |
+| `news_headline` | review-only | probable | 217 | 0.22% | 0.22% | Middle East Conflicts and Strikes (4.4%) |
+| `news_headline` | review-only | possible | 6899 | 6.90% | 6.47% | Middle East Conflicts and Strikes (71.9%) |
+| `automated_alert` | shown | probable | 22 | 0.02% | 0.08% | Middle East Conflicts and Strikes (0.8%) |
+| `automated_alert` | shown | possible | 22 | 0.02% | 0.08% | Middle East Conflicts and Strikes (0.8%) |
+| `templated_post` | shown | possible | 108 | 0.11% | 0.07% | Bobby Darin Music Tracks (3.6%) |
+| `quote_post` | shown | probable | 39 | 0.04% | 0.03% | Christian Scripture and Beliefs (2.1%) |
+| `quote_post` | shown | possible | 393 | 0.39% | 0.22% | Christian Scripture and Beliefs (13.4%) |
+| `lang:en` | shown | probable | 55864 | 55.86% | 56.51% | Political Corruption and Government Criticism (96.5%) |
+| `lang:en` | shown | possible | 55864 | 55.86% | 56.51% | Political Corruption and Government Criticism (96.5%) |
+| `lang:de` | shown | probable | 20834 | 20.83% | 21.60% | German Politics and Parties (85.6%) |
+| `lang:de` | shown | possible | 20834 | 20.83% | 21.60% | German Politics and Parties (85.6%) |
+| `political` | shown | probable | 20823 | 20.82% | 21.57% | German Politics and Parties (89.7%) |
+| `political` | shown | possible | 43038 | 43.04% | 43.71% | German Political Discussion (99.3%) |
+| `institution_distrust` | review-only | possible | 18 | 0.02% | 0.02% | German Politics and Parties (0.2%) |
+| `conspiracy_narrative` | shown | probable | 38 | 0.04% | 0.02% | Middle East Geopolitical Conflicts (0.6%) |
+| `endorsement` | shown | possible | 708 | 0.71% | 0.71% | Congratulations and Praise (18.9%) |
+| `theme:war_geopolitics` | shown | possible | 6354 | 6.35% | 6.47% | Middle East Geopolitical Conflicts (38.1%) |
+| `theme:crime_justice` | review-only | possible | 1841 | 1.84% | 2.15% | Middle East Conflicts and Strikes (10.9%) |
+| `theme:economy_work` | shown | possible | 13248 | 13.25% | 13.46% | Cryptocurrency Technical Analysis Signals (97.7%) |
+| `theme:politics_government` | shown | possible | 12544 | 12.54% | 13.01% | German Politics and Parties (65.8%) |
+| `theme:sport` | shown | probable | 6194 | 6.19% | 6.84% | Football Matches and Club Updates (95.1%) |
+| `theme:sport` | shown | possible | 6194 | 6.19% | 6.84% | Football Matches and Club Updates (95.1%) |
+| `theme:entertainment_culture` | shown | probable | 7347 | 7.35% | 6.85% | Bobby Darin Music Tracks (77.2%) |
+| `political_side:none` | shown | probable | 79158 | 79.16% | 78.43% | Monochrome Daily Photography (99.9%) |
+| `political_side:none` | shown | possible | 79158 | 79.16% | 78.43% | Monochrome Daily Photography (99.9%) |
+| `checkable_claim` | shown | probable | 13880 | 13.88% | 13.12% | Middle East Conflicts and Strikes (81.8%) |
+| `checkable_claim` | shown | possible | 33913 | 33.91% | 33.12% | Middle East Conflicts and Strikes (97.7%) |
+| `unsourced_statistic` | shown | possible | 27 | 0.03% | 0.02% | Cryptocurrency Technical Analysis Signals (0.2%) |
+| `urgency_framing` | shown | probable | 146 | 0.15% | 0.20% | Middle East Conflicts and Strikes (3.6%) |
+| `urgency_framing` | shown | possible | 146 | 0.15% | 0.20% | Middle East Conflicts and Strikes (3.6%) |
+| `anger` | shown | probable | 1963 | 1.96% | 2.26% | Hostile Political Arguments (33.0%) |
+| `anger` | shown | possible | 6211 | 6.21% | 6.70% | Hostile Political Arguments (76.2%) |
+| `fear` | shown | possible | 76 | 0.08% | 0.06% | Everyday Observations and Reactions (0.8%) |
+| `contempt` | shown | probable | 6513 | 6.51% | 6.74% | Hostile Political Arguments (64.3%) |
+| `contempt` | shown | possible | 21422 | 21.42% | 22.30% | Hostile Political Arguments (96.7%) |
+| `enthusiasm` | shown | probable | 689 | 0.69% | 0.81% | Congratulations and Praise (22.6%) |
+| `enthusiasm` | shown | possible | 2256 | 2.26% | 2.48% | Congratulations and Praise (57.2%) |
 
-The shares match the test for every probe. The largest gaps are on rare labels, where a share is a few dozen posts. A probe that flagged several times its test share would point at a shift between the test sample and the build: none does.
+Of the 56 cuts, 43 flag between 0.8 and 1.25 times their test share. The widest gaps: `call_amplify` at `possible` flags 2.93 times its test share (68 posts where 23 were expected); `automated_alert` at `probable` flags 0.27 times its test share (22 posts where 80 were expected). The accounts kept by hand weigh most on `call_boycott` at `probable`: 10 of its 19 flagged posts are theirs.
+
+How to read a gap: the build holds whole actors, so on a rare label one prolific actor moves the count. A probe that flagged many times its test share would point at a shift between the test sample and the build.
 
 ## 10. Errors read
 

@@ -278,13 +278,15 @@ Every number above is measured against the answers of the Haiku annotators. To s
 
 ### 9.9 On the build the site shows
 
-The demo build is {{note:demo}}, all written by actors of the test split: no probe was trained or calibrated on a post it holds. The server scores it from the exported pack when it starts. The same sum was done offline, to check that each probe flags there the share it flagged on test.
+The demo build is {{note:demo}}. No probe was trained or calibrated on a post written by an actor of the test split. The server scores the build from the exported pack when it starts. The same sum was done offline, to check that each probe flags there the share it flagged on test.
 
 ![Where eight probes fire on the map](figures/demo-{{run}}.png)
 
 {{table:demo}}
 
-The shares match the test for every probe. The largest gaps are on rare labels, where a share is a few dozen posts. A probe that flagged several times its test share would point at a shift between the test sample and the build: none does.
+{{note:demo_gaps}}
+
+How to read a gap: the build holds whole actors, so on a rare label one prolific actor moves the count. A probe that flagged many times its test share would point at a shift between the test sample and the build.
 
 ## 10. Errors read
 

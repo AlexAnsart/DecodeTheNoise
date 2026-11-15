@@ -15,6 +15,7 @@ import shutil
 from collections.abc import Callable
 from pathlib import Path
 
+from pipelines.probes import report_demo as demo
 from pipelines.probes import report_notes as notes
 from pipelines.probes import report_results as results
 from pipelines.probes import report_tables as tables
@@ -46,8 +47,9 @@ def builders(run: str, round_name: str) -> dict[str, Callable[[], str]]:
         "table:results_other": lambda: results.levels_table(("review-only", "dropped")),
         "table:heads": results.heads_table,
         "table:audit": results.audit_table,
-        "table:demo": results.demo_table,
-        "note:demo": results.demo_note,
+        "table:demo": demo.demo_table,
+        "note:demo": demo.demo_note,
+        "note:demo_gaps": demo.demo_gaps_note,
         "table:languages": results.language_table,
         "note:language_probe": results.language_note,
         "table:ranking": results.ranking_table,
