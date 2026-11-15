@@ -312,7 +312,7 @@ What the product does with this:
 
 ## 11. Limits
 
-- **The reference is a model.** Labels are the majority of two or three Haiku readings, audited on a sample by Opus. No person has read the test posts. `pipelines/probes/audit.py` writes blind sheets for a person as it did for Opus: about 30 posts per shown probe.
+- **The reference is a model.** Labels are the majority of two or three Haiku readings, audited on a sample by Opus. No person has read the test posts. `pipelines/probes/audit_sheet.py` writes the same audit as a sheet for a person (883 posts, one question each, the settled answer hidden) and scores it once filled; a person's reading then replaces the model's audit for the probes it covers.
 - **Recall is low and uncertain for rare labels.** A shown level of a rare label flags a few posts in ten thousand. What is missed below the threshold is bounded by a random sample of 1,200 posts, which holds almost none of them.
 - **Thresholds sit on band edges.** That keeps them from fitting noise and makes them coarse: `lang:de` stops at 75% recall because the next edge was too far.
 - **Calibration is optimistic at the margin.** Two levels were withdrawn on test, and three probes with one level fell under the bar. The levels that passed were also selected by passing: expect a point or two less on new posts.
@@ -323,7 +323,7 @@ What the product does with this:
 - **Position in the batch.** Annotators say yes less often on the first four posts of a batch. Not corrected.
 - **Four fallacy labels are not a reference yet.** Their agreement is under 0.5.
 - **The full vector was not tried.** 256 dimensions are served; the model gives 768.
-- **Group rates are not built.** Comparing the rate of a label in a swarm with its zone needs the measured false-positive rate and recall to correct the raw flag rate.
+- **Group rates are not built.** Comparing the rate of a label in a swarm with its zone needs the measured false-positive rate and recall to correct the raw flag rate. One lead from another experiment of this project: on synthetic posts, subtracting from each vector the mean vector of its topic barely changes the reading of one post and clearly improves the reading of a group of 16 (`docs/brief-recovery/1-field-probes.md`). Untested with these probes.
 
 What to do next, in order of expected gain: a person reads the audit sheets; a second run with hard negatives mined from the head of each review-only probe; the 768-dimension vectors; a larger random test sample for the call and solicitation passes only, to bound their recall.
 
