@@ -99,20 +99,6 @@
   font-weight: 600;
 }
 
-/* Says, beside the switch, that what is on screen is not the visitor's own data. */
-.nm-badge {
-  flex: none;
-  padding: 0.1rem 0.5rem;
-  border: 1px solid color-mix(in srgb, var(--nm-warning) 50%, transparent);
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--nm-warning) 12%, transparent);
-  color: var(--nm-warning);
-  font-size: 0.66rem;
-  font-weight: 600;
-  line-height: 1.5;
-  white-space: nowrap;
-}
-
 .nm-header__nav {
   display: flex;
   align-items: center;
@@ -122,16 +108,6 @@
 
 .nm-header__nav a {
   text-decoration: none;
-}
-
-.nm-header__source {
-  padding: 0 0.3rem;
-  color: var(--nm-text-muted);
-  font-size: 0.74rem;
-}
-
-.nm-header__source:hover {
-  color: var(--nm-text);
 }
 
 .nm-main {
@@ -157,8 +133,8 @@
 }
 
 @media (max-width: 760px) {
-  .nm-header__source,
-  .nm-badge {
+  /* Two classes: the link is also a toolbar control, whose own rule sets its display. */
+  .nm-header__nav .nm-header__source {
     display: none;
   }
 

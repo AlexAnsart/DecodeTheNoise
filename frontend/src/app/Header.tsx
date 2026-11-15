@@ -1,4 +1,4 @@
-import { BookOpen, CircleHelp, Moon, Plug, Settings, Sun } from 'lucide-react'
+import { BookOpen, CircleHelp, CodeXml, Moon, Plug, Settings, Sun } from 'lucide-react'
 import type { ReactElement } from 'react'
 import { Link } from '../route/Link'
 import type { Page } from '../route/useRoute'
@@ -33,11 +33,6 @@ export function Header({ page, workspaceOpen, onPanel, onTour }: HeaderProps): R
           <strong>NoiseMap</strong>
         </Link>
         <ModeSwitch page={page} />
-        {page === 'demo' ? (
-          <span className="nm-badge" title="A public sample dataset. Your own posts go to My workspace.">
-            Demo data
-          </span>
-        ) : null}
         <span className="nm-brand__line">Every post becomes a point on a meaning map.</span>
       </div>
       <nav className="nm-header__nav" aria-label="Pages and tools">
@@ -59,7 +54,8 @@ export function Header({ page, workspaceOpen, onPanel, onTour }: HeaderProps): R
         <button type="button" className="nm-tool nm-tool--icon" onClick={onTour} title="Take the tour of the map" aria-label="Take the tour of the map">
           <CircleHelp size={15} aria-hidden />
         </button>
-        <a className="nm-header__source" href={SOURCE_URL} target="_blank" rel="noopener noreferrer">
+        <a className="nm-tool nm-header__source" href={SOURCE_URL} target="_blank" rel="noopener noreferrer" title="The source code, on GitHub">
+          <CodeXml size={13} aria-hidden />
           Source
         </a>
         <button type="button" className="nm-tool nm-tool--icon" onClick={toggleTheme} title={otherTheme} aria-label={otherTheme}>
