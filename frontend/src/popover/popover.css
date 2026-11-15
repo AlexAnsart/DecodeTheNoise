@@ -1,6 +1,7 @@
 .nm-popover {
   position: fixed;
   z-index: 20050;
+  max-width: calc(100vw - 16px);
   max-height: min(70vh, 520px);
   overflow: auto;
   border: 1px solid var(--nm-border-strong);
