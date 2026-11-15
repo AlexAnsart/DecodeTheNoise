@@ -52,6 +52,7 @@ export function ReviewEvaluation({ report, techniques }: ReviewEvaluationProps):
     )
   }
   const cascaded = report.cascade && Object.keys(report.cascade.probes).length > 0 ? report.cascade : null
+  const banded = report.cascade_bands && Object.keys(report.cascade_bands.probes).length > 0 ? report.cascade_bands : null
   return (
     <>
       <p className="nm-num">{setting(report)}</p>
@@ -76,7 +77,18 @@ export function ReviewEvaluation({ report, techniques }: ReviewEvaluationProps):
           <RunsAgreement runs={report.runs_agreement} temperature={report.temperature} />
         </>
       ) : null}
-      {cascaded ? (
+      {banded ? (
+        <>
+          <h3>A probe, then the review</h3>
+          <CascadeTable cascade={banded} names={names} />
+          {cascaded ? (
+            <p className="nm-note">
+              A first measure used only the flagged posts of the random test sample ({known(cascaded.posts_read) ? formatCount(cascaded.posts_read) : 'fewer'} posts read): the same thing on far fewer posts, with wider intervals. It is kept in the
+              report beside this one, under <code>cascade</code>.
+            </p>
+          ) : null}
+        </>
+      ) : cascaded ? (
         <>
           <h3>A probe, then the review</h3>
           <CascadeTable cascade={cascaded} names={names} />
@@ -87,7 +99,7 @@ export function ReviewEvaluation({ report, techniques }: ReviewEvaluationProps):
         <li>The review of a selection of posts: what it says of a group has no measured figure.</li>
         <li>
           What the review answers about a probe that is not a technique (attacks, calls, claims)
-          {cascaded ? ', beyond the probes of the table above' : ''}.
+          {cascaded || banded ? ', beyond the probes of the table above' : ''}.
         </li>
         <li>Any other model or prompt version: a review made with another one is marked "not measured" in the interface.</li>
       </ul>

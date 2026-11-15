@@ -63,9 +63,17 @@ const cascadeProbeSchema = z.object({
   kept: count,
   kept_yes: count,
   after_review: rate,
+  /** Measured by score band only: the test posts the probe flags, and the share of its true
+   *  positives the review keeps. */
+  flagged_in_split: count,
+  true_positives_kept: rate,
+  /** "head" when only its highest scores were read enough to be measured. */
+  scope: text,
 })
 
 const cascadeSchema = z.object({
+  /** "bands" when each band of scores counts for the test posts it holds. */
+  design: text,
   pack_run: text,
   posts: count,
   posts_flagged: count,
@@ -91,6 +99,8 @@ export const reviewReportSchema = z.object({
   pooled: pooledSchema.nullable().optional().catch(undefined),
   runs_agreement: runsSchema.nullable().optional().catch(undefined),
   cascade: cascadeSchema.nullable().optional().catch(undefined),
+  /** The same cascade on every test post read by score band: more posts, narrower intervals. */
+  cascade_bands: cascadeSchema.nullable().optional().catch(undefined),
 })
 
 export type Rate = NonNullable<z.infer<typeof rate>>

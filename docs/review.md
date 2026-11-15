@@ -111,7 +111,10 @@ Measured on 15 Nov 2026 with `gemini-3.8-flash` and `review-v2`, on the 1,200 ra
 | The technique screen, the 12 measurable techniques together | Precision 78.0% (73.0 to 82.4), n=296. Recall 48.1% (43.7 to 52.6), n=480. False-positive rate 0.5% |
 | `loaded_language` | Precision 79.1% (72.0 to 84.8), n=153. Recall 64.0% |
 | `exaggeration` | Precision 85.5% (75.9 to 91.7), n=76. Recall 44.2% |
-| A probe flags, then the review reads: `loaded_language` | Precision 75.7% after the probe, 97.2% (85.8 to 99.5), n=36, after the review, which keeps 85.4% of the true positives |
+| A probe flags, then the review reads, on the random sample alone: `loaded_language` | Precision 75.7% after the probe, 97.2% (85.8 to 99.5), n=36, after the review, which keeps 85.4% of the true positives |
+| The same on every test post read by score band (913 posts, each band counted for the test posts it holds): `loaded_language` | Precision 73.8% (67.0 to 79.3) after the probe, 93.2% (87.8 to 96.5) after the review, which keeps 87.3% (81.0 to 92.2) of the true positives; 265 posts read |
+| By score band: `exaggeration`, `fear_appeal`, `us_vs_them` | After the probe 72.7%, 59.8%, 71.3%; after the review 93.1% (86.5 to 96.9), 92.7% (81.4 to 97.8), 98.4% (92.4 to 99.7) |
+| By score band, highest scores only (probes without a level): `doubt`, `identity_appeal`, `slogan` | After the review 84.6% (58.3 to 96.7), 84.2% (63.6 to 95.3), 96.2% (82.8 to 99.6); under their highest scores too few posts were read to say anything narrow |
 | The same 200 posts asked twice | Same list of techniques on 97.5% of the posts |
 | Answers that could not be read | 4 of 1,200 |
 | Quotes that were not in the post | 0 |

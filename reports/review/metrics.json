@@ -688,5 +688,385 @@
    "nazi_comparison": 0
   }
  },
- "calls": 1484
+ "calls": 1484,
+ "cascade_bands": {
+  "design": "bands",
+  "pack_run": "v1",
+  "pack_exported_at": "2026-11-15T00:08:11+00:00",
+  "model": "gemini-3.8-flash",
+  "prompt_version": "review-v2",
+  "split": "test",
+  "rounds": [
+   "m1",
+   "t1_calls",
+   "t1_claims",
+   "t1_emotion",
+   "t1_format",
+   "t1_hostility",
+   "t1_rhetoric",
+   "t1_solicitation",
+   "t1_subject",
+   "t2_calls",
+   "t2_rhetoric",
+   "t2_solicitation",
+   "t3_calls",
+   "t3_hostility",
+   "t3_rhetoric",
+   "t3_solicitation",
+   "t3_subject"
+  ],
+  "posts_flagged": 924,
+  "posts_read": 913,
+  "probes": {
+   "loaded_language": {
+    "threshold": 1.3450318574905396,
+    "scope": "flagged",
+    "measured_from": 1.3450318574905396,
+    "flagged_in_split": 29646,
+    "left_out_in_split": 0,
+    "flagged": 267,
+    "flagged_yes": 213,
+    "read": 265,
+    "read_yes": 211,
+    "kept": 201,
+    "kept_yes": 190,
+    "after_probe": {
+     "value": 0.7377250927397438,
+     "low": 0.6700815916766139,
+     "high": 0.7927782934938802
+    },
+    "after_review": {
+     "value": 0.9318092802864253,
+     "low": 0.8777259337699528,
+     "high": 0.9647528640538722
+    },
+    "true_positives_kept": {
+     "value": 0.8734588289126575,
+     "low": 0.8099217072433447,
+     "high": 0.9216947305708101
+    },
+    "kept_share": {
+     "value": 0.6915283086318555,
+     "low": 0.619348900437786,
+     "high": 0.7516526538214597
+    },
+    "bands": [
+     {
+      "low": 2.6589417457580566,
+      "size": 2900,
+      "kept_yes": 89,
+      "kept_no": 3,
+      "left_yes": 5,
+      "left_no": 5
+     },
+     {
+      "low": 1.3450318574905396,
+      "size": 26746,
+      "kept_yes": 101,
+      "kept_no": 8,
+      "left_yes": 16,
+      "left_no": 38
+     }
+    ]
+   },
+   "exaggeration": {
+    "threshold": 2.2378175258636475,
+    "scope": "flagged",
+    "measured_from": 2.2378175258636475,
+    "flagged_in_split": 9900,
+    "left_out_in_split": 0,
+    "flagged": 220,
+    "flagged_yes": 176,
+    "read": 220,
+    "read_yes": 176,
+    "kept": 161,
+    "kept_yes": 153,
+    "after_probe": {
+     "value": 0.7271900672837441,
+     "low": 0.649319740199651,
+     "high": 0.790802161395881
+    },
+    "after_review": {
+     "value": 0.9307966734785601,
+     "low": 0.8647799940075593,
+     "high": 0.9689760863794417
+    },
+    "true_positives_kept": {
+     "value": 0.8541150266419076,
+     "low": 0.7774093910280658,
+     "high": 0.9113304197536586
+    },
+    "kept_share": {
+     "value": 0.6672821050924096,
+     "low": 0.5855944856469097,
+     "high": 0.7385862945427829
+    },
+    "bands": [
+     {
+      "low": 3.6279165744781494,
+      "size": 1033,
+      "kept_yes": 80,
+      "kept_no": 2,
+      "left_yes": 10,
+      "left_no": 6
+     },
+     {
+      "low": 2.2378175258636475,
+      "size": 8867,
+      "kept_yes": 73,
+      "kept_no": 6,
+      "left_yes": 13,
+      "left_no": 30
+     }
+    ]
+   },
+   "fear_appeal": {
+    "threshold": 3.1082117557525635,
+    "scope": "flagged",
+    "measured_from": 3.1082117557525635,
+    "flagged_in_split": 108,
+    "left_out_in_split": 0,
+    "flagged": 94,
+    "flagged_yes": 57,
+    "read": 92,
+    "read_yes": 55,
+    "kept": 41,
+    "kept_yes": 38,
+    "after_probe": {
+     "value": 0.5978260869565217,
+     "low": 0.4987163414566228,
+     "high": 0.6915849396466793
+    },
+    "after_review": {
+     "value": 0.926829268292683,
+     "low": 0.8139971641897258,
+     "high": 0.9781832614927924
+    },
+    "true_positives_kept": {
+     "value": 0.6909090909090909,
+     "low": 0.5623127455281345,
+     "high": 0.8020529223925514
+    },
+    "kept_share": {
+     "value": 0.44565217391304346,
+     "low": 0.3473134620546365,
+     "high": 0.5439889257181084
+    },
+    "bands": [
+     {
+      "low": 3.1082117557525635,
+      "size": 108,
+      "kept_yes": 38,
+      "kept_no": 3,
+      "left_yes": 17,
+      "left_no": 34
+     }
+    ]
+   },
+   "doubt": {
+    "threshold": 1.7630584239959717,
+    "scope": "head",
+    "measured_from": 3.1883137226104736,
+    "flagged_in_split": 100,
+    "left_out_in_split": 2840,
+    "flagged": 54,
+    "flagged_yes": 28,
+    "read": 47,
+    "read_yes": 24,
+    "kept": 13,
+    "kept_yes": 11,
+    "after_probe": {
+     "value": 0.5106382978723404,
+     "low": 0.36886973116785,
+     "high": 0.6479314991823902
+    },
+    "after_review": {
+     "value": 0.8461538461538461,
+     "low": 0.5831680969317148,
+     "high": 0.9668014893815344
+    },
+    "true_positives_kept": {
+     "value": 0.45833333333333337,
+     "low": 0.27561765403217264,
+     "high": 0.6524435342991519
+    },
+    "kept_share": {
+     "value": 0.2765957446808511,
+     "low": 0.16774580252224383,
+     "high": 0.4118145172024208
+    },
+    "bands": [
+     {
+      "low": 3.1883137226104736,
+      "size": 100,
+      "kept_yes": 11,
+      "kept_no": 2,
+      "left_yes": 13,
+      "left_no": 21
+     },
+     {
+      "low": 1.7630584239959717,
+      "size": 2840,
+      "kept_yes": 2,
+      "kept_no": 0,
+      "left_yes": 1,
+      "left_no": 2
+     }
+    ]
+   },
+   "identity_appeal": {
+    "threshold": 1.3658499717712402,
+    "scope": "head",
+    "measured_from": 4.196362018585205,
+    "flagged_in_split": 100,
+    "left_out_in_split": 2790,
+    "flagged": 56,
+    "flagged_yes": 31,
+    "read": 48,
+    "read_yes": 27,
+    "kept": 19,
+    "kept_yes": 16,
+    "after_probe": {
+     "value": 0.5624999999999999,
+     "low": 0.42385217457088564,
+     "high": 0.689816444860554
+    },
+    "after_review": {
+     "value": 0.8421052631578947,
+     "low": 0.6362559100220652,
+     "high": 0.9526140849788954
+    },
+    "true_positives_kept": {
+     "value": 0.5925925925925926,
+     "low": 0.4062318776096787,
+     "high": 0.7655987480944172
+    },
+    "kept_share": {
+     "value": 0.39583333333333326,
+     "low": 0.27167964931786326,
+     "high": 0.5361033006294376
+    },
+    "bands": [
+     {
+      "low": 4.196362018585205,
+      "size": 100,
+      "kept_yes": 16,
+      "kept_no": 3,
+      "left_yes": 11,
+      "left_no": 18
+     },
+     {
+      "low": 1.3658499717712402,
+      "size": 2790,
+      "kept_yes": 2,
+      "kept_no": 0,
+      "left_yes": 1,
+      "left_no": 4
+     }
+    ]
+   },
+   "us_vs_them": {
+    "threshold": 2.2758023738861084,
+    "scope": "flagged",
+    "measured_from": 2.2758023738861084,
+    "flagged_in_split": 951,
+    "left_out_in_split": 0,
+    "flagged": 197,
+    "flagged_yes": 148,
+    "read": 194,
+    "read_yes": 145,
+    "kept": 93,
+    "kept_yes": 92,
+    "after_probe": {
+     "value": 0.7128684807256236,
+     "low": 0.6404270117122547,
+     "high": 0.7761788072971959
+    },
+    "after_review": {
+     "value": 0.9841012329656067,
+     "low": 0.9238509755503309,
+     "high": 0.9967957850050028
+    },
+    "true_positives_kept": {
+     "value": 0.6029821073558648,
+     "low": 0.5163191735616213,
+     "high": 0.6805825801185936
+    },
+    "kept_share": {
+     "value": 0.4367913832199547,
+     "low": 0.36682261737226757,
+     "high": 0.510355892989047
+    },
+    "bands": [
+     {
+      "low": 2.7573482990264893,
+      "size": 317,
+      "kept_yes": 59,
+      "kept_no": 0,
+      "left_yes": 24,
+      "left_no": 15
+     },
+     {
+      "low": 2.2758023738861084,
+      "size": 634,
+      "kept_yes": 33,
+      "kept_no": 1,
+      "left_yes": 29,
+      "left_no": 33
+     }
+    ]
+   },
+   "slogan": {
+    "threshold": 1.437650442123413,
+    "scope": "head",
+    "measured_from": 3.407078504562378,
+    "flagged_in_split": 100,
+    "left_out_in_split": 2904,
+    "flagged": 61,
+    "flagged_yes": 34,
+    "read": 49,
+    "read_yes": 31,
+    "kept": 26,
+    "kept_yes": 25,
+    "after_probe": {
+     "value": 0.6326530612244898,
+     "low": 0.4882856810146865,
+     "high": 0.7492570191771148
+    },
+    "after_review": {
+     "value": 0.9615384615384616,
+     "low": 0.8277475273965826,
+     "high": 0.9956009758446795
+    },
+    "true_positives_kept": {
+     "value": 0.8064516129032258,
+     "low": 0.6414477526978253,
+     "high": 0.9134785700028704
+    },
+    "kept_share": {
+     "value": 0.5306122448979592,
+     "low": 0.3893119548037016,
+     "high": 0.6592311433082261
+    },
+    "bands": [
+     {
+      "low": 3.407078504562378,
+      "size": 100,
+      "kept_yes": 25,
+      "kept_no": 1,
+      "left_yes": 6,
+      "left_no": 17
+     },
+     {
+      "low": 1.437650442123413,
+      "size": 2904,
+      "kept_yes": 2,
+      "kept_no": 0,
+      "left_yes": 0,
+      "left_no": 8
+     }
+    ]
+   }
+  }
+ }
 }
