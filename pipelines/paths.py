@@ -4,6 +4,9 @@ from pathlib import Path
 
 DATA = Path("data")
 RAW = DATA / "raw"
+# One folder per dataset, named after its manifest entry: `download/` holds the files exactly
+# as published, `extracted/` the content of an archive.
+DATASETS = DATA / "datasets"
 DATASET_MANIFEST = DATA / "MANIFEST.json"
 EMBEDDINGS = DATA / "embeddings"
 RUN_LOG = Path("reports") / "pipeline-runs.jsonl"

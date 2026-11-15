@@ -28,11 +28,11 @@ log = logging.getLogger("embed")
 ALL_DIMS = 1 << 16
 
 
-def store_folder(key: EmbeddingKey) -> Path:
+def store_folder(key: EmbeddingKey, root: Path = EMBEDDINGS) -> Path:
     """One cache per weights and prefix; the number of dimensions kept does not split it."""
     prefix_tag = hashlib.sha256(key.prefix.encode("utf-8")).hexdigest()[:8]
     slug = re.sub(r"[^A-Za-z0-9._-]+", "-", f"{key.model}-{key.revision}-{prefix_tag}")
-    return EMBEDDINGS / slug
+    return root / slug
 
 
 def embed_missing(
@@ -59,6 +59,9 @@ def main() -> None:
     parser.add_argument("--name", required=True)
     parser.add_argument("--batch", type=int, default=64)
     parser.add_argument("--workers", type=int, default=2)
+    parser.add_argument(
+        "--cache", type=Path, default=EMBEDDINGS, help="a dataset kept apart names its own"
+    )
     args = parser.parse_args()
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(name)s %(message)s")
     logging.getLogger("httpx").setLevel(logging.WARNING)
@@ -74,7 +77,9 @@ def main() -> None:
     texts = dict(zip(hashes, (item.text for item in items), strict=True))
     native = dataclasses.replace(key, dims=ALL_DIMS)
     client = EmbeddingClient(settings.embedding_api_base, settings.embedding_api_key, native)
-    store = VectorStore(store_folder(key), f"{key.model}@{key.revision}|prefix={key.prefix!r}")
+    store = VectorStore(
+        store_folder(key, args.cache), f"{key.model}@{key.revision}|prefix={key.prefix!r}"
+    )
     with runlog.timed() as elapsed:
         embedded = embed_missing(client, store, texts, args.batch, args.workers)
     client.close()
