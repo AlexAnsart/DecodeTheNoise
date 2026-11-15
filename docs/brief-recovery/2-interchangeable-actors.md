@@ -107,7 +107,7 @@ All figures, per group: [`results/interchangeable-actors.json`](results/intercha
 - **IRA is not a matched control.** Other years, posts of 140 characters, groups cut by map zone from a 4% sample, style features standardised on 2026 posts. The IRA meaning scores are comparable in kind; the IRA style scores are not.
 - **The real actors of 2026 are unlabelled.** Some may be scripted: the false-positive rates are upper bounds.
 - **It abstains often.** It needs several actors with at least 2 or 3 posts each in one group. Most actors of a corpus do not qualify.
-- **No hand audit** of flagged real groups yet.
+- **A selection with no shared subject reads as one voice.** When the posts of a selection do not talk about the same thing, no actor has a voice in it and all look interchangeable. Seen on real posts (below): a filler word typed in the search. The check should abstain there; it does not yet.
 
 ## As served in the product
 
@@ -132,16 +132,31 @@ The served rule is slightly different from the detector above, and was measured 
 
 The three real groups flagged were read. Two are one pool: police departments relaying the kit of a national drug take-back day, an open campaign and truly one voice. The third is sports outlets reporting the same matches of one club: the false alarm to expect on event-tight groups.
 
+**On 500,000 real posts** (build `tweets-2026-500k`; `pipelines/briefs/voices_census.py`, figures in `reports/voices/census-tweets-2026-500k.json`). The served check was run on every selection one gesture makes on the map and that it can read: a word typed in the search, the same word within a month, a zone within a month.
+
+| | Selections |
+| --- | --- |
+| Read | 15,427 |
+| Flagged | 13 |
+| One real campaign: five actors repost the same dated demand every day | 9 of the 13 |
+| False alarms | 4 of the 13 |
+
+On the 100,000-post subset the demo serves (`tweets-2026-100k`), the same census reads 2,864 selections and flags 19: eleven are that campaign, eight are false alarms. In both builds all but one flagged selection was read at 4 actors of 4 posts, the less sure size (18 of 19 here, 12 of 13 on the larger build).
+
+The four false alarms of the larger build, read by hand: a slang word and a common phrase used in unrelated replies (no shared subject), one broad subject written about from opposite sides, and fans and outlets reacting to one event. The selections are not labelled: this counts how often the check fires on ordinary posts, not how much coordination they hold.
+
 ## Decision
 
 
 - **Built as a check on a selection** (above), level `possible` only. Still worth adding as one trace of a swarm card once swarms exist: "the actors of this swarm are interchangeable in what they say", with the score, where real groups score, and the two rates above. It explains a swarm that other traces flagged; alone, at a 1% base rate, a flag is right about one time in three.
 - **Use the meaning score.** Keep the style score as evidence shown to the reader, not as a detector.
 - **Read posts without hashtags and links** before scoring: it removes the cheapest per-actor marker.
-- **Before shipping**: an event-tight organic control, a threshold per group size, and a hand reading of the first flagged real groups.
+- **Next**: abstain when the posts of a selection share no subject, and an event-tight organic control.
 
 ## Reproduce
 
 ```
 uv run --group pipelines python -m pipelines.briefs.interchange_run
+uv run --group pipelines python -m pipelines.briefs.voices_census --name tweets-2026-100k   # the census, one build
+uv run --group pipelines python -m pipelines.briefs.voices_report_text                      # the report, with every census on disk
 ```

@@ -9,6 +9,7 @@ import subprocess
 from pathlib import Path
 
 FOLDER = Path("reports") / "voices"
+_COMMIT_LINE = "- **Commit:** "
 
 # Real groups the check flagged on the held-out half, read by hand: what they turned out to be.
 # Keyed by pool; a pool not listed here is reported as not read yet.
@@ -108,7 +109,48 @@ def _size_section(size: dict) -> list[str]:
     return lines
 
 
-def write_report(path: Path, metrics: dict) -> None:
+def _census_section() -> list[str]:
+    """What `voices_census.py` counted on real builds, when it ran: one block per build."""
+    lines: list[str] = []
+    for file in sorted(FOLDER.glob("census-*.json")):
+        census = json.loads(file.read_text(encoding="utf-8"))
+        natures = ", ".join(f"{n} {nature}" for nature, n in census["flagged_by_nature"].items())
+        lines += [
+            f"### Build `{census['build']}` ({census['points']:,} posts)",
+            "",
+            "The check was run on every selection one gesture makes on the map: "
+            + "; ".join(f"{kind}: {text}" for kind, text in census["definition"].items())
+            + ".",
+            "",
+            f"{census['selections_tried']:,} selections tried, {census['selections_read']:,} "
+            f"read, **{census['flagged']} flagged**" + (f" ({natures})." if natures else "."),
+            "",
+            "| Kind of selection | Read | Flagged |",
+            "| --- | --- | --- |",
+            *[
+                f"| {kind} | {c['read']:,} | {c['flagged']} |"
+                for kind, c in census["by_kind"].items()
+            ],
+            "",
+        ]
+        if census["flagged_selections"]:
+            lines += [
+                "Every flagged selection, read by hand:",
+                "",
+                "| Selection | Posts | Read at | Score | Limit | What it is |",
+                "| --- | --- | --- | --- | --- | --- |",
+                *[
+                    f"| {e['name']} | {e['posts']} | {e['size']} | {e['score']} | {e['threshold']} "
+                    f"| {e['nature']}. {e['reason']} |"
+                    for e in census["flagged_selections"]
+                ],
+                "",
+            ]
+        lines += [census["note"], ""]
+    return lines
+
+
+def write_report(path: Path, metrics: dict, commit: str | None = None) -> None:
     flagged = sorted({name for size in metrics["sizes"] for name in size["flagged_real_groups"]})
     audit = [
         f"| {name} | {AUDIT[name][0]} | {AUDIT[name][1]} |"
@@ -117,6 +159,7 @@ def write_report(path: Path, metrics: dict) -> None:
         for name in flagged
     ]
     base = metrics["baseline"]
+    census = _census_section()
     lines = [
         f"# One voice or several: evaluation {metrics['evaluated']}",
         "",
@@ -126,7 +169,7 @@ def write_report(path: Path, metrics: dict) -> None:
         f"- **Positive means:** {metrics['positive']}.",
         f"- **Detector:** {metrics['score']}. Rule: {metrics['rule']}. Embedding: "
         f"`{metrics['embedding_key']}`.",
-        f"- **Commit:** {_commit()}",
+        f"{_COMMIT_LINE}{commit or _commit()}",
         "",
         "## Data",
         "",
@@ -164,6 +207,7 @@ def write_report(path: Path, metrics: dict) -> None:
         "| --- | --- | --- |",
         *(audit or ["| none | | |"]),
         "",
+        *(["## On real posts, outside the benchmark", "", *census] if census else []),
         "## Abstention",
         "",
         "The check answers `not enough evidence` when the selection holds fewer than "
@@ -185,4 +229,11 @@ def write_report(path: Path, metrics: dict) -> None:
 
 if __name__ == "__main__":
     saved = json.loads((FOLDER / "metrics.json").read_text(encoding="utf-8"))
-    write_report(FOLDER / saved["report"], saved)
+    report = FOLDER / saved["report"]
+    # Writing the report again keeps the commit its metrics were measured at.
+    measured = next(
+        line.removeprefix(_COMMIT_LINE)
+        for line in report.read_text(encoding="utf-8").splitlines()
+        if line.startswith(_COMMIT_LINE)
+    )
+    write_report(report, saved, measured)
