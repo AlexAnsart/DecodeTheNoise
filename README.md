@@ -1,10 +1,10 @@
 # NoiseMap
 
-Every post becomes a point on a 3D meaning map. Switch on layers to see what is coordinated, what is manipulative and who is behind it. An entry to the Hostinger challenge "Decode the Noise" at [Junction 2026](https://2026.hackjunction.com/) (Espoo, 13 to 15 November 2026).
+An API that places every post on a map of meaning. You see what is being said, who is saying it, and whether the crowd saying it is real or fake. An entry to the Hostinger challenge "Decode the Noise" at [Junction 2026](https://2026.hackjunction.com/) (Espoo, 13 to 15 November 2026).
 
 **Live:** <https://noisemap.srv2160938.hstgr.cloud> (Hostinger VPS).
 
-**Status:** the demo map shows 100,000 posts from X, a sample of the public dataset [`SinclairSchneider/tweets_sample_2026`](https://huggingface.co/datasets/SinclairSchneider/tweets_sample_2026) (nearly all dated January to July 2026): every post of 38,088 actors the probes never trained on, a seeded draw except 26 accounts kept on purpose for the demonstration. The posts are embedded with EmbeddingGemma on a Verda GPU and the 48 zones are named by Gemini through the Hostinger AI Router. A workspace maps your own posts through the API (`POST /api/v1/items`) as they arrive. A pasted text or link is placed on the map live. A layer appears in the product only once its evaluation report exists: the method page of the site lists what is measured. How each partner technology is used: [`docs/tech-challenge-status.md`](docs/tech-challenge-status.md).
+**Status:** a workspace maps your own posts through the API (`POST /api/v1/items`) as they arrive. The demo map shows 100,000 posts from X, a sample of the public dataset [`SinclairSchneider/tweets_sample_2026`](https://huggingface.co/datasets/SinclairSchneider/tweets_sample_2026) (nearly all dated January to July 2026): every post of 38,088 actors the probes never trained on, a seeded draw except 26 accounts kept on purpose for the demonstration. The posts are embedded with EmbeddingGemma on a Verda GPU and the 48 zones are named by Gemini through the Hostinger AI Router. A pasted text or link is placed on the map live. A layer appears in the product only once its evaluation report exists: the method page of the site lists what is measured. How each partner technology is used: [`docs/tech-challenge-status.md`](docs/tech-challenge-status.md).
 
 ## What is here
 
