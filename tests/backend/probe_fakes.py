@@ -40,7 +40,8 @@ PROBABLE_MEASURE = LevelMeasure(
 
 @dataclass(frozen=True)
 class FakeProbe:
-    """A level exists in the pack when its cut is given; its measure can be left out."""
+    """A level exists in the pack when its cut is given; its measure can be left out. A
+    review-only probe can be given the cut from which it sends an item to the review."""
 
     key: str
     possible_cut: float | None = None
@@ -48,6 +49,8 @@ class FakeProbe:
     state: ProbeState = "shown"
     measured_possible: bool = True
     measured_probable: bool = True
+    review_cut: float | None = None
+    reviewable: bool = True
 
 
 def _packed(probe: FakeProbe) -> PackedProbe:
@@ -63,7 +66,13 @@ def _packed(probe: FakeProbe) -> PackedProbe:
         probable=PROBABLE_MEASURE if has_probable else None,
         report="probes",
     )
-    return PackedProbe(info=info, possible_cut=probe.possible_cut, probable_cut=probe.probable_cut)
+    return PackedProbe(
+        info=info,
+        possible_cut=probe.possible_cut,
+        probable_cut=probe.probable_cut,
+        review_cut=probe.review_cut,
+        reviewable=probe.reviewable,
+    )
 
 
 def write_pack(

@@ -13,7 +13,7 @@ from pydantic import ValidationError
 
 from backend.probes.schema import PACK_FILE, WEIGHTS_FILE, PackedProbe, ProbeInfo, ProbePack
 from backend.probes.scoring import EMPTY, Probes
-from backend.probes.uniform import Rescale, rescale
+from backend.probes.uniform import Rescale, rescale, review_rescale
 
 __all__ = ["EMPTY", "Probes", "load_probes"]
 
@@ -39,14 +39,17 @@ def _shapes_agree(arrays: dict[str, np.ndarray]) -> bool:
 def _in_force(probe: PackedProbe) -> tuple[ProbeInfo, Rescale] | None:
     """The probe with the levels it really has, and how its logit becomes a score.
 
-    A level needs its cut and its measure: a cut nobody measured is not applied. None when no
-    level is left.
+    A level needs its cut and its measure: a cut nobody measured is not applied. A review-only
+    probe without a level is read at its review cut. None when nothing is left to read it at.
     """
     info = probe.info
     scale = rescale(
         probe.possible_cut if info.possible is not None else None,
         probe.probable_cut if info.probable is not None else None,
     )
+    if scale is None and info.state == "review-only" and probe.review_cut is not None:
+        unlevelled = info.model_copy(update={"possible": None, "probable": None})
+        return unlevelled, review_rescale(probe.review_cut)
     if scale is None:
         return None
     levels = {
@@ -63,9 +66,10 @@ def _fold(pack: ProbePack, arrays: dict[str, np.ndarray]) -> Probes:
     if missing:
         logger.warning("the probe weights lack %s: no probe is served", ", ".join(missing))
         return EMPTY
-    kept = [found for probe in pack.probes if (found := _in_force(probe)) is not None]
-    if not kept:
+    read = [(probe, found) for probe in pack.probes if (found := _in_force(probe)) is not None]
+    if not read:
         return EMPTY
+    kept = [found for _, found in read]
     rows = [row_of[info.key] for info, _ in kept]
     slope = np.array([scale.slope for _, scale in kept])
     shift = np.array([scale.shift for _, scale in kept])
@@ -79,6 +83,7 @@ def _fold(pack: ProbePack, arrays: dict[str, np.ndarray]) -> Probes:
         weights=(slope[:, None] * on_vectors).astype(np.float32),
         bias=(slope * offset + shift).astype(np.float32),
         caps=np.array([scale.cap for _, scale in kept], dtype=np.float32),
+        reviewable=tuple(probe.reviewable for probe, _ in read),
     )
 
 

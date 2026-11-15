@@ -212,3 +212,91 @@ def test_one_vector_is_scored_as_one_row(tmp_path: Path) -> None:
 
     assert scores.shape == (1, 2)
     assert scores[0] == pytest.approx([PROBABLE_SCORE, POSSIBLE_SCORE], abs=1e-4)
+
+
+def test_a_review_only_probe_without_a_level_is_read_at_its_review_cut(tmp_path: Path) -> None:
+    listed = [
+        FakeProbe("calls", possible_cut=-1.0, probable_cut=2.0),
+        FakeProbe("net", state="review-only", review_cut=1.0),
+    ]
+    arrays = write_pack(tmp_path, listed)
+    probes = load_probes(tmp_path, PACK_EMBEDDING_KEY)
+    vectors = np.stack(
+        [vector_with_logits(arrays, [-5.0, 1.0]), vector_with_logits(arrays, [-5.0, 9.0])]
+    )
+
+    at_cut, above = probes.scores(vectors)[:, 1].tolist()
+
+    assert at_cut == pytest.approx(POSSIBLE_SCORE, abs=1e-4)
+    # No ceiling: nobody reads this score as a level.
+    assert above > PROBABLE_SCORE
+    net = probes.infos[1]
+    assert net.possible is None and net.probable is None
+    assert [info.key for info in probes.shown()] == ["calls"]
+
+    row = _row(0.2, 0.55)
+    assert probes.readings(row) == [] and set(probes.score_map(row)) == {"calls"}
+    # It sends the item to the review from 0.5, whichever level the mode asks of the others.
+    assert [info.key for info in probes.triggers(row, "probable", 0.0)] == ["net"]
+    assert [info.key for info in probes.triggers(row, "possible", 0.0)] == ["net"]
+    assert probes.triggers(row, "score", 0.6) == []
+    assert probes.triggers(_row(0.2, 0.49), "possible", 0.0) == []
+    assert probes.triggers(row, "off", 0.0) == []
+
+
+def test_a_review_only_probe_with_levels_triggers_at_its_levels(tmp_path: Path) -> None:
+    listed = [
+        # Its measured levels read it; the review cut it was also given is not used.
+        FakeProbe(
+            "levelled", possible_cut=0.0, probable_cut=2.0, state="review-only", review_cut=-3.0
+        ),
+        FakeProbe("rare", probable_cut=3.0, state="review-only"),
+    ]
+    arrays = write_pack(tmp_path, listed)
+    probes = load_probes(tmp_path, PACK_EMBEDDING_KEY)
+
+    at_possible = probes.scores(vector_with_logits(arrays, [0.0, 0.0]))[0, 0]
+
+    assert at_possible == pytest.approx(POSSIBLE_SCORE, abs=1e-4)
+    levelled, rare = probes.infos
+    assert levelled.possible == POSSIBLE_MEASURE and levelled.probable == PROBABLE_MEASURE
+    assert probes.shown() == ()
+    row = _row(0.6, 0.6)
+    assert probes.readings(row) == [] and probes.score_map(row) == {}
+    assert [info.key for info in probes.triggers(row, "possible", 0.0)] == ["levelled"]
+    assert probes.triggers(row, "probable", 0.0) == []
+    # A probe that only has `probable` is not flagged between 0.5 and 0.8, in any mode but `score`.
+    assert [info.key for info in probes.triggers(_row(0.9, 0.9), "probable", 0.0)] == [
+        "levelled",
+        "rare",
+    ]
+    assert probes.flags(np.array([[0.6, 0.6]], dtype=np.float32)).tolist() == [[True, False]]
+
+
+def test_flags_start_at_the_lowest_level_each_probe_has(tmp_path: Path) -> None:
+    listed = [
+        FakeProbe("calls", possible_cut=-1.0, probable_cut=2.0),
+        FakeProbe("rare", probable_cut=3.0),
+        FakeProbe("net", state="review-only", review_cut=1.0),
+    ]
+    write_pack(tmp_path, listed)
+    probes = load_probes(tmp_path, PACK_EMBEDDING_KEY)
+
+    flags = probes.flags(np.array([[0.5, 0.79, 0.5], [0.49, 0.8, 0.49]], dtype=np.float32))
+
+    assert flags.tolist() == [[True, False, True], [False, True, False]]
+
+
+def test_a_probe_that_only_describes_a_post_never_sends_it_to_the_review(tmp_path: Path) -> None:
+    listed = [
+        FakeProbe("calls", possible_cut=-1.0, probable_cut=2.0),
+        FakeProbe("theme", possible_cut=-1.0, probable_cut=2.0, reviewable=False),
+    ]
+    write_pack(tmp_path, listed)
+    probes = load_probes(tmp_path, PACK_EMBEDDING_KEY)
+    row = _row(0.9, 0.95)
+
+    # It is shown and it flags like any other probe.
+    assert [reading.key for reading in probes.readings(row)] == ["theme", "calls"]
+    for mode in ("probable", "possible", "score"):
+        assert [info.key for info in probes.triggers(row, mode, 0.5)] == ["calls"]

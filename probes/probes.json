@@ -1,0 +1,1327 @@
+{
+ "embedding_key": "embeddinggemma:300m-qat-q8_0@e84a7acc2394|prefix='task: classification | query: '|dims=256",
+ "run": "v1",
+ "exported_at": "2026-11-15T00:08:11+00:00",
+ "probes": [
+  {
+   "info": {
+    "key": "call_amplify",
+    "label": "Call amplify",
+    "description": "Asks to share, repost, copy-paste, tag, push a hashtag",
+    "family": "calls",
+    "state": "shown",
+    "possible": {
+     "precision": 0.6304347826086957,
+     "precision_low": 0.5306595401433024,
+     "precision_high": 0.7211192240395616,
+     "false_positive_rate": 0.00008604650102782232,
+     "recall": 0.0493814347889828,
+     "read": 92,
+     "flag_rate": 0.00023214167274656763
+    },
+    "probable": null,
+    "report": "probes"
+   },
+   "possible_cut": 2.9496593475341797,
+   "probable_cut": null,
+   "review_cut": null,
+   "reviewable": true
+  },
+  {
+   "info": {
+    "key": "call_pressure",
+    "label": "Call pressure",
+    "description": "Asks to contact, mass-report or flood a target, petitions included",
+    "family": "calls",
+    "state": "review-only",
+    "possible": null,
+    "probable": null,
+    "report": "probes"
+   },
+   "possible_cut": null,
+   "probable_cut": null,
+   "review_cut": 1.2596254348754883,
+   "reviewable": true
+  },
+  {
+   "info": {
+    "key": "call_boycott",
+    "label": "Call boycott",
+    "description": "Calls to stop buying, unsubscribe, boycott",
+    "family": "calls",
+    "state": "shown",
+    "possible": {
+     "precision": 0.9009900990099011,
+     "precision_low": 0.8315025561127871,
+     "precision_high": 0.9485457842637384,
+     "false_positive_rate": 0.000023212563293095783,
+     "recall": 0.5247137701937457,
+     "read": 101,
+     "flag_rate": 0.00023435254582034444
+    },
+    "probable": {
+     "precision": 0.9009900990099011,
+     "precision_low": 0.8315025561127871,
+     "precision_high": 0.9485457842637384,
+     "false_positive_rate": 0.000023212563293095783,
+     "recall": 0.5247137701937457,
+     "read": 101,
+     "flag_rate": 0.00023435254582034444
+    },
+    "report": "probes"
+   },
+   "possible_cut": 3.2223196029663086,
+   "probable_cut": 3.2223196029663086,
+   "review_cut": null,
+   "reviewable": true
+  },
+  {
+   "info": {
+    "key": "call_vote",
+    "label": "Call vote",
+    "description": "Calls to vote for or against, to register",
+    "family": "calls",
+    "state": "shown",
+    "possible": {
+     "precision": 0.7010309278350515,
+     "precision_low": 0.6026611860582461,
+     "precision_high": 0.7857899983731919,
+     "false_positive_rate": 0.00006816391184712761,
+     "recall": 0.13158447558478836,
+     "read": 97,
+     "flag_rate": 0.00022771992659901394
+    },
+    "probable": null,
+    "report": "probes"
+   },
+   "possible_cut": 3.067462921142578,
+   "probable_cut": null,
+   "review_cut": null,
+   "reviewable": true
+  },
+  {
+   "info": {
+    "key": "call_join",
+    "label": "Call join",
+    "description": "Calls to join a group, a channel, a movement",
+    "family": "calls",
+    "state": "review-only",
+    "possible": null,
+    "probable": null,
+    "report": "probes"
+   },
+   "possible_cut": null,
+   "probable_cut": null,
+   "review_cut": 0.6119585037231445,
+   "reviewable": true
+  },
+  {
+   "info": {
+    "key": "call_violence",
+    "label": "Call violence",
+    "description": "Calls to hurt, kill or destroy",
+    "family": "calls",
+    "state": "review-only",
+    "possible": null,
+    "probable": null,
+    "report": "probes"
+   },
+   "possible_cut": null,
+   "probable_cut": null,
+   "review_cut": 0.6387686729431152,
+   "reviewable": true
+  },
+  {
+   "info": {
+    "key": "attack_addressee",
+    "label": "Attack addressee",
+    "description": "Insults or demeans the person the post speaks to",
+    "family": "hostility",
+    "state": "shown",
+    "possible": {
+     "precision": 0.8214285714285714,
+     "precision_low": 0.7427396336243827,
+     "precision_high": 0.8845050027790923,
+     "false_positive_rate": 0.0012728922935618184,
+     "recall": 0.1317878515140227,
+     "read": 112,
+     "flag_rate": 0.006824965178749088
+    },
+    "probable": {
+     "precision": 0.8214285714285714,
+     "precision_low": 0.7427396336243827,
+     "precision_high": 0.8845050027790923,
+     "false_positive_rate": 0.0012728922935618184,
+     "recall": 0.1317878515140227,
+     "read": 112,
+     "flag_rate": 0.006824965178749088
+    },
+    "report": "probes"
+   },
+   "possible_cut": 2.472137928009033,
+   "probable_cut": 2.472137928009033,
+   "review_cut": null,
+   "reviewable": true
+  },
+  {
+   "info": {
+    "key": "attack_person",
+    "label": "Attack person",
+    "description": "Insults or demeans a named third party",
+    "family": "hostility",
+    "state": "shown",
+    "possible": {
+     "precision": 0.6555001594529404,
+     "precision_low": 0.5681831342632755,
+     "precision_high": 0.7347626887833232,
+     "false_positive_rate": 0.0007829996487305012,
+     "recall": 0.0596849128884781,
+     "read": 199,
+     "flag_rate": 0.002217505692998165
+    },
+    "probable": {
+     "precision": 0.8061224489795918,
+     "precision_low": 0.7216917493360433,
+     "precision_high": 0.8742994581474478,
+     "false_positive_rate": 0.00005579597296767909,
+     "recall": 0.009293848018129583,
+     "read": 98,
+     "flag_rate": 0.000280780880369658
+    },
+    "report": "probes"
+   },
+   "possible_cut": 2.3842501640319824,
+   "probable_cut": 3.3530139923095703,
+   "review_cut": null,
+   "reviewable": true
+  },
+  {
+   "info": {
+    "key": "attack_identity_group",
+    "label": "Attack identity group",
+    "description": "Demeans a group defined by origin, religion, nationality, gender, orientation, disability",
+    "family": "hostility",
+    "state": "shown",
+    "possible": {
+     "precision": 0.7722772277227723,
+     "precision_low": 0.6845461045931038,
+     "precision_high": 0.847434839013293,
+     "false_positive_rate": 0.00015503262215496016,
+     "recall": 0.02283425145428954,
+     "read": 101,
+     "flag_rate": 0.0006654727952068272
+    },
+    "probable": {
+     "precision": 0.7722772277227723,
+     "precision_low": 0.6845461045931038,
+     "precision_high": 0.847434839013293,
+     "false_positive_rate": 0.00015503262215496016,
+     "recall": 0.02283425145428954,
+     "read": 101,
+     "flag_rate": 0.0006654727952068272
+    },
+    "report": "probes"
+   },
+   "possible_cut": 3.3644425868988037,
+   "probable_cut": 3.3644425868988037,
+   "review_cut": null,
+   "reviewable": true
+  },
+  {
+   "info": {
+    "key": "attack_political_group",
+    "label": "Attack political group",
+    "description": "Demeans a camp, a party, a profession, an institution",
+    "family": "hostility",
+    "state": "shown",
+    "possible": {
+     "precision": 0.6866812488047428,
+     "precision_low": 0.5959458541231241,
+     "precision_high": 0.7667462111412622,
+     "false_positive_rate": 0.0007142267130231282,
+     "recall": 0.04446260234468343,
+     "read": 180,
+     "flag_rate": 0.0022020295814817272
+    },
+    "probable": {
+     "precision": 0.7857142857142857,
+     "precision_low": 0.6918252561831659,
+     "precision_high": 0.8622046437418134,
+     "false_positive_rate": 0.000043158491366228666,
+     "recall": 0.0044949790588057785,
+     "read": 84,
+     "flag_rate": 0.00019455683049236143
+    },
+    "report": "probes"
+   },
+   "possible_cut": 2.9683291912078857,
+   "probable_cut": 3.994420289993286,
+   "review_cut": null,
+   "reviewable": true
+  },
+  {
+   "info": {
+    "key": "dehumanisation",
+    "label": "Dehumanisation",
+    "description": "Equates people with animals, a disease, objects",
+    "family": "hostility",
+    "state": "review-only",
+    "possible": {
+     "precision": 0.7142857142857143,
+     "precision_low": 0.6170523226681403,
+     "precision_high": 0.7949727011636739,
+     "false_positive_rate": 0.00009122477260348353,
+     "recall": 0.013401145358759053,
+     "read": 98,
+     "flag_rate": 0.0003139439764763105
+    },
+    "probable": null,
+    "report": "probes"
+   },
+   "possible_cut": 2.80819034576416,
+   "probable_cut": null,
+   "review_cut": null,
+   "reviewable": true
+  },
+  {
+   "info": {
+    "key": "threat",
+    "label": "Threat",
+    "description": "The author announces they will cause harm",
+    "family": "hostility",
+    "state": "review-only",
+    "possible": null,
+    "probable": null,
+    "report": "probes"
+   },
+   "possible_cut": null,
+   "probable_cut": null,
+   "review_cut": 0.6829824447631836,
+   "reviewable": true
+  },
+  {
+   "info": {
+    "key": "violence_endorsement",
+    "label": "Violence endorsement",
+    "description": "Wishes, celebrates or justifies violence or a death, without calling for it",
+    "family": "hostility",
+    "state": "review-only",
+    "possible": null,
+    "probable": null,
+    "report": "probes"
+   },
+   "possible_cut": null,
+   "probable_cut": null,
+   "review_cut": 2.166100025177002,
+   "reviewable": true
+  },
+  {
+   "info": {
+    "key": "profanity",
+    "label": "Profanity",
+    "description": "Contains vulgar words",
+    "family": "hostility",
+    "state": "shown",
+    "possible": {
+     "precision": 0.9120000000000001,
+     "precision_low": 0.8535792400540851,
+     "precision_high": 0.9528750973493604,
+     "false_positive_rate": 0.0020581906713256193,
+     "recall": 0.314526443161873,
+     "read": 125,
+     "flag_rate": 0.021903119541907098
+    },
+    "probable": {
+     "precision": 0.9120000000000001,
+     "precision_low": 0.8535792400540851,
+     "precision_high": 0.9528750973493604,
+     "false_positive_rate": 0.0020581906713256193,
+     "recall": 0.314526443161873,
+     "read": 125,
+     "flag_rate": 0.021903119541907098
+    },
+    "report": "probes"
+   },
+   "possible_cut": 2.160802125930786,
+   "probable_cut": 2.160802125930786,
+   "review_cut": null,
+   "reviewable": false
+  },
+  {
+   "info": {
+    "key": "loaded_language",
+    "label": "Loaded language",
+    "description": "A charged word that can be removed without losing the fact",
+    "family": "rhetoric",
+    "state": "shown",
+    "possible": {
+     "precision": 0.7393520357648622,
+     "precision_low": 0.6735619795516276,
+     "precision_high": 0.7967276490257632,
+     "false_positive_rate": 0.02043275385560565,
+     "recall": 0.2956635396765124,
+     "read": 267,
+     "flag_rate": 0.06554354314518804
+    },
+    "probable": {
+     "precision": 0.9223300970873787,
+     "precision_low": 0.8574175523351668,
+     "precision_high": 0.9628810873658112,
+     "false_positive_rate": 0.0005956034736092879,
+     "recall": 0.036079854140080615,
+     "read": 103,
+     "flag_rate": 0.00641153191395282
+    },
+    "report": "probes"
+   },
+   "possible_cut": 1.3450318574905396,
+   "probable_cut": 2.6589417457580566,
+   "review_cut": null,
+   "reviewable": true
+  },
+  {
+   "info": {
+    "key": "exaggeration",
+    "label": "Exaggeration",
+    "description": "Overstates or minimises beyond what the post supports",
+    "family": "rhetoric",
+    "state": "shown",
+    "possible": {
+     "precision": 0.7271900672837441,
+     "precision_low": 0.650114032309666,
+     "precision_high": 0.7941538607956014,
+     "false_positive_rate": 0.006868685807545344,
+     "recall": 0.12180827967328074,
+     "read": 220,
+     "flag_rate": 0.021887643430390662
+    },
+    "probable": {
+     "precision": 0.9183673469387755,
+     "precision_low": 0.8521840777632139,
+     "precision_high": 0.9609947198505701,
+     "false_positive_rate": 0.00021445812802278416,
+     "recall": 0.01605130813989582,
+     "read": 98,
+     "flag_rate": 0.00228383188521147
+    },
+    "report": "probes"
+   },
+   "possible_cut": 2.2378175258636475,
+   "probable_cut": 3.6279165744781494,
+   "review_cut": null,
+   "reviewable": true
+  },
+  {
+   "info": {
+    "key": "fear_appeal",
+    "label": "Fear appeal",
+    "description": "Pushes a conclusion with a threat, not with evidence",
+    "family": "rhetoric",
+    "state": "shown",
+    "possible": {
+     "precision": 0.6063829787234043,
+     "precision_low": 0.5038070601813808,
+     "precision_high": 0.6972960009711193,
+     "false_positive_rate": 0.00009507082306521808,
+     "recall": 0.012684490742737546,
+     "read": 94,
+     "flag_rate": 0.00023877429196789813
+    },
+    "probable": null,
+    "report": "probes"
+   },
+   "possible_cut": 3.1082117557525635,
+   "probable_cut": null,
+   "review_cut": null,
+   "reviewable": true
+  },
+  {
+   "info": {
+    "key": "doubt",
+    "label": "Doubt",
+    "description": "Questions someone's credibility without giving grounds",
+    "family": "rhetoric",
+    "state": "review-only",
+    "possible": null,
+    "probable": null,
+    "report": "probes"
+   },
+   "possible_cut": null,
+   "probable_cut": null,
+   "review_cut": 1.7630584239959717,
+   "reviewable": true
+  },
+  {
+   "info": {
+    "key": "identity_appeal",
+    "label": "Identity appeal",
+    "description": "Leans on national or group pride",
+    "family": "rhetoric",
+    "state": "review-only",
+    "possible": null,
+    "probable": null,
+    "report": "probes"
+   },
+   "possible_cut": null,
+   "probable_cut": null,
+   "review_cut": 1.3658499717712402,
+   "reviewable": true
+  },
+  {
+   "info": {
+    "key": "us_vs_them",
+    "label": "Us vs them",
+    "description": "Sets a virtuous \"us\" against a guilty \"them\"",
+    "family": "rhetoric",
+    "state": "shown",
+    "possible": {
+     "precision": 0.7200233628805058,
+     "precision_low": 0.6498573064007613,
+     "precision_high": 0.7823885974168665,
+     "false_positive_rate": 0.0006038664471871544,
+     "recall": 0.06012647876388855,
+     "read": 197,
+     "flag_rate": 0.0021025402931617696
+    },
+    "probable": {
+     "precision": 0.8469387755102041,
+     "precision_low": 0.7634588820300527,
+     "precision_high": 0.9082080993562305,
+     "false_positive_rate": 0.00011004315548814873,
+     "recall": 0.0235749046143471,
+     "read": 98,
+     "flag_rate": 0.0007008467643872565
+    },
+    "report": "probes"
+   },
+   "possible_cut": 2.2758023738861084,
+   "probable_cut": 2.7573482990264893,
+   "review_cut": null,
+   "reviewable": true
+  },
+  {
+   "info": {
+    "key": "slogan",
+    "label": "Slogan",
+    "description": "A short, chantable formula; a watchword",
+    "family": "rhetoric",
+    "state": "review-only",
+    "possible": null,
+    "probable": null,
+    "report": "probes"
+   },
+   "possible_cut": null,
+   "probable_cut": null,
+   "review_cut": 1.437650442123413,
+   "reviewable": true
+  },
+  {
+   "info": {
+    "key": "commercial_promo",
+    "label": "Commercial promo",
+    "description": "Promotes a product, a service, an event or a channel",
+    "family": "solicitation",
+    "state": "shown",
+    "possible": {
+     "precision": 0.7344572325713298,
+     "precision_low": 0.6503473782888922,
+     "precision_high": 0.8048970839626716,
+     "false_positive_rate": 0.0019338830656065267,
+     "recall": 0.28800102552999457,
+     "read": 209,
+     "flag_rate": 0.007149963520594283
+    },
+    "probable": {
+     "precision": 0.9504950495049505,
+     "precision_low": 0.8952728704100097,
+     "precision_high": 0.98104005439496,
+     "false_positive_rate": 0.000044927204305446664,
+     "recall": 0.04644536841460394,
+     "read": 101,
+     "flag_rate": 0.0008909818487320643
+    },
+    "report": "probes"
+   },
+   "possible_cut": 2.1609179973602295,
+   "probable_cut": 3.7673890590667725,
+   "review_cut": null,
+   "reviewable": true
+  },
+  {
+   "info": {
+    "key": "money_request",
+    "label": "Money request",
+    "description": "Asks to send money: donation, fundraiser, tip",
+    "family": "solicitation",
+    "state": "shown",
+    "possible": {
+     "precision": 0.8709677419354839,
+     "precision_low": 0.7891756846371437,
+     "precision_high": 0.9271748409799033,
+     "false_positive_rate": 0.00002770863048361974,
+     "recall": 0.13966025436451204,
+     "read": 93,
+     "flag_rate": 0.00021445468815635294
+    },
+    "probable": null,
+    "report": "probes"
+   },
+   "possible_cut": 3.7060394287109375,
+   "probable_cut": null,
+   "review_cut": null,
+   "reviewable": true
+  },
+  {
+   "info": {
+    "key": "gain_promise",
+    "label": "Gain promise",
+    "description": "Promises a gain: crypto, trading, \"earn X a day\"",
+    "family": "solicitation",
+    "state": "review-only",
+    "possible": {
+     "precision": 0.5392156862745098,
+     "precision_low": 0.4389153935688786,
+     "precision_high": 0.6344581769080553,
+     "false_positive_rate": 0.0009774605708218898,
+     "recall": 0.31386287735807034,
+     "read": 102,
+     "flag_rate": 0.002113594658530654
+    },
+    "probable": null,
+    "report": "probes"
+   },
+   "possible_cut": 1.6004085540771484,
+   "probable_cut": null,
+   "review_cut": null,
+   "reviewable": true
+  },
+  {
+   "info": {
+    "key": "off_platform_redirect",
+    "label": "Off platform redirect",
+    "description": "Sends the reader to DMs, WhatsApp, Telegram, \"link in bio\"",
+    "family": "solicitation",
+    "state": "shown",
+    "possible": {
+     "precision": 0.6383836058024408,
+     "precision_low": 0.5676370415603387,
+     "precision_high": 0.7036409933421701,
+     "false_positive_rate": 0.000622293209359582,
+     "recall": 0.19481113135000314,
+     "read": 202,
+     "flag_rate": 0.00171121575910327
+    },
+    "probable": {
+     "precision": 0.8811881188118812,
+     "precision_low": 0.8046728889604348,
+     "precision_high": 0.9329715908004383,
+     "false_positive_rate": 0.00006894557047345893,
+     "recall": 0.09067764292414032,
+     "read": 101,
+     "flag_rate": 0.0005770378722557538
+    },
+    "report": "probes"
+   },
+   "possible_cut": 1.709794282913208,
+   "probable_cut": 2.672292947769165,
+   "review_cut": null,
+   "reviewable": true
+  },
+  {
+   "info": {
+    "key": "adult_promo",
+    "label": "Adult promo",
+    "description": "Promotes sexual content or services",
+    "family": "solicitation",
+    "state": "review-only",
+    "possible": {
+     "precision": 0.5061728395061729,
+     "precision_low": 0.40098293472719615,
+     "precision_high": 0.6114837797276869,
+     "false_positive_rate": 0.00010592962244897223,
+     "recall": 0.4410269182453965,
+     "read": 81,
+     "flag_rate": 0.00021445468815635294
+    },
+    "probable": null,
+    "report": "probes"
+   },
+   "possible_cut": 2.2833352088928223,
+   "probable_cut": null,
+   "review_cut": null,
+   "reviewable": true
+  },
+  {
+   "info": {
+    "key": "testimonial",
+    "label": "Testimonial",
+    "description": "A first-person account that recommends something",
+    "family": "solicitation",
+    "state": "review-only",
+    "possible": null,
+    "probable": null,
+    "report": "probes"
+   },
+   "possible_cut": null,
+   "probable_cut": null,
+   "review_cut": 1.291393756866455,
+   "reviewable": true
+  },
+  {
+   "info": {
+    "key": "news_headline",
+    "label": "News headline",
+    "description": "A press headline, with no comment from the author",
+    "family": "format",
+    "state": "review-only",
+    "possible": {
+     "precision": 0.645022677104511,
+     "precision_low": 0.573602560423619,
+     "precision_high": 0.7100246214639094,
+     "false_positive_rate": 0.02445987591881145,
+     "recall": 0.6866839094116107,
+     "read": 284,
+     "flag_rate": 0.06471667661559549
+    },
+    "probable": {
+     "precision": 0.8761904761904762,
+     "precision_low": 0.8031099576976994,
+     "precision_high": 0.9286237134038374,
+     "false_positive_rate": 0.00029056978688706144,
+     "recall": 0.03177043620412801,
+     "read": 105,
+     "flag_rate": 0.002204240454555504
+    },
+    "report": "probes"
+   },
+   "possible_cut": 0.926532506942749,
+   "probable_cut": 4.272030830383301,
+   "review_cut": null,
+   "reviewable": true
+  },
+  {
+   "info": {
+    "key": "automated_alert",
+    "label": "Automated alert",
+    "description": "An alert made of structured data: weather, earthquake, price, score",
+    "family": "format",
+    "state": "shown",
+    "possible": {
+     "precision": 0.8910891089108911,
+     "precision_low": 0.8194371155422512,
+     "precision_high": 0.9412736886930632,
+     "false_positive_rate": 0.00008791364135296807,
+     "recall": 0.08378328691746184,
+     "read": 101,
+     "flag_rate": 0.000800336052707214
+    },
+    "probable": {
+     "precision": 0.8910891089108911,
+     "precision_low": 0.8194371155422512,
+     "precision_high": 0.9412736886930632,
+     "false_positive_rate": 0.00008791364135296807,
+     "recall": 0.08378328691746184,
+     "read": 101,
+     "flag_rate": 0.000800336052707214
+    },
+    "report": "probes"
+   },
+   "possible_cut": 3.8473315238952637,
+   "probable_cut": 3.8473315238952637,
+   "review_cut": null,
+   "reviewable": true
+  },
+  {
+   "info": {
+    "key": "templated_post",
+    "label": "Templated post",
+    "description": "The template of a publishing tool",
+    "family": "format",
+    "state": "shown",
+    "possible": {
+     "precision": 0.8415841584158416,
+     "precision_low": 0.7614468730077043,
+     "precision_high": 0.9036082655715874,
+     "false_positive_rate": 0.0001174649234904024,
+     "recall": 0.5406621127390925,
+     "read": 101,
+     "flag_rate": 0.0007406424797152396
+    },
+    "probable": null,
+    "report": "probes"
+   },
+   "possible_cut": 3.7410383224487305,
+   "probable_cut": null,
+   "review_cut": null,
+   "reviewable": true
+  },
+  {
+   "info": {
+    "key": "quote_post",
+    "label": "Quote post",
+    "description": "An attributed quotation or aphorism, with no comment",
+    "family": "format",
+    "state": "shown",
+    "possible": {
+     "precision": 0.7337814166031987,
+     "precision_low": 0.6508961209423294,
+     "precision_high": 0.8084998254406257,
+     "false_positive_rate": 0.0005833959699632714,
+     "recall": 0.49649326015647316,
+     "read": 201,
+     "flag_rate": 0.0021843425968915125
+    },
+    "probable": {
+     "precision": 0.97,
+     "precision_low": 0.9235013035518889,
+     "precision_high": 0.9914833459591892,
+     "false_positive_rate": 7.585674758566337e-6,
+     "recall": 0.07572970927162609,
+     "read": 100,
+     "flag_rate": 0.00025203953041055913
+    },
+    "report": "probes"
+   },
+   "possible_cut": 1.6067886352539062,
+   "probable_cut": 4.227967262268066,
+   "review_cut": null,
+   "reviewable": true
+  },
+  {
+   "info": {
+    "key": "lang:en",
+    "label": "Lang: en",
+    "description": "Main language",
+    "family": "format",
+    "state": "shown",
+    "possible": {
+     "precision": 0.9941690962099126,
+     "precision_low": 0.9865252010789378,
+     "precision_high": 0.9979378753289444,
+     "false_positive_rate": 0.008286427391670192,
+     "recall": 0.9325731642739015,
+     "read": 686,
+     "flag_rate": 0.5650615728151047
+    },
+    "probable": {
+     "precision": 0.9941690962099126,
+     "precision_low": 0.9865252010789378,
+     "precision_high": 0.9979378753289444,
+     "false_positive_rate": 0.008286427391670192,
+     "recall": 0.9325731642739015,
+     "read": 686,
+     "flag_rate": 0.5650615728151047
+    },
+    "report": "probes"
+   },
+   "possible_cut": 1.2933743000030518,
+   "probable_cut": 1.2933743000030518,
+   "review_cut": null,
+   "reviewable": false
+  },
+  {
+   "info": {
+    "key": "lang:de",
+    "label": "Lang: de",
+    "description": "Main language",
+    "family": "format",
+    "state": "shown",
+    "possible": {
+     "precision": 1.0,
+     "precision_low": 0.9899737362343305,
+     "precision_high": 0.9999975365967534,
+     "false_positive_rate": 0.0,
+     "recall": 0.7460918294772717,
+     "read": 240,
+     "flag_rate": 0.21598019057725895
+    },
+    "probable": {
+     "precision": 1.0,
+     "precision_low": 0.9899737362343305,
+     "precision_high": 0.9999975365967534,
+     "false_positive_rate": 0.0,
+     "recall": 0.7460918294772717,
+     "read": 240,
+     "flag_rate": 0.21598019057725895
+    },
+    "report": "probes"
+   },
+   "possible_cut": 6.570974826812744,
+   "probable_cut": 6.570974826812744,
+   "review_cut": null,
+   "reviewable": false
+  },
+  {
+   "info": {
+    "key": "political",
+    "label": "Political",
+    "description": "Is about political life or a public policy",
+    "family": "subject",
+    "state": "shown",
+    "possible": {
+     "precision": 0.72487716885111,
+     "precision_low": 0.6939595712740018,
+     "precision_high": 0.7525450947379858,
+     "false_positive_rate": 0.17922012715990876,
+     "recall": 0.9629582684717447,
+     "read": 709,
+     "flag_rate": 0.4370873958126064
+    },
+    "probable": {
+     "precision": 0.9457142857142857,
+     "precision_low": 0.9174950966829978,
+     "precision_high": 0.9659951690665322,
+     "false_positive_rate": 0.01744981256794878,
+     "recall": 0.6199377111560921,
+     "read": 350,
+     "flag_rate": 0.21568172271229907
+    },
+    "report": "probes"
+   },
+   "possible_cut": -1.4586536884307861,
+   "probable_cut": 1.4741352796554565,
+   "review_cut": null,
+   "reviewable": false
+  },
+  {
+   "info": {
+    "key": "institution_distrust",
+    "label": "Institution distrust",
+    "description": "States that an institution lies or is rigged as a whole",
+    "family": "subject",
+    "state": "review-only",
+    "possible": {
+     "precision": 0.5875,
+     "precision_low": 0.4727707647054607,
+     "precision_high": 0.6926109854715947,
+     "false_positive_rate": 0.00007353818532551032,
+     "recall": 0.013189115060914698,
+     "read": 80,
+     "flag_rate": 0.00017686984590214677
+    },
+    "probable": null,
+    "report": "probes"
+   },
+   "possible_cut": 2.8758151531219482,
+   "probable_cut": null,
+   "review_cut": null,
+   "reviewable": true
+  },
+  {
+   "info": {
+    "key": "conspiracy_narrative",
+    "label": "Conspiracy narrative",
+    "description": "Explains a fact by the secret plan of a powerful group",
+    "family": "subject",
+    "state": "shown",
+    "possible": null,
+    "probable": {
+     "precision": 0.8787878787878788,
+     "precision_low": 0.8038713094898557,
+     "precision_high": 0.9309723932117538,
+     "false_positive_rate": 0.000030374519493982585,
+     "recall": 0.018347640526383265,
+     "read": 99,
+     "flag_rate": 0.00024761778426300545
+    },
+    "report": "probes"
+   },
+   "possible_cut": null,
+   "probable_cut": 2.938850164413452,
+   "review_cut": null,
+   "reviewable": true
+  },
+  {
+   "info": {
+    "key": "endorsement",
+    "label": "Endorsement",
+    "description": "Supports or praises a named person, party or brand",
+    "family": "subject",
+    "state": "shown",
+    "possible": {
+     "precision": 0.6875,
+     "precision_low": 0.5968695106141182,
+     "precision_high": 0.7683170686612609,
+     "false_positive_rate": 0.0023316282070927783,
+     "recall": 0.0956458842278965,
+     "read": 112,
+     "flag_rate": 0.007081426455307201
+    },
+    "probable": null,
+    "report": "probes"
+   },
+   "possible_cut": 2.442373514175415,
+   "probable_cut": null,
+   "review_cut": null,
+   "reviewable": true
+  },
+  {
+   "info": {
+    "key": "theme:war_geopolitics",
+    "label": "Theme: war geopolitics",
+    "description": "One main theme in a fixed list of fourteen",
+    "family": "subject",
+    "state": "shown",
+    "possible": {
+     "precision": 0.8292682926829269,
+     "precision_low": 0.7396057953848703,
+     "precision_high": 0.8988805235179267,
+     "false_positive_rate": 0.0119911344159507,
+     "recall": 0.6778867335447945,
+     "read": 82,
+     "flag_rate": 0.06467688090026752
+    },
+    "probable": null,
+    "report": "probes"
+   },
+   "possible_cut": 1.0583683252334595,
+   "probable_cut": null,
+   "review_cut": null,
+   "reviewable": false
+  },
+  {
+   "info": {
+    "key": "theme:economy_work",
+    "label": "Theme: economy work",
+    "description": "One main theme in a fixed list of fourteen",
+    "family": "subject",
+    "state": "shown",
+    "possible": {
+     "precision": 0.6466666666666666,
+     "precision_low": 0.5704933193303092,
+     "precision_high": 0.7220775988566772,
+     "false_positive_rate": 0.05310221551785576,
+     "recall": 0.8318237407537913,
+     "read": 150,
+     "flag_rate": 0.13456700050850082
+    },
+    "probable": null,
+    "report": "probes"
+   },
+   "possible_cut": 0.7444150447845459,
+   "probable_cut": null,
+   "review_cut": null,
+   "reviewable": false
+  },
+  {
+   "info": {
+    "key": "theme:politics_government",
+    "label": "Theme: politics government",
+    "description": "One main theme in a fixed list of fourteen",
+    "family": "subject",
+    "state": "shown",
+    "possible": {
+     "precision": 0.6333333333333333,
+     "precision_low": 0.5572019379252079,
+     "precision_high": 0.7096250039802918,
+     "false_positive_rate": 0.05394752021314012,
+     "recall": 0.7097373150117648,
+     "read": 150,
+     "flag_rate": 0.1300546085649223
+    },
+    "probable": null,
+    "report": "probes"
+   },
+   "possible_cut": 0.4102901220321655,
+   "probable_cut": null,
+   "review_cut": null,
+   "reviewable": false
+  },
+  {
+   "info": {
+    "key": "theme:sport",
+    "label": "Theme: sport",
+    "description": "One main theme in a fixed list of fourteen",
+    "family": "subject",
+    "state": "shown",
+    "possible": {
+     "precision": 1.0,
+     "precision_low": 0.9693532127227302,
+     "precision_high": 0.9999926411301642,
+     "false_positive_rate": 0.0,
+     "recall": 0.7171078192357756,
+     "read": 78,
+     "flag_rate": 0.06838893679113882
+    },
+    "probable": {
+     "precision": 1.0,
+     "precision_low": 0.9693532127227302,
+     "precision_high": 0.9999926411301642,
+     "false_positive_rate": 0.0,
+     "recall": 0.7171078192357756,
+     "read": 78,
+     "flag_rate": 0.06838893679113882
+    },
+    "report": "probes"
+   },
+   "possible_cut": 1.701240062713623,
+   "probable_cut": 1.701240062713623,
+   "review_cut": null,
+   "reviewable": false
+  },
+  {
+   "info": {
+    "key": "theme:entertainment_culture",
+    "label": "Theme: entertainment culture",
+    "description": "One main theme in a fixed list of fourteen",
+    "family": "subject",
+    "state": "shown",
+    "possible": null,
+    "probable": {
+     "precision": 0.6888888888888889,
+     "precision_low": 0.587207682446385,
+     "precision_high": 0.778471708816132,
+     "false_positive_rate": 0.024036659706511854,
+     "recall": 0.4136576349037318,
+     "read": 90,
+     "flag_rate": 0.06845305211027834
+    },
+    "report": "probes"
+   },
+   "possible_cut": null,
+   "probable_cut": 2.1241939067840576,
+   "review_cut": null,
+   "reviewable": false
+  },
+  {
+   "info": {
+    "key": "political_side:none",
+    "label": "Political side: none",
+    "description": "Left, right or none",
+    "family": "subject",
+    "state": "shown",
+    "possible": {
+     "precision": 0.9778481012658228,
+     "precision_low": 0.9674672055768491,
+     "precision_high": 0.9855042317137431,
+     "false_positive_rate": 0.18173948297064998,
+     "recall": 0.847936854325002,
+     "read": 948,
+     "flag_rate": 0.7842541619685613
+    },
+    "probable": {
+     "precision": 0.9778481012658228,
+     "precision_low": 0.9674672055768491,
+     "precision_high": 0.9855042317137431,
+     "false_positive_rate": 0.18173948297064998,
+     "recall": 0.847936854325002,
+     "read": 948,
+     "flag_rate": 0.7842541619685613
+    },
+    "report": "probes"
+   },
+   "possible_cut": 0.659605860710144,
+   "probable_cut": 0.659605860710144,
+   "review_cut": null,
+   "reviewable": false
+  },
+  {
+   "info": {
+    "key": "checkable_claim",
+    "label": "Checkable claim",
+    "description": "Contains a factual statement that can be checked",
+    "family": "claims",
+    "state": "shown",
+    "possible": {
+     "precision": 0.7461827101000343,
+     "precision_low": 0.7098185742081746,
+     "precision_high": 0.7775301125475057,
+     "false_positive_rate": 0.1283549803257903,
+     "recall": 0.7162429326060877,
+     "read": 601,
+     "flag_rate": 0.33120647343636
+    },
+    "probable": {
+     "precision": 0.9007936507936508,
+     "precision_low": 0.8583514623735649,
+     "precision_high": 0.9327832477196649,
+     "false_positive_rate": 0.019880461225661974,
+     "recall": 0.34263833457111087,
+     "read": 252,
+     "flag_rate": 0.13124848002476178
+    },
+    "report": "probes"
+   },
+   "possible_cut": -0.025440216064453125,
+   "probable_cut": 1.4925552606582642,
+   "review_cut": null,
+   "reviewable": true
+  },
+  {
+   "info": {
+    "key": "unsourced_statistic",
+    "label": "Unsourced statistic",
+    "description": "Gives a figure with no source",
+    "family": "claims",
+    "state": "shown",
+    "possible": {
+     "precision": 0.773809523809524,
+     "precision_low": 0.6766243503079858,
+     "precision_high": 0.8526408785511785,
+     "false_positive_rate": 0.00004433935871330155,
+     "recall": 0.0035181694984803085,
+     "read": 84,
+     "flag_rate": 0.00018792421127103093
+    },
+    "probable": null,
+    "report": "probes"
+   },
+   "possible_cut": 4.215858459472656,
+   "probable_cut": null,
+   "review_cut": null,
+   "reviewable": true
+  },
+  {
+   "info": {
+    "key": "urgency_framing",
+    "label": "Urgency framing",
+    "description": "\"BREAKING\", \"before it gets deleted\", \"they don't want you to see this\"",
+    "family": "claims",
+    "state": "shown",
+    "possible": {
+     "precision": 0.8367346938775511,
+     "precision_low": 0.7543554341981793,
+     "precision_high": 0.9007481316954152,
+     "false_positive_rate": 0.000337723764912644,
+     "recall": 0.1264943616356685,
+     "read": 98,
+     "flag_rate": 0.002040635847096018
+    },
+    "probable": {
+     "precision": 0.8367346938775511,
+     "precision_low": 0.7543554341981793,
+     "precision_high": 0.9007481316954152,
+     "false_positive_rate": 0.000337723764912644,
+     "recall": 0.1264943616356685,
+     "read": 98,
+     "flag_rate": 0.002040635847096018
+    },
+    "report": "probes"
+   },
+   "possible_cut": 2.2207212448120117,
+   "probable_cut": 2.2207212448120117,
+   "review_cut": null,
+   "reviewable": true
+  },
+  {
+   "info": {
+    "key": "anger",
+    "label": "Anger",
+    "description": "Anger or indignation is expressed",
+    "family": "emotion",
+    "state": "shown",
+    "possible": {
+     "precision": 0.7560018061097833,
+     "precision_low": 0.7008237662814926,
+     "precision_high": 0.8052941466432639,
+     "false_positive_rate": 0.01874316105636679,
+     "recall": 0.3966853243785139,
+     "read": 271,
+     "flag_rate": 0.0670071411200283
+    },
+    "probable": {
+     "precision": 0.9098360655737705,
+     "precision_low": 0.848184066105825,
+     "precision_high": 0.9498967614145877,
+     "false_positive_rate": 0.002333229954517706,
+     "recall": 0.16082550076808974,
+     "read": 122,
+     "flag_rate": 0.02257301408326148
+    },
+    "report": "probes"
+   },
+   "possible_cut": 1.6008658409118652,
+   "probable_cut": 2.5953354835510254,
+   "review_cut": null,
+   "reviewable": false
+  },
+  {
+   "info": {
+    "key": "fear",
+    "label": "Fear",
+    "description": "Fear or alarm is expressed",
+    "family": "emotion",
+    "state": "shown",
+    "possible": {
+     "precision": 0.6831683168316832,
+     "precision_low": 0.5885496463251041,
+     "precision_high": 0.7644750603566534,
+     "false_positive_rate": 0.00020061518824749156,
+     "recall": 0.03601694195456788,
+     "read": 101,
+     "flag_rate": 0.0006256770798788441
+    },
+    "probable": null,
+    "report": "probes"
+   },
+   "possible_cut": 2.122607707977295,
+   "probable_cut": null,
+   "review_cut": null,
+   "reviewable": false
+  },
+  {
+   "info": {
+    "key": "contempt",
+    "label": "Contempt",
+    "description": "Contempt or mockery",
+    "family": "emotion",
+    "state": "shown",
+    "possible": {
+     "precision": 0.6856816084914694,
+     "precision_low": 0.6425066199031936,
+     "precision_high": 0.7262939277464043,
+     "false_positive_rate": 0.09204579231862248,
+     "recall": 0.6416265076058623,
+     "read": 465,
+     "flag_rate": 0.22304171917490218
+    },
+    "probable": {
+     "precision": 0.8928571428571429,
+     "precision_low": 0.8394245134047994,
+     "precision_high": 0.9332461912359407,
+     "false_positive_rate": 0.00948177767094198,
+     "recall": 0.25248417995311057,
+     "read": 168,
+     "flag_rate": 0.06740288740023435
+    },
+    "report": "probes"
+   },
+   "possible_cut": 0.590954065322876,
+   "probable_cut": 1.9758447408676147,
+   "review_cut": null,
+   "reviewable": false
+  },
+  {
+   "info": {
+    "key": "enthusiasm",
+    "label": "Enthusiasm",
+    "description": "Enthusiasm or admiration",
+    "family": "emotion",
+    "state": "shown",
+    "possible": {
+     "precision": 0.9028864600775309,
+     "precision_low": 0.8554080140534611,
+     "precision_high": 0.9379169408419724,
+     "false_positive_rate": 0.0026183271935588353,
+     "recall": 0.2789016378420338,
+     "read": 225,
+     "flag_rate": 0.024797152395480974
+    },
+    "probable": {
+     "precision": 0.9622641509433962,
+     "precision_low": 0.9139838632798413,
+     "precision_high": 0.987410188537869,
+     "false_positive_rate": 0.0003333631568342398,
+     "recall": 0.09739385891300374,
+     "read": 106,
+     "flag_rate": 0.008124958546129867
+    },
+    "report": "probes"
+   },
+   "possible_cut": 3.5977389812469482,
+   "probable_cut": 5.417483329772949,
+   "review_cut": null,
+   "reviewable": false
+  }
+ ]
+}

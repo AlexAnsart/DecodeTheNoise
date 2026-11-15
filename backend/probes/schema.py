@@ -64,6 +64,13 @@ class PackedProbe(BaseModel):
     info: ProbeInfo
     possible_cut: float | None
     probable_cut: float | None
+    # A review-only probe has no level to show. At or above this raw output it sends the item
+    # to the LLM review: a wide net, set on calibration posts, that the review then reads.
+    review_cut: float | None = None
+    # Whether a flag of this probe sends the item to the review. False for what describes a
+    # post without detecting anything in it (its theme, its language, an emotion): most posts
+    # carry such a flag, and reviewing them all would read nothing more.
+    reviewable: bool = True
 
 
 class ProbePack(BaseModel):

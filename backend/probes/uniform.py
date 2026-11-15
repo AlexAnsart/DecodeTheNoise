@@ -52,5 +52,12 @@ def rescale(possible_cut: float | None, probable_cut: float | None) -> Rescale |
     return None
 
 
+def review_rescale(review_cut: float) -> Rescale:
+    """A review-only probe shows no level: its score is 0.5 at the cut that sends an item to
+    the review, with the slope of its own logit and no ceiling, since nobody reads it as a level."""
+    shift = _logit(POSSIBLE_SCORE) - review_cut
+    return Rescale(1.0, shift, cap=1.0, has_possible=False, has_probable=False)
+
+
 def sigmoid(logits: np.ndarray) -> np.ndarray:
     return 1.0 / (1.0 + np.exp(-np.clip(logits, -_LOGIT_BOUND, _LOGIT_BOUND)))
