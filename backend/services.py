@@ -17,6 +17,10 @@ from backend.ingest.embedder import CHUNK, EmbeddingModel, ItemEmbedder
 from backend.ingest.schema import Counts
 from backend.probes.pack import Probes
 from backend.refresh.computing import Computing
+from backend.review.cache import REVIEWS_FILE, ReviewCache
+from backend.review.engine import Reviewer
+from backend.review.guides import NO_GUIDES, Guides
+from backend.review.measures import NO_MEASURES, Measures
 from backend.workspace.registry import Workspaces
 from backend.workspace.schema import IngestState, RefreshState, Usage, WorkspaceInfo
 from backend.workspace.state import Workspace
@@ -57,6 +61,8 @@ class Services:
     llm_model: str
     # Where layouts are computed: another process, so that the requests never wait for one.
     computing: Computing
+    # The LLM review: its guides, what its readings measured to be worth, the reviews kept.
+    reviewer: Reviewer
     jobs: Jobs | None = None
     # Zone names already asked, by a hash of the question: the same question is never paid twice.
     name_cache: dict[str, CachedName] = field(default_factory=dict)
@@ -124,6 +130,8 @@ def start_services(
     chat: Chat | None,
     llm_model: str,
     computing: Computing,
+    guides: Guides = NO_GUIDES,
+    measures: Measures = NO_MEASURES,
 ) -> Services:
     """Opens the stores under `root` and starts the background jobs."""
     from backend.ingest.background import resume
@@ -140,6 +148,7 @@ def start_services(
         chat=chat,
         llm_model=llm_model,
         computing=computing,
+        reviewer=Reviewer(chat, llm_model, guides, measures, ReviewCache(root / REVIEWS_FILE)),
     )
     services.jobs = Jobs(services)
     services.workspaces.on_load = lambda workspace: resume(services, workspace)
@@ -150,6 +159,7 @@ def stop_services(services: Services) -> None:
     if services.jobs is not None:
         services.jobs.stop()
     services.computing.close()
+    services.reviewer.cache.close()
     services.workspaces.close()
     services.embedder.close()
     services.accounts.close()

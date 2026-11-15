@@ -29,6 +29,10 @@ from backend.probes.pack import load_probes
 from backend.refresh.computing import ComputingProcess
 from backend.refresh.layout import warm_up
 from backend.reports.routes import router as reports_router
+from backend.review.guides import load_guides
+from backend.review.measures import load_measures
+from backend.review.routes import REVIEWS_PER_MINUTE
+from backend.review.routes import router as review_router
 from backend.sample.routes import router as sample_router
 from backend.search.meaning import QueryEmbedder
 from backend.search.routes import router as search_router
@@ -46,7 +50,7 @@ DAY = 86_400.0
 # Read by anyone, on the demo build.
 PUBLIC = (health_router, accounts_router, sample_router, reports_router)
 # The map routes: the demo build under /api, the caller's workspace under /api/v1.
-MAP = (map_router, items_router, search_router, analyze_router, voices_router)
+MAP = (map_router, items_router, search_router, analyze_router, voices_router, review_router)
 # What only the owner of a workspace does.
 OWNER = (workspace_router, ingest_router, events_router)
 
@@ -63,6 +67,7 @@ def set_limiters(app: FastAPI) -> None:
     app.state.item_limiter = RateLimiter(LIMITS.requests_per_minute, MINUTE)
     app.state.batch_limiter = RateLimiter(BATCHES_PER_MINUTE, MINUTE)
     app.state.creation_limiter = RateLimiter(CREATIONS_PER_DAY, DAY)
+    app.state.review_limiter = RateLimiter(REVIEWS_PER_MINUTE, MINUTE)
 
 
 @asynccontextmanager
@@ -104,6 +109,9 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
         chat,
         settings.llm_model,
         ComputingProcess(),
+        # The review applies the annotation guides, and quotes what its evaluation measured.
+        guides=load_guides(settings.guides_dir),
+        measures=load_measures(settings.reports_dir),
     )
     # The layout code compiles on first use: asked now, in the computing process, so that the
     # first refresh does not pay for it.

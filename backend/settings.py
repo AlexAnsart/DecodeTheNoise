@@ -39,6 +39,14 @@ class Settings(BaseSettings):
     # behind it. Both are committed: they hold weights and measures, no text.
     probes_dir: Path = Path("probes")
     reports_dir: Path = Path("reports")
+    # The method page: the documents of the repository it shows as they are (annotation guides,
+    # report of the probe campaign, note on the review), and the posts the annotators read,
+    # which reach the server beside the build, never through git.
+    method_docs_dir: Path = Path("docs")
+    labelled_path: Path = Path("data/method/labelled.sqlite")
+    # The annotation guides the LLM review applies word for word. Without the folder the review
+    # answers the probes from their description and screens for no technique.
+    guides_dir: Path = Path("docs/probes/guides")
 
     git_commit: str = "dev"
 
