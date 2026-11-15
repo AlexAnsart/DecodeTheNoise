@@ -1,4 +1,4 @@
-import { Axis3d, X } from 'lucide-react'
+import { Axis3d, Info, X } from 'lucide-react'
 import { useRef, useState } from 'react'
 import type { ReactElement } from 'react'
 import type { ProbeInfo } from '../api/schema'
@@ -6,9 +6,11 @@ import type { Shape } from '../map/geometry'
 import { Popover } from '../popover/Popover'
 import { shownProbes } from '../probes/levels'
 import { ProbeList } from '../probes/ProbeList'
-import { ConceptForm } from './ConceptForm'
 import type { Relief } from './relief'
 import './axes.css'
+
+const PROBE_HINT =
+  'Each item rises by its score for the probe. The axis marks the levels the probe was measured at, at the same height for every probe.'
 
 interface AxesMenuProps {
   shape: Shape
@@ -21,13 +23,13 @@ interface AxesMenuProps {
   error: string | null
   onShape(shape: '3d' | 'time'): void
   onProbe(probe: ProbeInfo): void
-  onConcept(text: string): void
   onClearRelief(): void
 }
 
-/** One more axis on the map: the date, or a height read from a probe or from a concept you type. */
+/** One more axis on the map: the date, or a height read from a probe. The search field raises
+ *  the map by a concept; that height is named and removed here too. */
 export function AxesMenu(props: AxesMenuProps): ReactElement {
-  const { shape, relief, probes, hasDates, busy, error, onShape, onProbe, onConcept, onClearRelief } = props
+  const { shape, relief, probes, hasDates, busy, error, onShape, onProbe, onClearRelief } = props
   const trigger = useRef<HTMLButtonElement>(null)
   const [open, setOpen] = useState(false)
   const raisedBy = relief?.source.kind === 'probe' ? relief.source.key : null
@@ -65,16 +67,15 @@ export function AxesMenu(props: AxesMenuProps): ReactElement {
           </button>
         </div>
         <section className="nm-axes__section">
-          <h4>Raise by a probe</h4>
           {shownProbes(probes).length > 0 ? (
-            <p>Each item rises by its score for the probe. The axis marks the levels the probe was measured at, at the same height for every probe.</p>
-          ) : null}
+            <h4 title={PROBE_HINT}>
+              Raise by a probe
+              <Info size={12} aria-hidden />
+            </h4>
+          ) : (
+            <h4>Raise by a probe</h4>
+          )}
           <ProbeList probes={probes} current={raisedBy} disabled={busy} onPick={onProbe} />
-        </section>
-        <section className="nm-axes__section">
-          <h4>Raise by a concept</h4>
-          <p>Type a few words. Each item rises by how much its meaning resembles them, whatever words it uses.</p>
-          <ConceptForm busy={busy} onConcept={onConcept} />
         </section>
         {busy ? <p className="nm-axes__note">Computing the scores…</p> : null}
         {error ? <p className="nm-axes__note nm-axes__note--error">{error}</p> : null}

@@ -66,7 +66,6 @@ export function MapBar(props: MapBarProps): ReactElement {
               error={actions.error}
               onShape={model.setShape}
               onProbe={actions.liftProbe}
-              onConcept={actions.liftConcept}
               onClearRelief={() => model.setRelief(null)}
             />
           }

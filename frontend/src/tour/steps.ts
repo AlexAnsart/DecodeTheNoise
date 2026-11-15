@@ -25,7 +25,7 @@ export const TOUR_STEPS: TourStep[] = [
     id: 'axes',
     target: '[data-tour="axes"], button[aria-label="Axes"]',
     title: 'Add an axis',
-    text: 'Put the date on an axis, or raise the points by a concept you type or by the score of a probe.',
+    text: 'Put the date on an axis, or raise the points by the score of a probe.',
   },
   {
     id: 'lasso',
