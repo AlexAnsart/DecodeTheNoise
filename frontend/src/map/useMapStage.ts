@@ -202,8 +202,16 @@ export function useMapStage(input: StageInput): Stage {
     const host = refs.host.current
     if (!host) return undefined
     let down: { x: number; y: number } | null = null
+    // The right button moves the map: the browser's menu must not open when the drag ends,
+    // wherever the button is let go (the canvas, a card, a drawer).
+    let moving = false
+    const onMenu = (event: MouseEvent): void => {
+      if (moving || (event.target instanceof Node && host.contains(event.target))) event.preventDefault()
+      moving = false
+    }
     const onDown = (event: PointerEvent): void => {
       down = event.button === 0 ? { x: event.clientX, y: event.clientY } : null
+      moving = event.button === 2
       // While a button is held the map is being turned or moved: the pivot mark shows plainly.
       latest.current.refs.stage.current?.classList.add('is-turning')
     }
@@ -228,7 +236,9 @@ export function useMapStage(input: StageInput): Stage {
     window.addEventListener('pointerup', onRelease, true)
     window.addEventListener('pointercancel', onRelease, true)
     window.addEventListener('blur', onRelease)
+    window.addEventListener('contextmenu', onMenu, true)
     return () => {
+      window.removeEventListener('contextmenu', onMenu, true)
       host.removeEventListener('pointerdown', onDown)
       host.removeEventListener('pointerup', onUp)
       window.removeEventListener('pointerup', onRelease, true)
